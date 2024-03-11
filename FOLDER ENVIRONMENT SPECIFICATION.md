@@ -40,6 +40,9 @@ This is so that the mappings can be used in other samplers that have SFZ import.
 
 #### Opcodes allowed
 This is not exactly a strict rule, technically you are free to use the opcodes you want, but you have to keep in mind at least these basic opcodes to make sure another players (and samplers with SFZ imports) can load these mappings and let the mappings being flexible as possible when a preset is made.
+
+The maximum header for these mappings is `<group>`
+
 The essential opcodes for mappings are:
 * sample
 * pitch_keycenter

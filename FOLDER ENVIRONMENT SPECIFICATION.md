@@ -8,8 +8,12 @@ SFZBuilder needs a specific folder environment to make this work. This document 
 SFZBuilder (root)
 ├───MappingPool
 │   └──Pack 1
-│      └──(any folders)
-│         └──Map.sfz
+│      └──MSamples
+│      │  └──(any folders)
+│      │      └──Map.sfz
+│      └──PSamples
+│         └──(any folders)
+│             └──Map.sfz
 ├───Presets
 │   └──Pack 1 Presets
 │      └──(any folders)
@@ -26,9 +30,18 @@ This is basically the environment for all these files. You can put this folder o
 This is where ALL mappings are stored. The name of the folders should at least have:
 * Author
 * Name of the pack
+
 Example: `NiceSounds - Texture Collections`
+
 ## Pack folder
 Under this folder, you can organize the maps **whatever you want**, also you can store documentation, readmes, licenses and so on to give information to the user.
+## MSamples/PSamples folder
+It's important to store the mappings under one of these two categories.
+
+**MSamples** means Mapping Samples. These are supposed to be instruments that are chromatic, melodic (pianos, winds, electric, synths).
+
+**PSamples** means Percussions Samples. Only non-melodic percussion samples allowed (snares, hats, cymbals, fx).
+
 ### Conditions for the mappings
 Whatever you put the samples, the sfz file mapping **ALWAYS should be in the same folder as the samples.** The SFZ map files must load the samples in the same place (no paths, only filenames in the `sample=` opcode).
 

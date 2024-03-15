@@ -1,0 +1,5 @@
+filter_type = ("lpf_1p", "hpf_1p", "lpf_2p", "hpf_2p", "bpf_2p", "brf_2p")
+off_modes = ("fast", "normal")
+loop_modes = ("None", "no_loop", "one_shot", "loop_continuous", "loop_sustain")
+loop_directions = ("forward", "reverse")
+trigger_modes = ("attack", "release", "first", "legato", "release_key")

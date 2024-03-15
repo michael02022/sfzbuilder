@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="pngicon">application.png</file>
+        <file alias="png1024">application1024.png</file>
+        <file alias="application-exit">application-exit.svgz</file>
+        <file alias="appicon">application.svgz</file>
+        <file alias="document-new">document-new.svgz</file>
+        <file alias="document-open">document-open.svgz</file>
+        <file alias="document-save-as">document-save-as.svgz</file>
+        <file alias="document-save">document-save.svgz</file>
+    </qresource>
+</RCC>

@@ -5,7 +5,8 @@ from src.ui.mainwindow import MainWindow
 
 import sys
 import resources.rc_resources as rc
-sys.path.insert(0, "..")
+
+#sys.path.insert(0, "..")
 
 def centerOnScreen(widget):
   screen = QApplication.screenAt(QCursor.pos())

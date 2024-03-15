@@ -2,7 +2,7 @@
 from PySide6.QtCore    import QObject
 from PySide6.QtGui     import QIcon
 from PySide6.QtWidgets import QMainWindow
-from ui.ui_mainwindow  import Ui_MainWindow
+from .ui_mainwindow  import Ui_MainWindow
 
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):

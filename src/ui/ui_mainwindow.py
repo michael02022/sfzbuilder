@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.2
+## Created by: Qt User Interface Compiler version 6.6.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,9 +20,9 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDial,
     QDoubleSpinBox, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QLabel, QLayout, QLineEdit,
     QListWidget, QListWidgetItem, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QSplitter, QTabWidget, QVBoxLayout,
-    QWidget)
+    QMenuBar, QPlainTextEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QSplitter, QTabWidget,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -31,27 +31,57 @@ class Ui_MainWindow(object):
         MainWindow.resize(896, 760)
         self.actNew = QAction(MainWindow)
         self.actNew.setObjectName(u"actNew")
-        icon = QIcon(QIcon.fromTheme(u"document-new"))
+        icon = QIcon()
+        iconThemeName = u"document-new"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon = QIcon.fromTheme(iconThemeName)
+        else:
+            icon.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+
         self.actNew.setIcon(icon)
         self.actNew.setMenuRole(QAction.NoRole)
         self.actOpen = QAction(MainWindow)
         self.actOpen.setObjectName(u"actOpen")
-        icon1 = QIcon(QIcon.fromTheme(u"document-open"))
+        icon1 = QIcon()
+        iconThemeName = u"document-open"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon1 = QIcon.fromTheme(iconThemeName)
+        else:
+            icon1.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+
         self.actOpen.setIcon(icon1)
         self.actOpen.setMenuRole(QAction.NoRole)
         self.actSave = QAction(MainWindow)
         self.actSave.setObjectName(u"actSave")
-        icon2 = QIcon(QIcon.fromTheme(u"document-save"))
+        icon2 = QIcon()
+        iconThemeName = u"document-save"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon2 = QIcon.fromTheme(iconThemeName)
+        else:
+            icon2.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+
         self.actSave.setIcon(icon2)
         self.actSave.setMenuRole(QAction.NoRole)
         self.actSaveAs = QAction(MainWindow)
         self.actSaveAs.setObjectName(u"actSaveAs")
-        icon3 = QIcon(QIcon.fromTheme(u"document-save-as"))
+        icon3 = QIcon()
+        iconThemeName = u"document-save-as"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon3 = QIcon.fromTheme(iconThemeName)
+        else:
+            icon3.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+
         self.actSaveAs.setIcon(icon3)
         self.actSaveAs.setMenuRole(QAction.NoRole)
         self.actQuit = QAction(MainWindow)
         self.actQuit.setObjectName(u"actQuit")
-        icon4 = QIcon(QIcon.fromTheme(u"application-exit"))
+        icon4 = QIcon()
+        iconThemeName = u"application-exit"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon4 = QIcon.fromTheme(iconThemeName)
+        else:
+            icon4.addFile(u".", QSize(), QIcon.Normal, QIcon.Off)
+
         self.actQuit.setIcon(icon4)
         self.actQuit.setMenuRole(QAction.QuitRole)
         self.actRealtimeSave = QAction(MainWindow)
@@ -148,7 +178,7 @@ class Ui_MainWindow(object):
 
         self.layGlobalBox.addWidget(self.sbxKeyswitchDefault)
 
-        self.hspKeyswitch = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspKeyswitch = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGlobalBox.addItem(self.hspKeyswitch)
 
@@ -237,7 +267,7 @@ class Ui_MainWindow(object):
 
         self.layKey.addWidget(self.sbxCcHi)
 
-        self.hspKey = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspKey = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layKey.addItem(self.hspKey)
 
@@ -254,7 +284,7 @@ class Ui_MainWindow(object):
 
         self.cbxPack = QComboBox(self.centralWidget)
         self.cbxPack.setObjectName(u"cbxPack")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cbxPack.sizePolicy().hasHeightForWidth())
@@ -322,7 +352,7 @@ class Ui_MainWindow(object):
 
         self.layRandom.addWidget(self.dsbVolume)
 
-        self.hspRandom = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspRandom = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layRandom.addItem(self.hspRandom)
 
@@ -346,7 +376,7 @@ class Ui_MainWindow(object):
         self.layOutput.setSizeConstraint(QLayout.SetNoConstraint)
         self.lblOutput = QLabel(self.tabMap)
         self.lblOutput.setObjectName(u"lblOutput")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.lblOutput.sizePolicy().hasHeightForWidth())
@@ -359,7 +389,7 @@ class Ui_MainWindow(object):
 
         self.layOutput.addWidget(self.sbxOutput)
 
-        self.hspOutput = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspOutput = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layOutput.addItem(self.hspOutput)
 
@@ -392,7 +422,7 @@ class Ui_MainWindow(object):
 
         self.LayGbxPolyphony.addWidget(self.chkNotePolyphony, 1, 0, 1, 1)
 
-        self.hspMapPolyphony = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspMapPolyphony = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.LayGbxPolyphony.addItem(self.hspMapPolyphony, 0, 2, 1, 1)
 
@@ -464,7 +494,7 @@ class Ui_MainWindow(object):
 
         self.layGbxKeyswitch.addWidget(self.chkKeySwitchCount, 0, 0, 1, 1)
 
-        self.hspKeyswitchCount = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspKeyswitchCount = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGbxKeyswitch.addItem(self.hspKeyswitchCount, 0, 2, 1, 1)
 
@@ -506,7 +536,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.gbxMapKey, 2, 1, 1, 1)
 
-        self.vspMap = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspMap = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_6.addItem(self.vspMap, 3, 0, 1, 1)
 
@@ -519,7 +549,8 @@ class Ui_MainWindow(object):
         self.laySample.setContentsMargins(6, 6, 6, 6)
         self.gbxSampleOffset = QGroupBox(self.tabSample)
         self.gbxSampleOffset.setObjectName(u"gbxSampleOffset")
-        self.gbxSampleOffset.setCheckable(True)
+        self.gbxSampleOffset.setCheckable(False)
+        self.gbxSampleOffset.setChecked(False)
         self.laySampleOffset = QGridLayout(self.gbxSampleOffset)
         self.laySampleOffset.setObjectName(u"laySampleOffset")
         self.laySampleOffset.setSizeConstraint(QLayout.SetNoConstraint)
@@ -529,20 +560,30 @@ class Ui_MainWindow(object):
 
         self.laySampleOffset.addWidget(self.lblSampleOffsetRandom, 3, 0, 1, 1)
 
-        self.dsbSampleOffsetRandom = QDoubleSpinBox(self.gbxSampleOffset)
-        self.dsbSampleOffsetRandom.setObjectName(u"dsbSampleOffsetRandom")
-
-        self.laySampleOffset.addWidget(self.dsbSampleOffsetRandom, 3, 1, 1, 1)
-
-        self.dsbSampleOffsetVelocity = QDoubleSpinBox(self.gbxSampleOffset)
-        self.dsbSampleOffsetVelocity.setObjectName(u"dsbSampleOffsetVelocity")
-
-        self.laySampleOffset.addWidget(self.dsbSampleOffsetVelocity, 4, 1, 1, 1)
-
         self.lblSampleOffsetVelocity = QLabel(self.gbxSampleOffset)
         self.lblSampleOffsetVelocity.setObjectName(u"lblSampleOffsetVelocity")
 
         self.laySampleOffset.addWidget(self.lblSampleOffsetVelocity, 4, 0, 1, 1)
+
+        self.chkSampleOffsetValue = QCheckBox(self.gbxSampleOffset)
+        self.chkSampleOffsetValue.setObjectName(u"chkSampleOffsetValue")
+
+        self.laySampleOffset.addWidget(self.chkSampleOffsetValue, 0, 0, 1, 1)
+
+        self.sbxSampleOffsetRandom = QSpinBox(self.gbxSampleOffset)
+        self.sbxSampleOffsetRandom.setObjectName(u"sbxSampleOffsetRandom")
+
+        self.laySampleOffset.addWidget(self.sbxSampleOffsetRandom, 3, 1, 1, 1)
+
+        self.sbxSampleOffsetVelocity = QSpinBox(self.gbxSampleOffset)
+        self.sbxSampleOffsetVelocity.setObjectName(u"sbxSampleOffsetVelocity")
+
+        self.laySampleOffset.addWidget(self.sbxSampleOffsetVelocity, 4, 1, 1, 1)
+
+        self.sbxSampleOffsetValue = QSpinBox(self.gbxSampleOffset)
+        self.sbxSampleOffsetValue.setObjectName(u"sbxSampleOffsetValue")
+
+        self.laySampleOffset.addWidget(self.sbxSampleOffsetValue, 0, 1, 1, 1)
 
 
         self.laySample.addWidget(self.gbxSampleOffset, 1, 0, 1, 1)
@@ -563,6 +604,7 @@ class Ui_MainWindow(object):
 
         self.dsbSampleMapDelay = QDoubleSpinBox(self.gbxSampleGeneral)
         self.dsbSampleMapDelay.setObjectName(u"dsbSampleMapDelay")
+        self.dsbSampleMapDelay.setDecimals(3)
 
         self.laySampleGeneral.addWidget(self.dsbSampleMapDelay, 0, 1, 1, 1)
 
@@ -694,7 +736,7 @@ class Ui_MainWindow(object):
 
         self.laySample.addWidget(self.gbxSampleTranspose, 1, 1, 1, 1)
 
-        self.vspOffset = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspOffset = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.laySample.addItem(self.vspOffset, 2, 0, 1, 1)
 
@@ -705,13 +747,14 @@ class Ui_MainWindow(object):
         self.layPan.setObjectName(u"layPan")
         self.layPan.setSizeConstraint(QLayout.SetNoConstraint)
         self.layPan.setContentsMargins(6, 6, 6, 6)
-        self.vspPan = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPan = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPan.addItem(self.vspPan, 2, 0, 1, 2)
 
         self.gbxPan = QGroupBox(self.tabPan)
         self.gbxPan.setObjectName(u"gbxPan")
         self.gbxPan.setCheckable(True)
+        self.gbxPan.setChecked(False)
         self.layGbxPan = QGridLayout(self.gbxPan)
         self.layGbxPan.setObjectName(u"layGbxPan")
         self.layGbxPan.setSizeConstraint(QLayout.SetNoConstraint)
@@ -729,7 +772,7 @@ class Ui_MainWindow(object):
 
         self.layPanKeycenter.addWidget(self.sbxPanKeycenter)
 
-        self.hspPanKeycenter = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPanKeycenter = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layPanKeycenter.addItem(self.hspPanKeycenter)
 
@@ -819,11 +862,11 @@ class Ui_MainWindow(object):
 
         self.layPanKnobs.addWidget(self.knbPanKeytrack, 1, 2, 1, 1)
 
-        self.hspPanL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPanL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layPanKnobs.addItem(self.hspPanL, 1, 0, 1, 1)
 
-        self.hspPanR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPanR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layPanKnobs.addItem(self.hspPanR, 1, 5, 1, 1)
 
@@ -841,7 +884,7 @@ class Ui_MainWindow(object):
         self.gbxAmpGeneral = QGroupBox(self.tabAmp)
         self.gbxAmpGeneral.setObjectName(u"gbxAmpGeneral")
         self.gbxAmpGeneral.setCheckable(True)
-        self.gbxAmpGeneral.setChecked(True)
+        self.gbxAmpGeneral.setChecked(False)
         self.layAmpGeneral = QGridLayout(self.gbxAmpGeneral)
         self.layAmpGeneral.setObjectName(u"layAmpGeneral")
         self.layAmpGeneral.setSizeConstraint(QLayout.SetNoConstraint)
@@ -869,7 +912,7 @@ class Ui_MainWindow(object):
 
         self.layAmpVelFloor.addWidget(self.sbxAmpKeycenter)
 
-        self.hspAmpVelFloor = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpVelFloor = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpVelFloor.addItem(self.hspAmpVelFloor)
 
@@ -921,7 +964,7 @@ class Ui_MainWindow(object):
 
         self.layAmpKeyVeltrackRandom.addWidget(self.lblAmpVeltrackVal, 2, 2, 1, 1)
 
-        self.hspAmpL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpKeyVeltrackRandom.addItem(self.hspAmpL, 1, 0, 1, 1)
 
@@ -937,7 +980,7 @@ class Ui_MainWindow(object):
 
         self.layAmpKeyVeltrackRandom.addWidget(self.lblAmpKeytrackVal, 2, 1, 1, 1)
 
-        self.hspAmpR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpKeyVeltrackRandom.addItem(self.hspAmpR, 1, 4, 1, 1)
 
@@ -957,7 +1000,7 @@ class Ui_MainWindow(object):
 
         self.layAmpVelAttack.addWidget(self.sbxAmpVelAttack)
 
-        self.hspAmpVelAttack = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpVelAttack = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpVelAttack.addItem(self.hspAmpVelAttack)
 
@@ -967,7 +1010,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.gbxAmpGeneral, 0, 0, 1, 1)
 
-        self.vspAmp = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspAmp = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_4.addItem(self.vspAmp, 2, 0, 1, 1)
 
@@ -1017,13 +1060,13 @@ class Ui_MainWindow(object):
 
         self.layAmpLfo.addWidget(self.lblAmpLfoDelayVal, 2, 1, 1, 1)
 
-        self.hspAmpLfoL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpLfoL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpLfo.addItem(self.hspAmpLfoL, 0, 0, 1, 1)
 
         self.lblAmpLfoDepth = QLabel(self.gbxAmpLfo)
         self.lblAmpLfoDepth.setObjectName(u"lblAmpLfoDepth")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.lblAmpLfoDepth.sizePolicy().hasHeightForWidth())
@@ -1061,7 +1104,7 @@ class Ui_MainWindow(object):
 
         self.layAmpLfo.addWidget(self.knbAmpLfoDelay, 1, 1, 1, 1)
 
-        self.hspAmpLfoR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspAmpLfoR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layAmpLfo.addItem(self.hspAmpLfoR, 0, 5, 1, 1)
 
@@ -1084,6 +1127,7 @@ class Ui_MainWindow(object):
         self.gbxAmpEnv = QGroupBox(self.tabAmpEnv)
         self.gbxAmpEnv.setObjectName(u"gbxAmpEnv")
         self.gbxAmpEnv.setCheckable(True)
+        self.gbxAmpEnv.setChecked(False)
         self.layAmpEnv = QGridLayout(self.gbxAmpEnv)
         self.layAmpEnv.setObjectName(u"layAmpEnv")
         self.layAmpEnv.setSizeConstraint(QLayout.SetNoConstraint)
@@ -1108,7 +1152,7 @@ class Ui_MainWindow(object):
 
         self.layAmpEnvHold.addWidget(self.lblAmpEnvHoldVal)
 
-        self.vspEnvAmpHold = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspEnvAmpHold = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layAmpEnvHold.addItem(self.vspEnvAmpHold)
 
@@ -1194,7 +1238,7 @@ class Ui_MainWindow(object):
         self.layAmpEnvDelay.setContentsMargins(6, 6, 6, 6)
         self.knbAmpEnvDelay = QDial(self.gbxAmpEnvDelay)
         self.knbAmpEnvDelay.setObjectName(u"knbAmpEnvDelay")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.knbAmpEnvDelay.sizePolicy().hasHeightForWidth())
@@ -1212,7 +1256,7 @@ class Ui_MainWindow(object):
 
         self.layAmpEnvDelay.addWidget(self.lblAmpEnvDelayVal)
 
-        self.vspEnvAmpDelay = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspEnvAmpDelay = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layAmpEnvDelay.addItem(self.vspEnvAmpDelay)
 
@@ -1308,7 +1352,7 @@ class Ui_MainWindow(object):
 
         self.layAmpEnvSustain.addWidget(self.lblAmpEnvSustainVal)
 
-        self.vspEnvAmpSustain = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspEnvAmpSustain = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layAmpEnvSustain.addItem(self.vspEnvAmpSustain)
 
@@ -1336,7 +1380,7 @@ class Ui_MainWindow(object):
 
         self.layAmpEnvRelease.addWidget(self.lblAmpEnvReleaseVal)
 
-        self.vspEnvAmpRelease = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspEnvAmpRelease = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layAmpEnvRelease.addItem(self.vspEnvAmpRelease)
 
@@ -1344,7 +1388,7 @@ class Ui_MainWindow(object):
 
         self.layAmpEnv.addWidget(self.gbxAmpEnvRelease, 0, 5, 1, 1)
 
-        self.vspAmpEnv = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspAmpEnv = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layAmpEnv.addItem(self.vspAmpEnv, 1, 2, 1, 1)
 
@@ -1361,6 +1405,7 @@ class Ui_MainWindow(object):
         self.gbxFilterGeneral = QGroupBox(self.tabFilter)
         self.gbxFilterGeneral.setObjectName(u"gbxFilterGeneral")
         self.gbxFilterGeneral.setCheckable(True)
+        self.gbxFilterGeneral.setChecked(False)
         self.layFilterGeneral = QGridLayout(self.gbxFilterGeneral)
         self.layFilterGeneral.setObjectName(u"layFilterGeneral")
         self.layFilterGeneral.setSizeConstraint(QLayout.SetNoConstraint)
@@ -1394,7 +1439,7 @@ class Ui_MainWindow(object):
 
         self.layFilterGeneralTop.addWidget(self.sbxFilterKeycenter)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layFilterGeneralTop.addItem(self.horizontalSpacer)
 
@@ -1410,7 +1455,7 @@ class Ui_MainWindow(object):
 
         self.layFilterGeneralKnobs.addWidget(self.lblFilterRandomVal, 2, 5, 1, 1)
 
-        self.hspFilterL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilterL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layFilterGeneralKnobs.addItem(self.hspFilterL, 1, 0, 1, 1)
 
@@ -1515,7 +1560,7 @@ class Ui_MainWindow(object):
 
         self.layFilterGeneralKnobs.addWidget(self.lblFilterResonance, 0, 2, 1, 1)
 
-        self.hspFilterR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilterR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layFilterGeneralKnobs.addItem(self.hspFilterR, 1, 6, 1, 1)
 
@@ -1528,6 +1573,7 @@ class Ui_MainWindow(object):
         self.gbxFilterLfo = QGroupBox(self.tabFilter)
         self.gbxFilterLfo.setObjectName(u"gbxFilterLfo")
         self.gbxFilterLfo.setCheckable(True)
+        self.gbxFilterLfo.setChecked(False)
         self.layFilterLfo = QGridLayout(self.gbxFilterLfo)
         self.layFilterLfo.setObjectName(u"layFilterLfo")
         self.layFilterLfo.setSizeConstraint(QLayout.SetNoConstraint)
@@ -1616,18 +1662,18 @@ class Ui_MainWindow(object):
 
         self.layFilterLfo.addWidget(self.lblFilterLfoDelay, 0, 1, 1, 1)
 
-        self.hspFilterLfoL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilterLfoL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layFilterLfo.addItem(self.hspFilterLfoL, 1, 0, 1, 1)
 
-        self.hspFilterLfoR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilterLfoR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layFilterLfo.addItem(self.hspFilterLfoR, 1, 5, 1, 1)
 
 
         self.layFilter.addWidget(self.gbxFilterLfo, 1, 0, 1, 1)
 
-        self.vspFilter = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilter = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilter.addItem(self.vspFilter, 2, 0, 1, 1)
 
@@ -1639,9 +1685,10 @@ class Ui_MainWindow(object):
         self.gbxFilEnv = QGroupBox(self.tabEnvFilter)
         self.gbxFilEnv.setObjectName(u"gbxFilEnv")
         self.gbxFilEnv.setCheckable(True)
+        self.gbxFilEnv.setChecked(False)
         self.gridLayout_16 = QGridLayout(self.gbxFilEnv)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.vspFilEnv = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnv = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_16.addItem(self.vspFilEnv, 1, 4, 1, 1)
 
@@ -1665,7 +1712,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvDecay.addWidget(self.lblFilEnvDecayVal)
 
-        self.vspFilEnvDecay = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvDecay = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvDecay.addItem(self.vspFilEnvDecay)
 
@@ -1693,7 +1740,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvDepth.addWidget(self.lblFilEnvDepthVal)
 
-        self.vspFilEnvDepth = QSpacerItem(20, 65, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvDepth = QSpacerItem(20, 65, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvDepth.addItem(self.vspFilEnvDepth)
 
@@ -1722,7 +1769,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvDelay.addWidget(self.lblFilEnvDelayVal)
 
-        self.vspFilEnvDelay = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvDelay = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvDelay.addItem(self.vspFilEnvDelay)
 
@@ -1750,7 +1797,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvHold.addWidget(self.lblFilEnvHoldVal)
 
-        self.vspFilEnvHold = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvHold = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvHold.addItem(self.vspFilEnvHold)
 
@@ -1758,7 +1805,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.gbxFilEnvHold, 0, 3, 1, 1)
 
-        self.hspFilEnvL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilEnvL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.gridLayout_16.addItem(self.hspFilEnvL, 0, 0, 1, 1)
 
@@ -1782,7 +1829,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvRelease.addWidget(self.lblFilEnvReleaseVal)
 
-        self.vspFilEnvRelease = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvRelease = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvRelease.addItem(self.vspFilEnvRelease)
 
@@ -1810,7 +1857,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvAttack.addWidget(self.lblFilEnvAttack)
 
-        self.vspFilEnvAttack = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvAttack = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvAttack.addItem(self.vspFilEnvAttack)
 
@@ -1838,7 +1885,7 @@ class Ui_MainWindow(object):
 
         self.layFilEnvSustain.addWidget(self.lblFilEnvSustainVal)
 
-        self.vspFilEnvSustain = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspFilEnvSustain = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layFilEnvSustain.addItem(self.vspFilEnvSustain)
 
@@ -1846,7 +1893,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.gbxFilEnvSustain, 0, 5, 1, 1)
 
-        self.hspFilEnvR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspFilEnvR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.gridLayout_16.addItem(self.hspFilEnvR, 0, 8, 1, 1)
 
@@ -1863,6 +1910,7 @@ class Ui_MainWindow(object):
         self.gbxPitch = QGroupBox(self.tabPitch)
         self.gbxPitch.setObjectName(u"gbxPitch")
         self.gbxPitch.setCheckable(True)
+        self.gbxPitch.setChecked(False)
         self.layGbxPitch = QGridLayout(self.gbxPitch)
         self.layGbxPitch.setObjectName(u"layGbxPitch")
         self.layGbxPitch.setSizeConstraint(QLayout.SetNoConstraint)
@@ -1906,7 +1954,7 @@ class Ui_MainWindow(object):
 
         self.layPitchKnobs.addWidget(self.knbPitchVeltrack, 1, 2, 1, 1)
 
-        self.hspPitchL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layPitchKnobs.addItem(self.hspPitchL, 1, 0, 1, 1)
 
@@ -1937,7 +1985,7 @@ class Ui_MainWindow(object):
 
         self.layPitchKnobs.addWidget(self.lblPitchVeltrack, 0, 2, 1, 1)
 
-        self.hspPitchR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layPitchKnobs.addItem(self.hspPitchR, 1, 4, 1, 1)
 
@@ -1950,6 +1998,7 @@ class Ui_MainWindow(object):
         self.gbxPitchLfo = QGroupBox(self.tabPitch)
         self.gbxPitchLfo.setObjectName(u"gbxPitchLfo")
         self.gbxPitchLfo.setCheckable(True)
+        self.gbxPitchLfo.setChecked(False)
         self.layGbxPitchLfo = QGridLayout(self.gbxPitchLfo)
         self.layGbxPitchLfo.setObjectName(u"layGbxPitchLfo")
         self.layGbxPitchLfo.setSizeConstraint(QLayout.SetNoConstraint)
@@ -2038,18 +2087,18 @@ class Ui_MainWindow(object):
 
         self.layGbxPitchLfo.addWidget(self.lblPitchLfoDelay, 0, 1, 1, 1)
 
-        self.hspPitchLfoL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchLfoL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGbxPitchLfo.addItem(self.hspPitchLfoL, 1, 0, 1, 1)
 
-        self.hspPitchLfoR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchLfoR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGbxPitchLfo.addItem(self.hspPitchLfoR, 1, 5, 1, 1)
 
 
         self.layPitch.addWidget(self.gbxPitchLfo, 1, 0, 1, 1)
 
-        self.VspPitch = QSpacerItem(20, 77, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.VspPitch = QSpacerItem(20, 77, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitch.addItem(self.VspPitch, 2, 0, 1, 1)
 
@@ -2063,6 +2112,7 @@ class Ui_MainWindow(object):
         self.gbxPitchEnv = QGroupBox(self.tabPitchEnv)
         self.gbxPitchEnv.setObjectName(u"gbxPitchEnv")
         self.gbxPitchEnv.setCheckable(True)
+        self.gbxPitchEnv.setChecked(False)
         self.layGbxPitchEnv = QGridLayout(self.gbxPitchEnv)
         self.layGbxPitchEnv.setObjectName(u"layGbxPitchEnv")
         self.layGbxPitchEnv.setSizeConstraint(QLayout.SetNoConstraint)
@@ -2087,7 +2137,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvAttack.addWidget(self.lblPitchEnvAttackVal)
 
-        self.vspPitchEnvAttack = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvAttack = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvAttack.addItem(self.vspPitchEnvAttack)
 
@@ -2115,7 +2165,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvHold.addWidget(self.lblPitchEnvHoldVal)
 
-        self.vspPitchEnvHold = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvHold = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvHold.addItem(self.vspPitchEnvHold)
 
@@ -2143,7 +2193,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvDecay.addWidget(self.lblPitchEnvDecayVal)
 
-        self.vspPitchEnvDecay = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvDecay = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvDecay.addItem(self.vspPitchEnvDecay)
 
@@ -2151,7 +2201,7 @@ class Ui_MainWindow(object):
 
         self.layGbxPitchEnv.addWidget(self.gbxPitchEnvDecay, 0, 4, 1, 1)
 
-        self.hspPitchEnvL = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchEnvL = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGbxPitchEnv.addItem(self.hspPitchEnvL, 0, 0, 1, 1)
 
@@ -2175,7 +2225,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvSustain.addWidget(self.lblPitchEnvSustain)
 
-        self.vspPitchEnvSustain = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvSustain = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvSustain.addItem(self.vspPitchEnvSustain)
 
@@ -2222,7 +2272,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvDepth.addWidget(self.lblPitchEnvDepthVelVal)
 
-        self.vspPitchEnvDepth = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvDepth = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvDepth.addItem(self.vspPitchEnvDepth)
 
@@ -2249,7 +2299,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvRelease.addWidget(self.lblPitchEnvReleaseVal)
 
-        self.vspPitchEnvRelease = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvRelease = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvRelease.addItem(self.vspPitchEnvRelease)
 
@@ -2281,7 +2331,7 @@ class Ui_MainWindow(object):
 
         self.layPitchEnvDelay.addWidget(self.lblPitchEnvDelayVal)
 
-        self.vspPitchEnvDelay = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnvDelay = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnvDelay.addItem(self.vspPitchEnvDelay)
 
@@ -2289,14 +2339,14 @@ class Ui_MainWindow(object):
 
         self.layGbxPitchEnv.addWidget(self.gbxPitchEnvDelay, 0, 1, 1, 1)
 
-        self.hspPitchEnvR = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.hspPitchEnvR = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.layGbxPitchEnv.addItem(self.hspPitchEnvR, 0, 8, 1, 1)
 
 
         self.layPitchEnv.addWidget(self.gbxPitchEnv)
 
-        self.vspPitchEnv = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.vspPitchEnv = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.layPitchEnv.addItem(self.vspPitchEnv)
 
@@ -2310,12 +2360,12 @@ class Ui_MainWindow(object):
         self.lblOpcodes = QLabel(self.tabOpcodes)
         self.lblOpcodes.setObjectName(u"lblOpcodes")
 
-        self.layOpcodes.addWidget(self.lblOpcodes, 0, 0, 1, 1)
+        self.layOpcodes.addWidget(self.lblOpcodes, 0, 1, 1, 1)
 
-        self.lstOpcodes = QListWidget(self.tabOpcodes)
-        self.lstOpcodes.setObjectName(u"lstOpcodes")
+        self.txtOpcodes = QPlainTextEdit(self.tabOpcodes)
+        self.txtOpcodes.setObjectName(u"txtOpcodes")
 
-        self.layOpcodes.addWidget(self.lstOpcodes, 1, 0, 1, 1)
+        self.layOpcodes.addWidget(self.txtOpcodes, 1, 1, 1, 1)
 
         self.tabWidget.addTab(self.tabOpcodes, "")
         self.splitter.addWidget(self.tabWidget)
@@ -2326,7 +2376,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralWidget)
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
-        self.menuBar.setGeometry(QRect(0, 0, 896, 28))
+        self.menuBar.setGeometry(QRect(0, 0, 896, 21))
         self.menuFile = QMenu(self.menuBar)
         self.menuFile.setObjectName(u"menuFile")
         MainWindow.setMenuBar(self.menuBar)
@@ -2415,6 +2465,7 @@ class Ui_MainWindow(object):
         self.gbxSampleOffset.setTitle(QCoreApplication.translate("MainWindow", u"Offset", None))
         self.lblSampleOffsetRandom.setText(QCoreApplication.translate("MainWindow", u"Random:", None))
         self.lblSampleOffsetVelocity.setText(QCoreApplication.translate("MainWindow", u"Velocity:", None))
+        self.chkSampleOffsetValue.setText(QCoreApplication.translate("MainWindow", u"Offset Value", None))
         self.gbxSampleGeneral.setTitle(QCoreApplication.translate("MainWindow", u"General", None))
         self.cbxDirection.setItemText(0, QCoreApplication.translate("MainWindow", u"None", None))
         self.cbxDirection.setItemText(1, QCoreApplication.translate("MainWindow", u"forward", None))

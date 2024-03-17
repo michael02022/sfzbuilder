@@ -366,7 +366,7 @@
       <widget class="QListWidget" name="listWidget"/>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tabMap">
         <attribute name="title">
@@ -414,7 +414,7 @@
            <property name="title">
             <string>Polyphony</string>
            </property>
-           <layout class="QGridLayout" name="LayGbxPolyphony">
+           <layout class="QGridLayout" name="layGbxPolyphony">
             <property name="sizeConstraint">
              <enum>QLayout::SetNoConstraint</enum>
             </property>
@@ -1053,7 +1053,7 @@
             <bool>true</bool>
            </property>
            <property name="checked">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <layout class="QGridLayout" name="layGbxPan">
             <property name="sizeConstraint">
@@ -1150,22 +1150,6 @@
               </item>
               <item row="1" column="3">
                <widget class="QDial" name="knbPanVeltrack">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QDial" name="knbPan">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -3865,7 +3849,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <spacer name="VspPitch">
+          <spacer name="vspPitch">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -4523,7 +4507,7 @@
      <x>0</x>
      <y>0</y>
      <width>896</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -4542,8 +4526,7 @@
   </widget>
   <action name="actNew">
    <property name="icon">
-    <iconset theme="document-new">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-new"/>
    </property>
    <property name="text">
     <string>&amp;New project...</string>
@@ -4557,8 +4540,7 @@
   </action>
   <action name="actOpen">
    <property name="icon">
-    <iconset theme="document-open">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-open"/>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -4572,8 +4554,7 @@
   </action>
   <action name="actSave">
    <property name="icon">
-    <iconset theme="document-save">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-save"/>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -4587,8 +4568,7 @@
   </action>
   <action name="actSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-save-as"/>
    </property>
    <property name="text">
     <string>&amp;Save as...</string>
@@ -4602,8 +4582,7 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset theme="application-exit">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="application-exit"/>
    </property>
    <property name="text">
     <string>&amp;Quit</string>

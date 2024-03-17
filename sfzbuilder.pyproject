@@ -5,6 +5,7 @@
     "resources/resources.qrc",
     "src/ui/mainwindow.py",
     "src/ui/mainwindow.ui",
+    "src/ui/Knob.py",
     "src/utils/classes/global.py",
     "src/utils/classes/mapping.py",
     "src/utils/constants.py",

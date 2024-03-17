@@ -8,5 +8,7 @@
         <file alias="document-open">document-open.svgz</file>
         <file alias="document-save-as">document-save-as.svgz</file>
         <file alias="document-save">document-save.svgz</file>
+        <file alias="pan">pan.png</file>
+        <file alias="volume">volume.png</file>
     </qresource>
 </RCC>

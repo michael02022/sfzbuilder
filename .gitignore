@@ -1,3 +1,7 @@
 __pycache__/
+.ropeproject/
 *.pyc
+*.qm
 *.user
+resources/rc_resources.py
+src/ui/ui_mainwindow.py

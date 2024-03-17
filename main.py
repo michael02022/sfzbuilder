@@ -1,12 +1,14 @@
 # This Python file uses the following encoding: utf-8
+from PySide6.QtCore    import QLocale, QTranslator
 from PySide6.QtGui     import QCursor, QIcon
 from PySide6.QtWidgets import QApplication
+#from PySide6.QtUiTools import QUiLoader
 from src.ui.mainwindow import MainWindow
 
-import sys
-import resources.rc_resources as rc
-
+import os, sys
 #sys.path.insert(0, "..")
+
+testingOtherTranslation = False # FIXME: put this somewhere in a gitignored config file
 
 def centerOnScreen(widget):
   screen = QApplication.screenAt(QCursor.pos())
@@ -15,8 +17,6 @@ def centerOnScreen(widget):
     (rect.height() - widget.height()) / 2);
 
 if __name__ == "__main__":
-  rc.qInitResources()
-
   app = QApplication(sys.argv)
   app.setApplicationDisplayName("SFZBuilder")
   app.setApplicationName("sfzbuilder")
@@ -26,7 +26,17 @@ if __name__ == "__main__":
   app.setWindowIcon(QIcon(":/pngicon"))
   app.setStyle("Fusion")
 
+  locale = QLocale.system()
+  if testingOtherTranslation:
+    locale = QLocale("it")
+    QLocale.setDefault(locale);
+
+  translator = QTranslator(app)
+  translator.load("resources/translations/sfzbuilder_" + locale.name(), os.path.dirname(__file__))
+  app.installTranslator(translator)
+
   window = MainWindow()
+# window = QUiLoader().load("src/ui/mainwindow.ui", None)
   centerOnScreen(window)
   window.show()
 

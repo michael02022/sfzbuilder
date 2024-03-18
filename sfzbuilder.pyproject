@@ -1,10 +1,13 @@
 {
   "files": [
+    "scripts/update_ui_files.sh",
     ".editorconfig",
     ".gitignore",
     "resources/resources.qrc",
+    "resources/rc_resources.py",
     "src/ui/mainwindow.py",
     "src/ui/mainwindow.ui",
+    "src/ui/ui_mainwindow.py",
     "src/ui/Knob.py",
     "src/utils/classes/global.py",
     "src/utils/classes/mapping.py",

@@ -9,6 +9,7 @@
     "src/ui/mainwindow.ui",
     "src/ui/ui_mainwindow.py",
     "src/ui/Knob.py",
+    "src/ui/tabpan.py",
     "src/utils/classes/global.py",
     "src/utils/classes/mapping.py",
     "src/utils/constants.py",

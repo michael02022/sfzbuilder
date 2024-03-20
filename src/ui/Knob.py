@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore    import QPointF, QRectF, QSize, Qt, Signal
 from PySide6.QtGui     import QPainter, QPixmap
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QHBoxLayout, QWidget
 
 def clamp(n, min, max):
   t = min if (n < min) else n
@@ -10,7 +10,7 @@ def clamp(n, min, max):
 class Range:
   def __init__(self):
     self.minimum    = 0.0
-    self.maximum    = 1.0
+    self.maximum    = 100.0
     self.value      = 0.0
     self.isDragging = False
 
@@ -41,18 +41,71 @@ class Range:
     self.value = value
     return True
 
-class KnobPrivate:
-  def __init__(self, knob):
-    self.q = knob
-    self.framesPixmap  = QPixmap()
-    self.previousPoint = QPointF()
-    self.currentFrameY =   0
-    self.frameCount    = 100
-    self.frameHeight   =  64
-    self.frameWidth    =  64
-    self.param         =  -1
-    self.defaultValue  =   0
-    self.inverted      = False
+class KnobPrivate(QWidget):
+  def __init__(self, parent=None):
+    super().__init__(parent)
+
+    self.q = parent
+    self.framesPixmap    = QPixmap()
+    self.previousPoint   = QPointF()
+    self.currentFrameY   = 0
+    self.frameCount      = 100
+    self.frameHeight     = 64
+    self.frameWidth      = 64
+    self.param           = -1
+    self.defaultValue    = 0.0
+    self.incrementFactor = 1.0
+    self.inverted        = False
+
+    layout = QHBoxLayout(parent)
+    layout.setContentsMargins(0, 0, 0, 0);
+    layout.addStretch();
+    layout.addWidget(self);
+    layout.addStretch();
+    parent.setLayout(layout)
+
+  def sizeHint(self):
+    if (not self.framesPixmap.isNull()):
+      return QSize(self.frameWidth, self.frameHeight)
+    return QWidget.sizeHint(self)
+
+  def minimumSizeHint(self):
+    return self.sizeHint()
+
+  def mouseMoveEvent(self, event):
+    if (self.framesPixmap.isNull()):
+      return
+
+    delta = QPointF(event.pos().x() - self.previousPoint.x(),\
+                    event.pos().y() - self.previousPoint.y())
+
+    self.previousPoint = event.pos()
+
+    value    = self.q.r.value + self.incrementFactor * (delta.x() - delta.y())
+    newValue = clamp(value, self.q.r.minimum, self.q.r.maximum);
+
+    self.q.setValue(newValue)
+
+  def mousePressEvent(self, event):
+    if (event.button() == Qt.LeftButton):
+      self.q.r.isDragging = True
+
+  def mouseReleaseEvent(self, event):
+    self.q.r.isDragging = False
+
+  def paintEvent(self, event):
+    if (self.framesPixmap.isNull()):
+      print("[Knob.py] pixmap is null")
+      return;
+    painter = QPainter(self)
+    painter.setRenderHint(QPainter.Antialiasing)
+    if (self.currentFrameY == self.framesPixmap.height()):
+        self.currentFrameY-= self.frameHeight;
+    painter.drawPixmap(
+      QRectF(0, 0, -1, -1),
+      self.framesPixmap,
+      QRectF(0, self.currentFrameY, self.frameWidth, self.frameHeight)
+    )
 
 class Knob(QWidget):
   pixmapChanged = Signal(QPixmap)
@@ -62,50 +115,6 @@ class Knob(QWidget):
     super().__init__(parent)
     self.d = KnobPrivate(self)
     self.r = Range()
-
-  def sizeHint(self):
-    if (not self.d.framesPixmap.isNull()):
-      return QSize(self.d.frameWidth, self.d.frameHeight)
-    return QWidget.sizeHint(self)
-
-  def minimumSizeHint(self):
-    return self.sizeHint()
-
-  def mouseMoveEvent(self, event):
-    if (self.d.framesPixmap.isNull() or not self.r.isDragging):
-      return
-    if (event.pos().x() > self.d.previousPoint.x() or
-      event.pos().y() < self.d.previousPoint.y()):
-        if (self.d.currentFrameY < self.d.framesPixmap.height()):
-            self.d.currentFrameY += self.d.frameHeight;
-        else:
-          if (self.d.currentFrameY >= self.d.frameHeight):
-            self.d.currentFrameY -= self.d.frameHeight
-    self.d.previousPoint = event.pos()
-    rnge     = self.r.maximum - self.r.minimum
-    newValue = self.d.currentFrameY * rnge / self.d.framesPixmap.height() + self.r.minimum
-    self.setValue(newValue)
-
-  def mousePressEvent(self, event):
-    if (event.button() == Qt.LeftButton):
-      self.r.isDragging = True
-
-  def mouseReleaseEvent(self, event):
-    self.r.isDragging = False
-
-  def paintEvent(self, event):
-    if (self.d.framesPixmap.isNull()):
-      print("[Knob.py] pixmap is null")
-      return;
-    painter = QPainter(self)
-    painter.setRenderHint(QPainter.Antialiasing)
-    if (self.d.currentFrameY == self.d.framesPixmap.height()):
-        self.d.currentFrameY-= self.d.frameHeight;
-    painter.drawPixmap(
-      QRectF(0, 0, -1, -1),
-      self.d.framesPixmap,
-      QRectF(0, self.d.currentFrameY, self.d.frameWidth, self.d.frameHeight)
-    )
 
   def setInverted(self, inverted):
     if (self.inverted == inverted):
@@ -167,11 +176,18 @@ class Knob(QWidget):
     return self.r.maximum
 
   def setValue(self, value):
-    if (not self.isEnabled() or not self.r.setValue(value)):
+    if (self.d.framesPixmap.isNull() or not self.isEnabled() or not self.r.setValue(value)):
       return
+
     rnge = self.r.maximum - self.r.minimum;
-    self.d.currentFrameY = self.d.frameHeight * value / rnge;
-    self.d.value  = value;
+    maxY = (self.d.frameCount - 1) * self.d.frameHeight
+    self.d.currentFrameY = self.d.frameHeight * self.d.frameCount * round(value) / rnge;
+
+    if (self.d.currentFrameY > maxY):
+      self.d.currentFrameY = maxY
+
+    self.r.value  = value;
+
     self.valueChanged.emit(value)
     self.update()
 

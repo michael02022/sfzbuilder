@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Andrea Zanellato</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>930</width>
+    <width>1010</width>
     <height>760</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="layCentralWidget" stretch="0,0,0,0,0,0,0">
-    <property name="sizeConstraint">
-     <enum>QLayout::SetNoConstraint</enum>
-    </property>
-    <property name="leftMargin">
-     <number>6</number>
-    </property>
-    <property name="topMargin">
-     <number>6</number>
-    </property>
-    <property name="rightMargin">
-     <number>6</number>
-    </property>
-    <property name="bottomMargin">
-     <number>6</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QHBoxLayout" name="layMainFolder">
       <property name="sizeConstraint">
@@ -363,52 +349,157 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QListWidget" name="listWidget"/>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QListWidget" name="listWidget"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget_2" native="true">
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Import</string>
+             </property>
+             <property name="icon">
+              <iconset theme="emblem-downloads">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>- Delete</string>
+             </property>
+             <property name="icon">
+              <iconset theme="list-remove">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>+ Mapping</string>
+             </property>
+             <property name="icon">
+              <iconset theme="list-add">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Clone</string>
+             </property>
+             <property name="icon">
+              <iconset theme="edit-copy">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>120</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>v</string>
+             </property>
+             <property name="icon">
+              <iconset theme="go-up">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>120</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>^</string>
+             </property>
+             <property name="icon">
+              <iconset theme="go-down">
+               <normaloff>.</normaloff>.</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>6</number>
        </property>
        <widget class="QWidget" name="tabMap">
         <attribute name="title">
          <string>Map</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0" colspan="2">
-          <layout class="QHBoxLayout" name="layOutput">
-           <property name="sizeConstraint">
-            <enum>QLayout::SetNoConstraint</enum>
-           </property>
-           <item>
-            <widget class="QLabel" name="lblOutput">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Output:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="sbxOutput"/>
-           </item>
-           <item>
-            <spacer name="hspOutput">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
          <item row="1" column="0">
           <widget class="QGroupBox" name="gbxPolyphony">
            <property name="title">
@@ -472,6 +563,106 @@
             </item>
            </layout>
           </widget>
+         </item>
+         <item row="4" column="0">
+          <spacer name="vspMap">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QGroupBox" name="gbxMapKey">
+           <property name="title">
+            <string>Key</string>
+           </property>
+           <layout class="QGridLayout" name="layMapKey">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="layUsePitchKeycenter4All">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetNoConstraint</enum>
+              </property>
+              <item>
+               <widget class="QCheckBox" name="chkUseGlobalPitchKeycenter">
+                <property name="text">
+                 <string>Global `pitch_keycenter`</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="sbxUsePitchKeycenter4All"/>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="chkUseKey">
+              <property name="text">
+               <string>Use `key` opcode instead</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <layout class="QHBoxLayout" name="layOutput">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetNoConstraint</enum>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblOutput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Output:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="sbxOutput"/>
+           </item>
+           <item>
+            <spacer name="hspOutput">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
          <item row="1" column="1">
           <widget class="QGroupBox" name="gbxTrigger">
@@ -606,70 +797,6 @@
             </item>
            </layout>
           </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QGroupBox" name="gbxMapKey">
-           <property name="title">
-            <string>Key</string>
-           </property>
-           <layout class="QGridLayout" name="layMapKey">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetNoConstraint</enum>
-            </property>
-            <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="layUsePitchKeycenter4All">
-              <property name="sizeConstraint">
-               <enum>QLayout::SetNoConstraint</enum>
-              </property>
-              <item>
-               <widget class="QCheckBox" name="chkUseGlobalPitchKeycenter">
-                <property name="text">
-                 <string>Global `pitch_keycenter`</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="sbxUsePitchKeycenter4All"/>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="chkUseKey">
-              <property name="text">
-               <string>Use `key` opcode instead</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <spacer name="vspMap">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
@@ -2998,15 +3125,122 @@
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout_16">
-            <item row="0" column="5">
-             <widget class="QGroupBox" name="gbxFilEnvDecay">
+            <item row="0" column="3">
+             <widget class="QGroupBox" name="gbxFilEnvAttack">
               <property name="title">
-               <string>Decay</string>
+               <string>Attack</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="layFilEnvDecay" stretch="0,0,1">
+              <layout class="QGridLayout" name="gridLayout_3">
+               <item row="0" column="0">
+                <widget class="QDial" name="knbFilEnvAttack">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>48</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>48</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="lblFilEnvAttack">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="Line" name="line_7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="pbnFilEnvAttackShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QWidget" name="pnlFilEnvAttackShape" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_3">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvAttackShape">
+                    <property name="text">
+                     <string>Shape</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDial" name="knbFilEnvAttackShape">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvAttackShapeVal">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnFilEnvAttackShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QGroupBox" name="gbxFilEnvDepth">
+              <property name="title">
+               <string>Depth (cents)</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="layFilEnvDepth">
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
                </property>
@@ -3023,7 +3257,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvDecay">
+                <widget class="QDial" name="knbFilEnvDepth">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -3039,7 +3273,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="lblFilEnvDecayVal">
+                <widget class="QLabel" name="lblFilEnvDepthVal">
                  <property name="text">
                   <string>0</string>
                  </property>
@@ -3049,14 +3283,14 @@
                 </widget>
                </item>
                <item>
-                <spacer name="vspFilEnvDecay">
+                <spacer name="vspFilEnvDepth">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
                    <width>20</width>
-                   <height>40</height>
+                   <height>65</height>
                   </size>
                  </property>
                 </spacer>
@@ -3064,15 +3298,15 @@
               </layout>
              </widget>
             </item>
-            <item row="0" column="4">
-             <widget class="QGroupBox" name="gbxFilEnvHold">
+            <item row="0" column="6">
+             <widget class="QGroupBox" name="gbxFilEnvSustain">
               <property name="title">
-               <string>Hold</string>
+               <string>Sustain</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="layFilEnvHold" stretch="0,0,1">
+              <layout class="QVBoxLayout" name="layFilEnvSustain" stretch="0,0,1">
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
                </property>
@@ -3089,7 +3323,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvHold">
+                <widget class="QDial" name="knbFilEnvSustain">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -3105,7 +3339,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="lblFilEnvHoldVal">
+                <widget class="QLabel" name="lblFilEnvSustainVal">
                  <property name="text">
                   <string>0</string>
                  </property>
@@ -3115,7 +3349,7 @@
                 </widget>
                </item>
                <item>
-                <spacer name="vspFilEnvHold">
+                <spacer name="vspFilEnvSustain">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -3202,15 +3436,15 @@
               </layout>
              </widget>
             </item>
-            <item row="0" column="7">
-             <widget class="QGroupBox" name="gbxFilEnvRelease">
+            <item row="0" column="4">
+             <widget class="QGroupBox" name="gbxFilEnvHold">
               <property name="title">
-               <string>Release</string>
+               <string>Hold</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="layFilEnvRelease" stretch="0,0,1">
+              <layout class="QVBoxLayout" name="layFilEnvHold" stretch="0,0,1">
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
                </property>
@@ -3227,7 +3461,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvRelease">
+                <widget class="QDial" name="knbFilEnvHold">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -3243,7 +3477,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="lblFilEnvReleaseVal">
+                <widget class="QLabel" name="lblFilEnvHoldVal">
                  <property name="text">
                   <string>0</string>
                  </property>
@@ -3253,7 +3487,7 @@
                 </widget>
                </item>
                <item>
-                <spacer name="vspFilEnvRelease">
+                <spacer name="vspFilEnvHold">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
                  </property>
@@ -3268,32 +3502,17 @@
               </layout>
              </widget>
             </item>
-            <item row="0" column="6">
-             <widget class="QGroupBox" name="gbxFilEnvSustain">
+            <item row="0" column="5">
+             <widget class="QGroupBox" name="gbxFilEnvDecay">
               <property name="title">
-               <string>Sustain</string>
+               <string>Decay</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="layFilEnvSustain" stretch="0,0,1">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetNoConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QDial" name="knbFilEnvSustain">
+              <layout class="QGridLayout" name="gridLayout_8">
+               <item row="0" column="0">
+                <widget class="QDial" name="knbFilEnvDecay">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -3308,8 +3527,8 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QLabel" name="lblFilEnvSustainVal">
+               <item row="1" column="0">
+                <widget class="QLabel" name="lblFilEnvDecayVal">
                  <property name="text">
                   <string>0</string>
                  </property>
@@ -3318,84 +3537,86 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <spacer name="vspFilEnvSustain">
+               <item row="2" column="0">
+                <widget class="Line" name="line_8">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QGroupBox" name="gbxFilEnvAttack">
-              <property name="title">
-               <string>Attack</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QVBoxLayout" name="layFilEnvAttack" stretch="0,0,0">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetNoConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QDial" name="knbFilEnvAttack">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QLabel" name="lblFilEnvAttack">
+               <item row="3" column="0">
+                <widget class="QPushButton" name="pbnFilEnvDecayShapeEnable">
                  <property name="text">
-                  <string>0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <spacer name="vspFilEnvAttack">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+               <item row="4" column="0">
+                <widget class="QWidget" name="pnlFilEnvDecayShape" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
                  </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
+                 <layout class="QVBoxLayout" name="layAmpEnvDecayShape_3">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <property name="leftMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvDecayShape">
+                    <property name="text">
+                     <string>Shape</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDial" name="knbFilEnvDecayShape">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvDecayShapeVal">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnfILEnvDecayShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
                  </property>
-                </spacer>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -3413,6 +3634,19 @@
               </property>
              </spacer>
             </item>
+            <item row="0" column="8">
+             <spacer name="hspFilEnvR">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="0" column="0">
              <spacer name="hspFilEnvL">
               <property name="orientation">
@@ -3426,45 +3660,17 @@
               </property>
              </spacer>
             </item>
-            <item row="0" column="9">
-             <spacer name="hspFilEnvR">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="1">
-             <widget class="QGroupBox" name="gbxFilEnvDepth">
+            <item row="0" column="7">
+             <widget class="QGroupBox" name="gbxFilEnvRelease">
               <property name="title">
-               <string>Depth (cents)</string>
+               <string>Release</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
-              <layout class="QVBoxLayout" name="layFilEnvDepth">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetNoConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QDial" name="knbFilEnvDepth">
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <widget class="QDial" name="knbFilEnvRelease">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -3479,8 +3685,8 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QLabel" name="lblFilEnvDepthVal">
+               <item row="1" column="0">
+                <widget class="QLabel" name="lblFilEnvReleaseVal">
                  <property name="text">
                   <string>0</string>
                  </property>
@@ -3489,18 +3695,74 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <spacer name="vspFilEnvDepth">
+               <item row="2" column="0">
+                <widget class="Line" name="line_9">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>65</height>
-                  </size>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="pbnFilEnvReleaseShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
-                </spacer>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QWidget" name="pnlFilEnvReleaseShape" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_7">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvReleaseShape">
+                    <property name="text">
+                     <string>Shape</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDial" name="knbFilEnvReleaseShape">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>48</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvReleaseShapeVal">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnFilEnvReleaseShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -4580,8 +4842,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>930</width>
-     <height>28</height>
+     <width>1010</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -4600,7 +4862,8 @@
   </widget>
   <action name="actNew">
    <property name="icon">
-    <iconset theme="document-new"/>
+    <iconset theme="document-new">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;New project...</string>
@@ -4614,7 +4877,8 @@
   </action>
   <action name="actOpen">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -4628,7 +4892,8 @@
   </action>
   <action name="actSave">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -4642,7 +4907,8 @@
   </action>
   <action name="actSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Save as...</string>
@@ -4656,7 +4922,8 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -4680,6 +4947,7 @@
    </property>
   </action>
  </widget>
+ <layoutdefault spacing="6" margin="6"/>
  <resources/>
  <connections>
   <connection>
@@ -4699,4 +4967,21 @@
    </hints>
   </connection>
  </connections>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>12</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>12</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
 </ui>

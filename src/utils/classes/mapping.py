@@ -1,9 +1,14 @@
+from ..constants import *
+from ..enums import *
+import pathlib
+
 class Mapping:
   def __init__(self, type):
     self.type = type
     self.pack = ""
     self.map = ""
     self.name = ""
+
     # MAP PROPERTIES
     self.map_key_range = [0, 127]
     self.map_vel_range = [0, 127]
@@ -74,6 +79,13 @@ class Mapping:
     self.pan_veltrack = 0
     self.pan_random = 0
 
+    self.pan_lfo = False
+    self.pan_lfo_delay = 0
+    self.pan_lfo_fade = 0
+    self.pan_lfo_depth = 0
+    self.pan_lfo_freq = 15
+    self.pan_lfo_wave = lfo_waves[1]
+
     # AMP PROPERTIES
     self.amp_keycenter = 60
     self.amp_keytrack = 0
@@ -105,6 +117,7 @@ class Mapping:
     self.amp_lfo_fade = 0
     self.amp_lfo_depth = 0
     self.amp_lfo_freq = 15
+    self.amp_lfo_wave = lfo_waves[1]
 
     # FILTER PROPERTIES
     self.fil = False
@@ -121,16 +134,23 @@ class Mapping:
     self.fil_vel2depth = 0
     self.fil_env_delay = 0
     self.fil_env_attack = 0
+    self.fil_env_attack_shapebool = False
+    self.fil_env_attack_shape = LINEAR_CURVE
     self.fil_env_hold = 0
     self.fil_env_sustain = 100
     self.fil_env_decay = 0
+    self.amp_env_decay_shapebool = False
+    self.amp_env_decay_shape = LINEAR_CURVE
     self.fil_env_release = 0
+    self.amp_env_release_shapebool = False
+    self.amp_env_release_shape = LINEAR_CURVE
     # FILTER LFO
     self.fil_lfo = False
     self.fil_lfo_delay = 0
     self.fil_lfo_fade = 0
     self.fil_lfo_depth = 0
     self.fil_lfo_freq = 15
+    self.fil_lfo_wave = lfo_waves[1]
 
     # PITCH PROPERTIES
     self.pitch = False
@@ -152,6 +172,7 @@ class Mapping:
     self.pit_lfo_fade = 0
     self.pit_lfo_depth = 0
     self.pit_lfo_freq = 15
+    self.pit_lfo_wave = lfo_waves[1]
 
     # MISC
     self.opcode_notepad = ""

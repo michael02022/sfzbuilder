@@ -3,7 +3,7 @@ from PySide6.QtCore    import QLocale, QTranslator
 from PySide6.QtGui     import QCursor, QIcon
 from PySide6.QtWidgets import QApplication
 #from PySide6.QtUiTools import QUiLoader
-from src.ui.mainwindow import MainWindow
+from ui.mainwindow import MainWindow
 
 import os, sys
 #sys.path.insert(0, "..")
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     QLocale.setDefault(locale);
 
   translator = QTranslator(app)
-  translator.load("resources/translations/sfzbuilder_" + locale.name(), os.path.dirname(__file__))
+  translator.load("../resources/translations/sfzbuilder_" + locale.name(), os.path.dirname(__file__))
   app.installTranslator(translator)
 
   window = MainWindow()

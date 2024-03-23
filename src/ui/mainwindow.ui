@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1010</width>
-    <height>760</height>
+    <width>1204</width>
+    <height>770</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -349,14 +349,32 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="widget" native="true">
-       <layout class="QVBoxLayout" name="verticalLayout">
+      <widget class="QWidget" name="pnlMap" native="true">
+       <layout class="QVBoxLayout" name="layPnlMap">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetNoConstraint</enum>
+        </property>
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
         <item>
          <widget class="QListWidget" name="listMap"/>
         </item>
         <item>
-         <widget class="QWidget" name="widget_2" native="true">
-          <layout class="QGridLayout" name="gridLayout">
+         <widget class="QWidget" name="pnlMapButtons" native="true">
+          <layout class="QGridLayout" name="layMapButtons">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetNoConstraint</enum>
+           </property>
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -384,8 +402,7 @@
               <string>Import</string>
              </property>
              <property name="icon">
-              <iconset theme="emblem-downloads">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="emblem-downloads"/>
              </property>
             </widget>
            </item>
@@ -398,11 +415,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>- Delete</string>
+              <string>Delete</string>
              </property>
              <property name="icon">
-              <iconset theme="list-remove">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="list-remove"/>
              </property>
             </widget>
            </item>
@@ -415,11 +431,10 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>+ Mapping</string>
+              <string>Mapping</string>
              </property>
              <property name="icon">
-              <iconset theme="list-add">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="list-add"/>
              </property>
             </widget>
            </item>
@@ -435,8 +450,7 @@
               <string>Clone</string>
              </property>
              <property name="icon">
-              <iconset theme="edit-copy">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="edit-copy"/>
              </property>
             </widget>
            </item>
@@ -454,12 +468,8 @@
                <height>0</height>
               </size>
              </property>
-             <property name="text">
-              <string>v</string>
-             </property>
              <property name="icon">
-              <iconset theme="go-up">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="go-up"/>
              </property>
             </widget>
            </item>
@@ -477,12 +487,8 @@
                <height>0</height>
               </size>
              </property>
-             <property name="text">
-              <string>^</string>
-             </property>
              <property name="icon">
-              <iconset theme="go-down">
-               <normaloff>.</normaloff>.</iconset>
+              <iconset theme="go-down"/>
              </property>
             </widget>
            </item>
@@ -2630,7 +2636,7 @@
                <widget class="QSpinBox" name="sbxFilterKeycenter"/>
               </item>
               <item>
-               <spacer name="horizontalSpacer">
+               <spacer name="hspFilterType">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -3612,7 +3618,7 @@
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QPushButton" name="pbnfILEnvDecayShapeReset">
+                <widget class="QPushButton" name="pbnFilEnvDecayShapeReset">
                  <property name="text">
                   <string>Reset</string>
                  </property>
@@ -4842,8 +4848,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1010</width>
-     <height>21</height>
+     <width>1204</width>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -4862,8 +4868,7 @@
   </widget>
   <action name="actNew">
    <property name="icon">
-    <iconset theme="document-new">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-new"/>
    </property>
    <property name="text">
     <string>&amp;New project...</string>
@@ -4877,8 +4882,7 @@
   </action>
   <action name="actOpen">
    <property name="icon">
-    <iconset theme="document-open">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-open"/>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -4892,8 +4896,7 @@
   </action>
   <action name="actSave">
    <property name="icon">
-    <iconset theme="document-save">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-save"/>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -4907,8 +4910,7 @@
   </action>
   <action name="actSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="document-save-as"/>
    </property>
    <property name="text">
     <string>&amp;Save as...</string>
@@ -4922,8 +4924,7 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset theme="application-exit">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="application-exit"/>
    </property>
    <property name="text">
     <string>&amp;Quit</string>

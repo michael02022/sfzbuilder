@@ -1,14 +1,20 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="pngicon">application.png</file>
-        <file alias="png1024">application1024.png</file>
-        <file alias="application-exit">application-exit.svgz</file>
-        <file alias="appicon">application.svgz</file>
-        <file alias="document-new">document-new.svgz</file>
-        <file alias="document-open">document-open.svgz</file>
-        <file alias="document-save-as">document-save-as.svgz</file>
-        <file alias="document-save">document-save.svgz</file>
-        <file alias="pan">pan.png</file>
-        <file alias="volume">volume.png</file>
+        <file alias="pngicon">icons/application.png</file>
+        <file alias="png1024">icons/application1024.png</file>
+        <file alias="application-exit">icons/application-exit.svgz</file>
+        <file alias="appicon">icons/application.svgz</file>
+        <file alias="document-new">icons/document-new.svgz</file>
+        <file alias="document-open">icons/document-open.svgz</file>
+        <file alias="document-save-as">icons/document-save-as.svgz</file>
+        <file alias="document-save">icons/document-save.svgz</file>
+        <file alias="pan">icons/pan.png</file>
+        <file alias="volume">icons/volume.png</file>
+        <file alias="edit-copy">icons/edit-copy.svgz</file>
+        <file alias="go-down">icons/go-down.svgz</file>
+        <file alias="go-up">icons/go-up.svgz</file>
+        <file alias="import">icons/import.svgz</file>
+        <file alias="list-add">icons/list-add.svgz</file>
+        <file alias="list-remove">icons/list-remove.svgz</file>
     </qresource>
 </RCC>

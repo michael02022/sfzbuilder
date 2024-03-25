@@ -4,16 +4,25 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Save UI",
-      "type": "process",
-      "command": "bash",
-      "args": [
-        "scripts/update_ui_files.sh"
-      ],
+      "label":    "Save UI",
+      "type":     "process",
+      "command":  "bash",
+      "args":   [ "scripts/update_ui_files.sh" ],
       "problemMatcher": [],
       "group": {
         "kind": "build",
         "isDefault": true
+      }
+    },
+    {
+      "label":    "Qt Designer",
+      "type":     "process",
+      "command":  "bash",
+      "args":   [ "scripts/designer.sh" ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
       }
     }
   ]

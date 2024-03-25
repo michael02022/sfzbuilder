@@ -1,0 +1,13 @@
+// This doesn't work from here, copy to your keybindings.json instead
+[
+	{
+		"key":     "ctrl+meta+d",
+		"command": "workbench.action.tasks.runTask",
+		"args":    "Qt Designer"
+	},
+	{
+		"key":     "ctrl+meta+u",
+		"command": "workbench.action.tasks.runTask",
+		"args":    "Save UI"
+	}
+]

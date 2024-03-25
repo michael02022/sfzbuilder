@@ -1,7 +1,8 @@
 {
   "files": [
+    "scripts/designer.sh",
     "scripts/update_ui_files.sh",
-    "scripts/registerknob.py",
+    "scripts/registerknobpy.py",
     ".editorconfig",
     ".gitignore",
     "resources/resources.qrc",
@@ -16,7 +17,6 @@
     "src/utils/constants.py",
     "src/utils/enums.py",
     "src/main.py",
-    "designer",
     "sfzbuilder"
   ]
 }

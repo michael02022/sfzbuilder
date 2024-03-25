@@ -2,9 +2,17 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 # This Python file uses the following encoding: utf-8
-from PySide6.QtCore    import QPointF, QRectF, QSize, Qt, Signal
+from PySide6.QtCore    import Property, QPointF, QRectF, QSize, Qt, Signal
 from PySide6.QtGui     import QPainter, QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QWidget
+
+import sys, importlib.util
+name   = "rc_resources"
+spec   = importlib.util.spec_from_file_location(name, "src/ui/rc_resources.py")
+module = importlib.util.module_from_spec(spec)
+sys.modules[name] = module
+spec.loader.exec_module(module)
+from rc_resources import *
 
 def clamp(n, min, max):
   t = min if (n < min) else n
@@ -196,3 +204,12 @@ class KnobPy(QWidget):
 
   def value(self):
     return self.r.value
+
+  minimum  = Property(float,   minimum,      setMinimum)
+  maximum  = Property(float,   maximum,      setMaximum)
+  value    = Property(float,   value,        setValue)
+  frames   = Property(int,     frameCount,   setFrameCount)
+  image    = Property(QPixmap, pixmap,       setPixmap)
+  inverse  = Property(bool,    isInverted,   setInverted)
+  param    = Property(int,     param,        setParam)
+  vdefault = Property(float,   defaultValue, setDefaultValue)

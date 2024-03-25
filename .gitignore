@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 *.qm
 *.user
-resources/rc_resources.py
+src/ui/rc_resources.py
 src/ui/ui_mainwindow.py

@@ -1396,6 +1396,9 @@
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="image" stdset="0">
+                 <pixmap resource="../../resources/resources.qrc">:/pan</pixmap>
+                </property>
                </widget>
               </item>
               <item row="1" column="2">
@@ -4423,10 +4426,12 @@
   <customwidget>
    <class>KnobPy</class>
    <extends>QWidget</extends>
-   <header location="global">.AyrePy</header>
+   <header>AyrePy</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actQuit</sender>

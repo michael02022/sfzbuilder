@@ -7,14 +7,8 @@ from PySide6.QtGui     import QIcon
 from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication
 from .ui_mainwindow    import Ui_MainWindow
 from .tabpan           import setupKnobs
+from .rc_resources     import *
 import os
-
-import sys, importlib.util
-spec      = importlib.util.spec_from_file_location("rc", "resources/rc_resources.py")
-resources = importlib.util.module_from_spec(spec)
-sys.modules["resources"] = resources
-spec.loader.exec_module(resources)
-import resources as rc
 
 current_map_ls = []
 current_pack_dict = {}
@@ -22,8 +16,6 @@ current_pack_dict = {}
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):
     super().__init__(parent)
-
-    rc.qInitResources() # TODO: Not needed, just silence a warning about the import above.
 
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)

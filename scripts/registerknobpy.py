@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import sys, importlib.util
-spec   = importlib.util.spec_from_file_location("AyrePy", "src/ui/AyrePy.py")
-AyrePy = importlib.util.module_from_spec(spec)
-sys.modules["AyrePy"] = AyrePy
-spec.loader.exec_module(AyrePy)
+name   = 'AyrePy'
+spec   = importlib.util.spec_from_file_location(name, "src/ui/AyrePy.py")
+module = importlib.util.module_from_spec(spec)
+sys.modules[name] = module
+spec.loader.exec_module(module)
 
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 from AyrePy import KnobPy

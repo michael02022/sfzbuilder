@@ -32,7 +32,7 @@ if __name__ == "__main__":
   locale = QLocale.system()
   if testingOtherTranslation:
     locale = QLocale("it")
-    QLocale.setDefault(locale);
+    QLocale.setDefault(locale)
 
   translator = QTranslator(app)
   translator.load("../resources/translations/sfzbuilder_" + locale.name(), os.path.dirname(__file__))

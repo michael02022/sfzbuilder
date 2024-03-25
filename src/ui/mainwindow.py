@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 # This Python file uses the following encoding: utf-8
+from PySide6.QtCore    import QSettings
 from PySide6.QtGui     import QIcon
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication
 from .ui_mainwindow    import Ui_MainWindow
 from .tabpan           import setupKnobs
+import os
 
 import sys, importlib.util
 spec      = importlib.util.spec_from_file_location("rc", "resources/rc_resources.py")
@@ -13,6 +15,9 @@ resources = importlib.util.module_from_spec(spec)
 sys.modules["resources"] = resources
 spec.loader.exec_module(resources)
 import resources as rc
+
+current_map_ls = []
+current_pack_dict = {}
 
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):
@@ -24,6 +29,7 @@ class MainWindow(QMainWindow):
     self.ui.setupUi(self)
 
     setupKnobs(self.ui)
+    self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
 
     self.ui.actNew.setIcon(QIcon.fromTheme("document-new",        QIcon(":/document-new")))
     self.ui.actOpen.setIcon(QIcon.fromTheme("document-open",      QIcon(":/document-open")))
@@ -38,6 +44,10 @@ class MainWindow(QMainWindow):
     self.ui.pbnMapImport.setIcon(QIcon.fromTheme("emblem-downloads", QIcon(":/import")))
     self.ui.pbnMapUp.setIcon(QIcon.fromTheme("go-up",                QIcon(":/go-up")))
 
+    self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
+    if self.settings.value("mainfolderpath") is not None:
+      self.ui.txtMainFolder.setText(self.settings.value("mainfolderpath"))
+
     self.ui.pbnAmpEnvAttackShapeEnable.clicked.connect(self.onAmpEnvAttackShapeEnabled)
     self.ui.pbnAmpEnvDecayShapeEnable.clicked.connect(self.onAmpEnvDecayShapeEnabled)
     self.ui.pbnAmpEnvReleaseShapeEnable.clicked.connect(self.onAmpEnvReleaseShapeEnabled)
@@ -45,6 +55,16 @@ class MainWindow(QMainWindow):
     self.ui.pbnFilEnvAttackShapeEnable.clicked.connect(self.onFilEnvAttackShapeEnabled)
     self.ui.pbnFilEnvDecayShapeEnable.clicked.connect(self.onFilEnvDecayShapeEnabled)
     self.ui.pbnFilEnvReleaseShapeEnable.clicked.connect(self.onFilEnvReleaseShapeEnabled)
+
+  def onMainFolder(self):
+    main_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a SFZBuilder folder", options=QFileDialog.ShowDirsOnly)
+    self.msgbox_ok = QMessageBox(self)
+    if False in (os.path.exists(f"{main_folder_path}/MappingPool"), os.path.exists(f"{main_folder_path}/Presets"), os.path.exists(f"{main_folder_path}/Projects")):
+      self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Projects folders.")
+      self.msgbox_ok.exec()
+    else:
+      self.ui.txtMainFolder.setText(main_folder_path)
+      self.settings.setValue("mainfolderpath", main_folder_path)
 
   def onAmpEnvAttackShapeEnabled(self):
     self.ui.pnlAmpEnvAttackShape.setEnabled(not self.ui.pnlAmpEnvAttackShape.isEnabled())

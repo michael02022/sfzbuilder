@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1204</width>
-    <height>770</height>
+    <width>1207</width>
+    <height>802</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -181,6 +181,13 @@
        <widget class="QSpinBox" name="sbxVelHi"/>
       </item>
       <item>
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkNoteOn">
         <property name="text">
          <string>&quot;note on&quot;</string>
@@ -318,6 +325,13 @@
       </item>
       <item>
        <widget class="QDoubleSpinBox" name="dsbRandomHi"/>
+      </item>
+      <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="lblVolume">
@@ -1374,6 +1388,46 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="1">
+               <widget class="KnobPy" name="knbPan">
+                <property name="maximumSize">
+                 <size>
+                  <width>96</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="KnobPy" name="knbPanKeytrack">
+                <property name="maximumSize">
+                 <size>
+                  <width>96</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="KnobPy" name="knbPanVeltrack">
+                <property name="maximumSize">
+                 <size>
+                  <width>96</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="KnobPy" name="knbPanRandom">
+                <property name="maximumSize">
+                 <size>
+                  <width>96</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>
@@ -1461,36 +1515,6 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="2">
-               <widget class="QDial" name="knbAmpVeltrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QDial" name="knbAmpRandom">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QDial" name="knbAmpKeytrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
               <item row="2" column="2">
                <widget class="QLabel" name="lblAmpVeltrackVal">
                 <property name="text">
@@ -1546,6 +1570,15 @@
                  </size>
                 </property>
                </spacer>
+              </item>
+              <item row="1" column="1">
+               <widget class="KnobPy" name="knbAmpKeytrack"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="KnobPy" name="knbAmpVeltrack"/>
+              </item>
+              <item row="1" column="3">
+               <widget class="KnobPy" name="knbAmpRandom"/>
               </item>
              </layout>
             </item>
@@ -1679,11 +1712,17 @@
          </item>
          <item row="1" column="0">
           <widget class="QGroupBox" name="gbxAmpLfo">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="title">
             <string>LFO</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="layAmpLfo">
             <property name="sizeConstraint">
@@ -1701,57 +1740,8 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="1" column="3">
-             <widget class="QDial" name="knbAmpLfoDepth">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLabel" name="lblAmpLfoFadeVal">
-              <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QDial" name="knbAmpLfoFade">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QDial" name="knbAmpLfoFreq">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QLabel" name="lblAmpLfoDepthVal">
+            <item row="2" column="4">
+             <widget class="QLabel" name="lblAmpLfoFreqVal">
               <property name="text">
                <string>0</string>
               </property>
@@ -1764,35 +1754,6 @@
              <widget class="QLabel" name="lblAmpLfoDelayVal">
               <property name="text">
                <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="hspAmpLfoL">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="lblAmpLfoDepth">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Depth</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1815,8 +1776,8 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="lblAmpLfoFade">
+            <item row="0" column="3">
+             <widget class="QLabel" name="lblAmpLfoDepth">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1824,15 +1785,28 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Fade</string>
+               <string>Depth</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
-            <item row="2" column="4">
-             <widget class="QLabel" name="lblAmpLfoFreqVal">
+            <item row="0" column="0">
+             <spacer name="hspAmpLfoL">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="lblAmpLfoFadeVal">
               <property name="text">
                <string>0</string>
               </property>
@@ -1841,16 +1815,13 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QDial" name="knbAmpLfoDelay">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
+            <item row="2" column="3">
+             <widget class="QLabel" name="lblAmpLfoDepthVal">
+              <property name="text">
+               <string>0</string>
               </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -1882,6 +1853,34 @@
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="lblAmpLfoFade">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Fade</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="KnobPy" name="knbAmpLfoDelay"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="KnobPy" name="knbAmpLfoFade"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="KnobPy" name="knbAmpLfoDepth"/>
+            </item>
+            <item row="1" column="4">
+             <widget class="KnobPy" name="knbAmpLfoFreq"/>
             </item>
            </layout>
           </widget>
@@ -1945,20 +1944,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvHold">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvHold"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvHoldVal">
@@ -2011,20 +1997,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvDecay">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvDecay"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvDecayVal">
@@ -2082,20 +2055,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDial" name="knbAmpEnvDecayShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <widget class="KnobPy" name="knbAmpEnvDecayShape"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvDecayShapeVal">
@@ -2145,26 +2105,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvDelay">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvDelay"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvDelayVal">
@@ -2223,20 +2164,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvAttack">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvAttack"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvAttackVal">
@@ -2282,20 +2210,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDial" name="knbAmpEnvAttackShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <widget class="KnobPy" name="knbAmpEnvAttackShape"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvAttackShapeVal">
@@ -2345,20 +2260,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvSustain">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvSustain"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvSustainVal">
@@ -2424,20 +2326,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbAmpEnvRelease">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbAmpEnvRelease"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvReleaseVal">
@@ -2483,20 +2372,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDial" name="knbAmpEnvReleaseShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <widget class="KnobPy" name="knbAmpEnvReleaseShape"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvReleaseShapeVal">
@@ -2520,11 +2396,11 @@
                </item>
               </layout>
               <zorder>line_5</zorder>
-              <zorder>knbAmpEnvRelease</zorder>
               <zorder>lblAmpEnvReleaseVal</zorder>
               <zorder>pbnAmpEnvReleaseShapeEnable</zorder>
               <zorder>pnlAmpEnvReleaseShape</zorder>
               <zorder>pbnAmpEnvReleaseShapeReset</zorder>
+              <zorder>knbAmpEnvRelease</zorder>
              </widget>
             </item>
            </layout>
@@ -2704,38 +2580,6 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QDial" name="knbFilterCutoff">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QDial" name="knbFilterKeytrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
               <item row="2" column="2">
                <widget class="QLabel" name="lblFilterResonanceVal">
                 <property name="text">
@@ -2743,32 +2587,6 @@
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="5">
-               <widget class="QDial" name="knbFilterRandom">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QDial" name="knbFilterResonance">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2795,19 +2613,6 @@
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="4">
-               <widget class="QDial" name="knbFilterVeltrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2882,6 +2687,21 @@
                 </property>
                </spacer>
               </item>
+              <item row="1" column="1">
+               <widget class="KnobPy" name="knbFilterCutoff"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="KnobPy" name="knbFilterResonance"/>
+              </item>
+              <item row="1" column="3">
+               <widget class="KnobPy" name="knbFilterKeytrack"/>
+              </item>
+              <item row="1" column="4">
+               <widget class="KnobPy" name="knbFilterVeltrack"/>
+              </item>
+              <item row="1" column="5">
+               <widget class="KnobPy" name="knbFilterRandom"/>
+              </item>
              </layout>
             </item>
            </layout>
@@ -2914,19 +2734,6 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="1" column="3">
-             <widget class="QDial" name="knbFilterLfoDepth">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="2">
              <widget class="QLabel" name="lblFilterLfoFadeVal">
               <property name="text">
@@ -2934,32 +2741,6 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QDial" name="knbFilterLfoFade">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QDial" name="knbFilterLfoFreq">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -3041,19 +2822,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QDial" name="knbFilterLfoDelay">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="lblFilterLfoDelay">
               <property name="sizePolicy">
@@ -3095,6 +2863,18 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="KnobPy" name="knbFilterLfoDelay"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="KnobPy" name="knbFilterLfoFade"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="KnobPy" name="knbFilterLfoDepth"/>
+            </item>
+            <item row="1" column="4">
+             <widget class="KnobPy" name="knbFilterLfoFreq"/>
             </item>
            </layout>
           </widget>
@@ -3140,20 +2920,46 @@
                <set>Qt::AlignCenter</set>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
-               <item row="0" column="0">
-                <widget class="QDial" name="knbFilEnvAttack">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnFilEnvAttackShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
                  </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QWidget" name="pnlFilEnvAttackShape" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
                  </property>
+                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_3">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvAttackShape">
+                    <property name="text">
+                     <string>Shape</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="KnobPy" name="knbFilEnvAttackShape"/>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblFilEnvAttackShapeVal">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
                <item row="1" column="0">
@@ -3180,60 +2986,8 @@
                  </property>
                 </widget>
                </item>
-               <item row="4" column="0">
-                <widget class="QWidget" name="pnlFilEnvAttackShape" native="true">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_3">
-                  <property name="sizeConstraint">
-                   <enum>QLayout::SetNoConstraint</enum>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="lblFilEnvAttackShape">
-                    <property name="text">
-                     <string>Shape</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QDial" name="knbFilEnvAttackShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblFilEnvAttackShapeVal">
-                    <property name="text">
-                     <string>0</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvAttackShapeReset">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
+               <item row="0" column="0">
+                <widget class="KnobPy" name="knbFilEnvAttack"/>
                </item>
               </layout>
              </widget>
@@ -3263,20 +3017,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvDepth">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbFilEnvDepth"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvDepthVal">
@@ -3329,20 +3070,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvSustain">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbFilEnvSustain"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvSustainVal">
@@ -3395,20 +3123,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvDelay">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbFilEnvDelay"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvDelayVal">
@@ -3467,20 +3182,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbFilEnvHold">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbFilEnvHold"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvHoldVal">
@@ -3517,43 +3219,10 @@
                <set>Qt::AlignCenter</set>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
-               <item row="0" column="0">
-                <widget class="QDial" name="knbFilEnvDecay">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="lblFilEnvDecayVal">
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnFilEnvDecayShapeReset">
                  <property name="text">
-                  <string>0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="Line" name="line_8">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="pbnFilEnvDecayShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
+                  <string>Reset</string>
                  </property>
                 </widget>
                </item>
@@ -3589,20 +3258,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDial" name="knbFilEnvDecayShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <widget class="KnobPy" name="knbFilEnvDecayShape"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblFilEnvDecayShapeVal">
@@ -3617,12 +3273,32 @@
                  </layout>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvDecayShapeReset">
-                 <property name="text">
-                  <string>Reset</string>
+               <item row="2" column="0">
+                <widget class="Line" name="line_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="lblFilEnvDecayVal">
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="pbnFilEnvDecayShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="KnobPy" name="knbFilEnvDecay"/>
                </item>
               </layout>
              </widget>
@@ -3675,29 +3351,17 @@
                <set>Qt::AlignCenter</set>
               </property>
               <layout class="QGridLayout" name="gridLayout_9">
-               <item row="0" column="0">
-                <widget class="QDial" name="knbFilEnvRelease">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="pbnFilEnvReleaseShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="lblFilEnvReleaseVal">
+               <item row="5" column="0">
+                <widget class="QPushButton" name="pbnFilEnvReleaseShapeReset">
                  <property name="text">
-                  <string>0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
+                  <string>Reset</string>
                  </property>
                 </widget>
                </item>
@@ -3705,13 +3369,6 @@
                 <widget class="Line" name="line_9">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QPushButton" name="pbnFilEnvReleaseShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
@@ -3735,20 +3392,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QDial" name="knbFilEnvReleaseShape">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>48</height>
-                     </size>
-                    </property>
-                   </widget>
+                   <widget class="KnobPy" name="knbFilEnvReleaseShape"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblFilEnvReleaseShapeVal">
@@ -3763,12 +3407,18 @@
                  </layout>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvReleaseShapeReset">
+               <item row="1" column="0">
+                <widget class="QLabel" name="lblFilEnvReleaseVal">
                  <property name="text">
-                  <string>Reset</string>
+                  <string>0</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="KnobPy" name="knbFilEnvRelease"/>
                </item>
               </layout>
              </widget>
@@ -3846,19 +3496,6 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="3">
-               <widget class="QDial" name="knbPitchRandom">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="1">
                <widget class="QLabel" name="lblPitchKeytrack">
                 <property name="sizePolicy">
@@ -3885,19 +3522,6 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="2">
-               <widget class="QDial" name="knbPitchVeltrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
               <item row="1" column="0">
                <spacer name="hspPitchL">
                 <property name="orientation">
@@ -3910,19 +3534,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item row="1" column="1">
-               <widget class="QDial" name="knbPitchKeytrack">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>48</height>
-                 </size>
-                </property>
-                <property name="notchesVisible">
-                 <bool>true</bool>
-                </property>
-               </widget>
               </item>
               <item row="2" column="3">
                <widget class="QLabel" name="lblPitchRandomVal">
@@ -3973,6 +3584,15 @@
                 </property>
                </spacer>
               </item>
+              <item row="1" column="1">
+               <widget class="KnobPy" name="knbPitchKeytrack"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="KnobPy" name="knbPitchVeltrack"/>
+              </item>
+              <item row="1" column="3">
+               <widget class="KnobPy" name="knbPitchRandom"/>
+              </item>
              </layout>
             </item>
            </layout>
@@ -4005,19 +3625,6 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="1" column="3">
-             <widget class="QDial" name="knbPitchDepth">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="2">
              <widget class="QLabel" name="lblPitchLfoFadeVal">
               <property name="text">
@@ -4025,32 +3632,6 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QDial" name="knbPitchFade">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QDial" name="knbPitchFreq">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -4132,19 +3713,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QDial" name="knbPitchDelay">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>48</height>
-               </size>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="lblPitchLfoDelay">
               <property name="sizePolicy">
@@ -4186,6 +3754,18 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="KnobPy" name="knbPitchDelay"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="KnobPy" name="knbPitchFade"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="KnobPy" name="knbPitchDepth"/>
+            </item>
+            <item row="1" column="4">
+             <widget class="KnobPy" name="knbPitchFreq"/>
             </item>
            </layout>
           </widget>
@@ -4277,26 +3857,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvDelay">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvDelay"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDelayVal">
@@ -4355,20 +3916,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvAttack">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvAttack"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvAttackVal">
@@ -4421,20 +3969,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvRelease">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvRelease"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvReleaseVal">
@@ -4487,20 +4022,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvDecay">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvDecay"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDecayVal">
@@ -4553,20 +4075,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvSustain">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvSustain"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvSustain">
@@ -4619,20 +4128,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvHold">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvHold"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvHoldVal">
@@ -4711,20 +4207,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QDial" name="knbPitchEnvDepth">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvDepth"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDepthVal">
@@ -4747,20 +4230,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QDial" name="knbPitchEnvDepthVel">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>48</height>
-                  </size>
-                 </property>
-                </widget>
+                <widget class="KnobPy" name="knbPitchEnvDepthVel"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDepthVelVal">
@@ -4848,7 +4318,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1204</width>
+     <width>1207</width>
      <height>28</height>
     </rect>
    </property>
@@ -4949,6 +4419,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="6"/>
+ <customwidgets>
+  <customwidget>
+   <class>KnobPy</class>
+   <extends>QWidget</extends>
+   <header location="global">.AyrePy</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

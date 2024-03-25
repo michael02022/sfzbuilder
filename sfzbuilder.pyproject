@@ -1,6 +1,7 @@
 {
   "files": [
     "scripts/update_ui_files.sh",
+    "scripts/registerknob.py",
     ".editorconfig",
     ".gitignore",
     "resources/resources.qrc",
@@ -8,13 +9,14 @@
     "src/ui/mainwindow.py",
     "src/ui/mainwindow.ui",
     "src/ui/ui_mainwindow.py",
-    "src/ui/Knob.py",
+    "src/ui/AyrePy.py",
     "src/ui/tabpan.py",
     "src/utils/classes/global.py",
     "src/utils/classes/mapping.py",
     "src/utils/constants.py",
     "src/utils/enums.py",
     "src/main.py",
+    "designer",
     "sfzbuilder"
   ]
 }

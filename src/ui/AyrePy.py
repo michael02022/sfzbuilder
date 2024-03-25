@@ -1,3 +1,6 @@
+# Copyright (c) 2024 Andrea Zanellato
+# SPDX-License-Identifier: BSD-3-Clause
+
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore    import QPointF, QRectF, QSize, Qt, Signal
 from PySide6.QtGui     import QPainter, QPixmap
@@ -46,7 +49,7 @@ class KnobPrivate(QWidget):
     super().__init__(parent)
 
     self.q = parent
-    self.framesPixmap    = QPixmap()
+    self.framesPixmap    = QPixmap(":/volume")
     self.previousPoint   = QPointF()
     self.currentFrameY   = 0
     self.frameCount      = 100
@@ -107,7 +110,7 @@ class KnobPrivate(QWidget):
       QRectF(0, self.currentFrameY, self.frameWidth, self.frameHeight)
     )
 
-class Knob(QWidget):
+class KnobPy(QWidget):
   pixmapChanged = Signal(QPixmap)
   valueChanged  = Signal(float)
 

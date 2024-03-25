@@ -1,3 +1,6 @@
+# Copyright (c) 2024 Andrea Zanellato
+# SPDX-License-Identifier: BSD-3-Clause
+
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore    import QLocale, QTranslator
 from PySide6.QtGui     import QCursor, QIcon

@@ -8,10 +8,45 @@ from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplicatio
 from .ui_mainwindow    import Ui_MainWindow
 from .tabpan           import setupKnobs
 from .rc_resources     import *
+from collections       import defaultdict
+from utils.classes.mapping import Mapping
 import os
+import glob
+import pathlib
 
-current_map_ls = []
-current_pack_dict = {}
+def get_mappings(config_path):
+  mappings_dict = {}
+  mappings_dict["MSamples"] = [p for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
+  mappings_dict["PSamples"] = [p for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
+  return mappings_dict
+
+def get_pack(ls):
+  pack_dict = defaultdict(list)
+  for p in ls:
+      path_ls = pathlib.Path(p).parts # split path into list
+      pack_dict[path_ls[0]].append(os.path.join(*path_ls[1:]))
+  return pack_dict
+
+def which_pack(mappings_dict, bool):
+    pack = {}
+    if bool:
+        pack = get_pack(mappings_dict["PSamples"])
+        return pack
+    else:
+        pack = get_pack(mappings_dict["MSamples"])
+        return pack
+
+def which_pack_str(bool):
+    if bool:
+        return "PSamples"
+    else:
+        return "MSamples"
+
+def get_map_names(map_objects):
+    ls = []
+    for map in map_objects:
+        ls.append(map.get_name())
+    return ls
 
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):
@@ -21,7 +56,14 @@ class MainWindow(QMainWindow):
     self.ui.setupUi(self)
 
     setupKnobs(self.ui)
+
+    self.current_map_ls = []
+    self.current_pack_dict = {}
+    self.map_objects = []
+
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
+    self.enable_edit = False
+    self.msgbox_ok = QMessageBox(self)
 
     self.ui.actNew.setIcon(QIcon.fromTheme("document-new",        QIcon(":/document-new")))
     self.ui.actOpen.setIcon(QIcon.fromTheme("document-open",      QIcon(":/document-open")))
@@ -36,9 +78,17 @@ class MainWindow(QMainWindow):
     self.ui.pbnMapImport.setIcon(QIcon.fromTheme("emblem-downloads", QIcon(":/import")))
     self.ui.pbnMapUp.setIcon(QIcon.fromTheme("go-up",                QIcon(":/go-up")))
 
+    # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
+    self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
     if self.settings.value("mainfolderpath") is not None:
       self.ui.txtMainFolder.setText(self.settings.value("mainfolderpath"))
+      self.ui.lblPresetPrefix.setText(self.settings.value("presetfolderpath"))
+      self.mappings_dict = get_mappings(self.settings.value("mainfolderpath"))
+      self.enable_edit = True
+
+    self.ui.pbnMapAdd.clicked.connect(self.onMapAdd)
+    self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
 
     self.ui.pbnAmpEnvAttackShapeEnable.clicked.connect(self.onAmpEnvAttackShapeEnabled)
     self.ui.pbnAmpEnvDecayShapeEnable.clicked.connect(self.onAmpEnvDecayShapeEnabled)
@@ -50,13 +100,41 @@ class MainWindow(QMainWindow):
 
   def onMainFolder(self):
     main_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a SFZBuilder folder", options=QFileDialog.ShowDirsOnly)
-    self.msgbox_ok = QMessageBox(self)
     if False in (os.path.exists(f"{main_folder_path}/MappingPool"), os.path.exists(f"{main_folder_path}/Presets"), os.path.exists(f"{main_folder_path}/Projects")):
       self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Projects folders.")
       self.msgbox_ok.exec()
     else:
       self.ui.txtMainFolder.setText(main_folder_path)
       self.settings.setValue("mainfolderpath", main_folder_path)
+
+  def onPresetFolder(self):
+    preset_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a preset folder", options=QFileDialog.ShowDirsOnly, dir=self.settings.value("mainfolderpath"))
+    self.ui.lblPresetPrefix.setText(preset_folder_path)
+    if preset_folder_path != "":
+      self.settings.setValue("presetfolderpath", preset_folder_path)
+
+  def onMapAdd(self):
+    if self.enable_edit:
+      self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
+
+      self.pack_ls = list(self.current_pack_dict)
+      self.ui.cbxPack.addItems(self.pack_ls)
+      self.map_ls = self.current_pack_dict[self.pack_ls[0]]
+      self.ui.cbxMap.addItems(self.map_ls)
+      # Mapping object creation
+      self.sfz_map = Mapping(which_pack_str(self.ui.chkPercussion.isChecked()))
+      self.sfz_map.set_map(list(self.current_pack_dict)[0], self.map_ls[0])
+      self.map_objects.append(self.sfz_map)
+      self.ui.listMap.addItems(get_map_names(self.map_objects))
+    else:
+      self.msgbox_ok.setText("Please select a SFZBuilder folder.")
+      self.msgbox_ok.exec()
+
+  def onPackChanged(self):
+    self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
+    self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]]
+    self.ui.cbxMap.clear()
+    self.ui.cbxMap.addItems(self.map_ls)
 
   def onAmpEnvAttackShapeEnabled(self):
     self.ui.pnlAmpEnvAttackShape.setEnabled(not self.ui.pnlAmpEnvAttackShape.isEnabled())

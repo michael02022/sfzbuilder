@@ -4,16 +4,20 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label":   "Save UI",
-      "type":    "shell",
+      "label": "Save UI",
+      "type": "shell",
       "command": "./scripts/update_ui_files.sh",
-      "group":   "test"
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
     },
     {
-      "label":   "Qt Designer",
-      "type":    "shell",
+      "label": "Qt Designer",
+      "type": "shell",
       "command": "./scripts/designer.sh",
-      "group":   "test"
+      "group": "test"
     }
   ]
 }

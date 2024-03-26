@@ -36,9 +36,9 @@
        <enum>QLayout::SetNoConstraint</enum>
       </property>
       <item>
-       <widget class="QLabel" name="lblPreset">
+       <widget class="QPushButton" name="pbnPresetFolder">
         <property name="text">
-         <string>PRESET:</string>
+         <string>Preset Path</string>
         </property>
        </widget>
       </item>
@@ -50,7 +50,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="txtPreset"/>
+       <widget class="QLineEdit" name="txtPreset">
+        <property name="text">
+         <string>MyPreset</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="lblSfzExt">
@@ -416,7 +420,8 @@
               <string>Import</string>
              </property>
              <property name="icon">
-              <iconset theme="emblem-downloads"/>
+              <iconset theme="emblem-downloads">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -432,7 +437,8 @@
               <string>Delete</string>
              </property>
              <property name="icon">
-              <iconset theme="list-remove"/>
+              <iconset theme="list-remove">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -448,7 +454,8 @@
               <string>Mapping</string>
              </property>
              <property name="icon">
-              <iconset theme="list-add"/>
+              <iconset theme="list-add">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -464,7 +471,8 @@
               <string>Clone</string>
              </property>
              <property name="icon">
-              <iconset theme="edit-copy"/>
+              <iconset theme="edit-copy">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -483,7 +491,8 @@
               </size>
              </property>
              <property name="icon">
-              <iconset theme="go-up"/>
+              <iconset theme="go-up">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -502,7 +511,8 @@
               </size>
              </property>
              <property name="icon">
-              <iconset theme="go-down"/>
+              <iconset theme="go-down">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -1389,7 +1399,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="KnobPy" name="knbPan">
+               <widget class="KnobPy" name="knbPan" native="true">
                 <property name="maximumSize">
                  <size>
                   <width>96</width>
@@ -1402,7 +1412,7 @@
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="KnobPy" name="knbPanKeytrack">
+               <widget class="KnobPy" name="knbPanKeytrack" native="true">
                 <property name="maximumSize">
                  <size>
                   <width>96</width>
@@ -1412,7 +1422,7 @@
                </widget>
               </item>
               <item row="1" column="3">
-               <widget class="KnobPy" name="knbPanVeltrack">
+               <widget class="KnobPy" name="knbPanVeltrack" native="true">
                 <property name="maximumSize">
                  <size>
                   <width>96</width>
@@ -1422,7 +1432,7 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="KnobPy" name="knbPanRandom">
+               <widget class="KnobPy" name="knbPanRandom" native="true">
                 <property name="maximumSize">
                  <size>
                   <width>96</width>
@@ -1575,13 +1585,13 @@
                </spacer>
               </item>
               <item row="1" column="1">
-               <widget class="KnobPy" name="knbAmpKeytrack"/>
+               <widget class="KnobPy" name="knbAmpKeytrack" native="true"/>
               </item>
               <item row="1" column="2">
-               <widget class="KnobPy" name="knbAmpVeltrack"/>
+               <widget class="KnobPy" name="knbAmpVeltrack" native="true"/>
               </item>
               <item row="1" column="3">
-               <widget class="KnobPy" name="knbAmpRandom"/>
+               <widget class="KnobPy" name="knbAmpRandom" native="true"/>
               </item>
              </layout>
             </item>
@@ -1874,16 +1884,16 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="KnobPy" name="knbAmpLfoDelay"/>
+             <widget class="KnobPy" name="knbAmpLfoDelay" native="true"/>
             </item>
             <item row="1" column="2">
-             <widget class="KnobPy" name="knbAmpLfoFade"/>
+             <widget class="KnobPy" name="knbAmpLfoFade" native="true"/>
             </item>
             <item row="1" column="3">
-             <widget class="KnobPy" name="knbAmpLfoDepth"/>
+             <widget class="KnobPy" name="knbAmpLfoDepth" native="true"/>
             </item>
             <item row="1" column="4">
-             <widget class="KnobPy" name="knbAmpLfoFreq"/>
+             <widget class="KnobPy" name="knbAmpLfoFreq" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1947,7 +1957,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvHold"/>
+                <widget class="KnobPy" name="knbAmpEnvHold" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvHoldVal">
@@ -2000,7 +2010,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvDecay"/>
+                <widget class="KnobPy" name="knbAmpEnvDecay" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvDecayVal">
@@ -2058,7 +2068,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbAmpEnvDecayShape"/>
+                   <widget class="KnobPy" name="knbAmpEnvDecayShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvDecayShapeVal">
@@ -2108,7 +2118,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvDelay"/>
+                <widget class="KnobPy" name="knbAmpEnvDelay" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvDelayVal">
@@ -2167,7 +2177,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvAttack"/>
+                <widget class="KnobPy" name="knbAmpEnvAttack" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvAttackVal">
@@ -2213,7 +2223,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbAmpEnvAttackShape"/>
+                   <widget class="KnobPy" name="knbAmpEnvAttackShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvAttackShapeVal">
@@ -2263,7 +2273,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvSustain"/>
+                <widget class="KnobPy" name="knbAmpEnvSustain" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvSustainVal">
@@ -2329,7 +2339,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbAmpEnvRelease"/>
+                <widget class="KnobPy" name="knbAmpEnvRelease" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblAmpEnvReleaseVal">
@@ -2375,7 +2385,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbAmpEnvReleaseShape"/>
+                   <widget class="KnobPy" name="knbAmpEnvReleaseShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblAmpEnvReleaseShapeVal">
@@ -2691,19 +2701,19 @@
                </spacer>
               </item>
               <item row="1" column="1">
-               <widget class="KnobPy" name="knbFilterCutoff"/>
+               <widget class="KnobPy" name="knbFilterCutoff" native="true"/>
               </item>
               <item row="1" column="2">
-               <widget class="KnobPy" name="knbFilterResonance"/>
+               <widget class="KnobPy" name="knbFilterResonance" native="true"/>
               </item>
               <item row="1" column="3">
-               <widget class="KnobPy" name="knbFilterKeytrack"/>
+               <widget class="KnobPy" name="knbFilterKeytrack" native="true"/>
               </item>
               <item row="1" column="4">
-               <widget class="KnobPy" name="knbFilterVeltrack"/>
+               <widget class="KnobPy" name="knbFilterVeltrack" native="true"/>
               </item>
               <item row="1" column="5">
-               <widget class="KnobPy" name="knbFilterRandom"/>
+               <widget class="KnobPy" name="knbFilterRandom" native="true"/>
               </item>
              </layout>
             </item>
@@ -2868,16 +2878,16 @@
              </spacer>
             </item>
             <item row="1" column="1">
-             <widget class="KnobPy" name="knbFilterLfoDelay"/>
+             <widget class="KnobPy" name="knbFilterLfoDelay" native="true"/>
             </item>
             <item row="1" column="2">
-             <widget class="KnobPy" name="knbFilterLfoFade"/>
+             <widget class="KnobPy" name="knbFilterLfoFade" native="true"/>
             </item>
             <item row="1" column="3">
-             <widget class="KnobPy" name="knbFilterLfoDepth"/>
+             <widget class="KnobPy" name="knbFilterLfoDepth" native="true"/>
             </item>
             <item row="1" column="4">
-             <widget class="KnobPy" name="knbFilterLfoFreq"/>
+             <widget class="KnobPy" name="knbFilterLfoFreq" native="true"/>
             </item>
            </layout>
           </widget>
@@ -2950,7 +2960,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbFilEnvAttackShape"/>
+                   <widget class="KnobPy" name="knbFilEnvAttackShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblFilEnvAttackShapeVal">
@@ -2990,7 +3000,7 @@
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="KnobPy" name="knbFilEnvAttack"/>
+                <widget class="KnobPy" name="knbFilEnvAttack" native="true"/>
                </item>
               </layout>
              </widget>
@@ -3020,7 +3030,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbFilEnvDepth"/>
+                <widget class="KnobPy" name="knbFilEnvDepth" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvDepthVal">
@@ -3073,7 +3083,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbFilEnvSustain"/>
+                <widget class="KnobPy" name="knbFilEnvSustain" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvSustainVal">
@@ -3126,7 +3136,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbFilEnvDelay"/>
+                <widget class="KnobPy" name="knbFilEnvDelay" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvDelayVal">
@@ -3185,7 +3195,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbFilEnvHold"/>
+                <widget class="KnobPy" name="knbFilEnvHold" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblFilEnvHoldVal">
@@ -3261,7 +3271,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbFilEnvDecayShape"/>
+                   <widget class="KnobPy" name="knbFilEnvDecayShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblFilEnvDecayShapeVal">
@@ -3301,7 +3311,7 @@
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="KnobPy" name="knbFilEnvDecay"/>
+                <widget class="KnobPy" name="knbFilEnvDecay" native="true"/>
                </item>
               </layout>
              </widget>
@@ -3395,7 +3405,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="KnobPy" name="knbFilEnvReleaseShape"/>
+                   <widget class="KnobPy" name="knbFilEnvReleaseShape" native="true"/>
                   </item>
                   <item>
                    <widget class="QLabel" name="lblFilEnvReleaseShapeVal">
@@ -3421,7 +3431,7 @@
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="KnobPy" name="knbFilEnvRelease"/>
+                <widget class="KnobPy" name="knbFilEnvRelease" native="true"/>
                </item>
               </layout>
              </widget>
@@ -3588,13 +3598,13 @@
                </spacer>
               </item>
               <item row="1" column="1">
-               <widget class="KnobPy" name="knbPitchKeytrack"/>
+               <widget class="KnobPy" name="knbPitchKeytrack" native="true"/>
               </item>
               <item row="1" column="2">
-               <widget class="KnobPy" name="knbPitchVeltrack"/>
+               <widget class="KnobPy" name="knbPitchVeltrack" native="true"/>
               </item>
               <item row="1" column="3">
-               <widget class="KnobPy" name="knbPitchRandom"/>
+               <widget class="KnobPy" name="knbPitchRandom" native="true"/>
               </item>
              </layout>
             </item>
@@ -3759,16 +3769,16 @@
              </spacer>
             </item>
             <item row="1" column="1">
-             <widget class="KnobPy" name="knbPitchDelay"/>
+             <widget class="KnobPy" name="knbPitchDelay" native="true"/>
             </item>
             <item row="1" column="2">
-             <widget class="KnobPy" name="knbPitchFade"/>
+             <widget class="KnobPy" name="knbPitchFade" native="true"/>
             </item>
             <item row="1" column="3">
-             <widget class="KnobPy" name="knbPitchDepth"/>
+             <widget class="KnobPy" name="knbPitchDepth" native="true"/>
             </item>
             <item row="1" column="4">
-             <widget class="KnobPy" name="knbPitchFreq"/>
+             <widget class="KnobPy" name="knbPitchFreq" native="true"/>
             </item>
            </layout>
           </widget>
@@ -3860,7 +3870,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvDelay"/>
+                <widget class="KnobPy" name="knbPitchEnvDelay" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDelayVal">
@@ -3919,7 +3929,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvAttack"/>
+                <widget class="KnobPy" name="knbPitchEnvAttack" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvAttackVal">
@@ -3972,7 +3982,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvRelease"/>
+                <widget class="KnobPy" name="knbPitchEnvRelease" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvReleaseVal">
@@ -4025,7 +4035,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvDecay"/>
+                <widget class="KnobPy" name="knbPitchEnvDecay" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDecayVal">
@@ -4078,7 +4088,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvSustain"/>
+                <widget class="KnobPy" name="knbPitchEnvSustain" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvSustain">
@@ -4131,7 +4141,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvHold"/>
+                <widget class="KnobPy" name="knbPitchEnvHold" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvHoldVal">
@@ -4210,7 +4220,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvDepth"/>
+                <widget class="KnobPy" name="knbPitchEnvDepth" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDepthVal">
@@ -4233,7 +4243,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="KnobPy" name="knbPitchEnvDepthVel"/>
+                <widget class="KnobPy" name="knbPitchEnvDepthVel" native="true"/>
                </item>
                <item>
                 <widget class="QLabel" name="lblPitchEnvDepthVelVal">
@@ -4322,7 +4332,7 @@
      <x>0</x>
      <y>0</y>
      <width>1207</width>
-     <height>28</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -4341,7 +4351,8 @@
   </widget>
   <action name="actNew">
    <property name="icon">
-    <iconset theme="document-new"/>
+    <iconset theme="document-new">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;New project...</string>
@@ -4355,7 +4366,8 @@
   </action>
   <action name="actOpen">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Open...</string>
@@ -4369,7 +4381,8 @@
   </action>
   <action name="actSave">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -4383,7 +4396,8 @@
   </action>
   <action name="actSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Save as...</string>
@@ -4397,7 +4411,8 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>

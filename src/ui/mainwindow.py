@@ -89,6 +89,8 @@ class MainWindow(QMainWindow):
 
     self.ui.pbnMapAdd.clicked.connect(self.onMapAdd)
     self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
+    self.ui.cbxMap.currentIndexChanged.connect(self.onMapChanged)
+    self.ui.listMap.itemSelectionChanged.connect(self.onItemMap)
 
     self.ui.pbnAmpEnvAttackShapeEnable.clicked.connect(self.onAmpEnvAttackShapeEnabled)
     self.ui.pbnAmpEnvDecayShapeEnable.clicked.connect(self.onAmpEnvDecayShapeEnabled)
@@ -104,7 +106,7 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Projects folders.")
       self.msgbox_ok.exec()
     else:
-      self.ui.txtMainFolder.setText(main_folder_path)
+      self.ui.txtMainFolder.setText(f"{main_folder_path}/")
       self.settings.setValue("mainfolderpath", main_folder_path)
 
   def onPresetFolder(self):
@@ -118,14 +120,17 @@ class MainWindow(QMainWindow):
       self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
 
       self.pack_ls = list(self.current_pack_dict)
-      self.ui.cbxPack.addItems(self.pack_ls)
+
+      self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
       self.map_ls = self.current_pack_dict[self.pack_ls[0]]
-      self.ui.cbxMap.addItems(self.map_ls)
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+
       # Mapping object creation
       self.sfz_map = Mapping(which_pack_str(self.ui.chkPercussion.isChecked()))
       self.sfz_map.set_map(list(self.current_pack_dict)[0], self.map_ls[0])
       self.map_objects.append(self.sfz_map)
-      self.ui.listMap.addItems(get_map_names(self.map_objects))
+
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
     else:
       self.msgbox_ok.setText("Please select a SFZBuilder folder.")
       self.msgbox_ok.exec()
@@ -133,8 +138,37 @@ class MainWindow(QMainWindow):
   def onPackChanged(self):
     self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]]
-    self.ui.cbxMap.clear()
-    self.ui.cbxMap.addItems(self.map_ls)
+    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+
+    # update
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      pk_idx = self.ui.cbxPack.currentIndex()
+      mp_idx = self.ui.cbxMap.currentIndex()
+
+      self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx])
+
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(idx)
+    else:
+      None
+
+  def onMapChanged(self):
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      pk_idx = self.ui.cbxPack.currentIndex()
+      mp_idx = self.ui.cbxMap.currentIndex()
+
+      self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx])
+
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(idx)
+    else:
+      None
+
+
+  def onItemMap(self):
+    None
 
   def onAmpEnvAttackShapeEnabled(self):
     self.ui.pnlAmpEnvAttackShape.setEnabled(not self.ui.pnlAmpEnvAttackShape.isEnabled())

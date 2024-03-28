@@ -48,6 +48,14 @@ def get_map_names(map_objects):
         ls.append(map.get_name())
     return ls
 
+def clip(n, range):
+    if n < range[0]:
+        return range[0]
+    elif n > range[1]:
+        return range[1]
+    else:
+        return n
+
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):
     super().__init__(parent)
@@ -83,11 +91,16 @@ class MainWindow(QMainWindow):
     self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
     if self.settings.value("mainfolderpath") is not None:
       self.ui.txtMainFolder.setText(self.settings.value("mainfolderpath"))
-      self.ui.lblPresetPrefix.setText(self.settings.value("presetfolderpath"))
+      self.ui.lblPresetPrefix.setText(f"{self.settings.value('presetfolderpath')}/")
       self.mappings_dict = get_mappings(self.settings.value("mainfolderpath"))
       self.enable_edit = True
 
     self.ui.pbnMapAdd.clicked.connect(self.onMapAdd)
+    self.ui.pbnMapDelete.clicked.connect(self.onMapDelete)
+    self.ui.pbnMapUp.clicked.connect(self.onMapUp)
+    self.ui.pbnMapDown.clicked.connect(self.onMapDown)
+    self.ui.pbnMapClone.clicked.connect(self.onMapClone)
+
     self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
     self.ui.cbxMap.currentIndexChanged.connect(self.onMapChanged)
     self.ui.listMap.itemSelectionChanged.connect(self.onItemMap)
@@ -106,12 +119,12 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Projects folders.")
       self.msgbox_ok.exec()
     else:
-      self.ui.txtMainFolder.setText(f"{main_folder_path}/")
+      self.ui.txtMainFolder.setText(main_folder_path)
       self.settings.setValue("mainfolderpath", main_folder_path)
 
   def onPresetFolder(self):
-    preset_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a preset folder", options=QFileDialog.ShowDirsOnly, dir=self.settings.value("mainfolderpath"))
-    self.ui.lblPresetPrefix.setText(preset_folder_path)
+    preset_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a preset folder", options=QFileDialog.ShowDirsOnly, dir=f"{self.settings.value('mainfolderpath')}/Presets")
+    self.ui.lblPresetPrefix.setText(f"{preset_folder_path}/")
     if preset_folder_path != "":
       self.settings.setValue("presetfolderpath", preset_folder_path)
 
@@ -134,6 +147,46 @@ class MainWindow(QMainWindow):
     else:
       self.msgbox_ok.setText("Please select a SFZBuilder folder.")
       self.msgbox_ok.exec()
+
+  def onMapDelete(self):
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      self.msgbox_yesno = QMessageBox(self); self.msgbox_yesno.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+      self.msgbox_yesno.setText(f"Are you sure you want to remove {self.map_objects[idx].get_name()}?")
+      answer = self.msgbox_yesno.exec()
+      match answer:
+        case QMessageBox.Yes:
+          del self.map_objects[idx]
+          self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+          if self.ui.listMap.count() != 0: # if it has objects to select
+            if self.ui.listMap.count() <= idx:
+              self.ui.listMap.setCurrentRow(self.ui.listMap.count() - 1) # set index to the last object
+            else:
+              self.ui.listMap.setCurrentRow(idx)
+        case QMessageBox.No:
+          None
+  # TODO: FIX A BUG WHERE MULTIPLE MAP OBJECTS ARE CHANGING THEIR MAPS INSTEAD OF THE SELECTED ONE ONLY
+  def onMapClone(self):
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      element = self.map_objects[idx]
+      self.map_objects.insert(clip(idx + 1, (0, len(self.map_objects))), element)
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(idx + 1)
+
+  def onMapUp(self):
+    if self.ui.listMap.count() != 0:
+      idx = clip(self.ui.listMap.currentRow(), (0, len(self.map_objects)))
+      self.map_objects.insert(clip(idx - 1, (0, len(self.map_objects))), self.map_objects.pop(idx))
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(clip(idx - 1, (0, len(self.map_objects))))
+
+  def onMapDown(self):
+    if self.ui.listMap.count() != 0:
+      idx = clip(self.ui.listMap.currentRow(), (0, len(self.map_objects)))
+      self.map_objects.insert(clip(idx + 1, (0, len(self.map_objects))), self.map_objects.pop(idx))
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(clip(idx + 1, (0, len(self.map_objects) - 1)))
 
   def onPackChanged(self):
     self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())

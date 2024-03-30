@@ -4,11 +4,12 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore    import QSettings
 from PySide6.QtGui     import QIcon
-from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication
+from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup
 from .ui_mainwindow    import Ui_MainWindow
 from .tabpan           import setupKnobs
 from .rc_resources     import *
 from collections       import defaultdict
+from utils.opcodes     import *
 from utils.classes.mapping import Mapping
 import os
 import glob
@@ -18,6 +19,7 @@ def get_mappings(config_path):
   mappings_dict = {}
   mappings_dict["MSamples"] = [p for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
   mappings_dict["PSamples"] = [p for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
+  mappings_dict["Wavetables"] = [p for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav")]
   return mappings_dict
 
 def get_pack(ls):
@@ -27,20 +29,26 @@ def get_pack(ls):
       pack_dict[path_ls[0]].append(os.path.join(*path_ls[1:]))
   return pack_dict
 
-def which_pack(mappings_dict, bool):
+def which_pack(mappings_dict, pbool, wbool):
     pack = {}
-    if bool:
+    if pbool:
         pack = get_pack(mappings_dict["PSamples"])
         return pack
     else:
-        pack = get_pack(mappings_dict["MSamples"])
+        if wbool:
+          pack = get_pack(mappings_dict["Wavetables"])
+        else:
+          pack = get_pack(mappings_dict["MSamples"])
         return pack
 
-def which_pack_str(bool):
-    if bool:
+def which_pack_str(pbool, wbool):
+    if pbool:
         return "PSamples"
     else:
-        return "MSamples"
+        if wbool:
+          return "Wavetables"
+        else:
+          return "MSamples"
 
 def get_map_names(map_objects):
     ls = []
@@ -72,6 +80,8 @@ class MainWindow(QMainWindow):
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
     self.enable_edit = False
     self.msgbox_ok = QMessageBox(self)
+    self.chk_group = QButtonGroup(self); self.chk_group.addButton(self.ui.chkMap); self.chk_group.addButton(self.ui.chkPercussion); self.chk_group.addButton(self.ui.chkWavetable)
+    self.chk_group.setExclusive(True)
 
     self.ui.actNew.setIcon(QIcon.fromTheme("document-new",        QIcon(":/document-new")))
     self.ui.actOpen.setIcon(QIcon.fromTheme("document-open",      QIcon(":/document-open")))
@@ -94,6 +104,9 @@ class MainWindow(QMainWindow):
       self.ui.lblPresetPrefix.setText(f"{self.settings.value('presetfolderpath')}/")
       self.mappings_dict = get_mappings(self.settings.value("mainfolderpath"))
       self.enable_edit = True
+      #print(self.mappings_dict)
+
+    self.chk_group.buttonClicked.connect(self.onCheckboxesWavetables)
 
     self.ui.pbnMapAdd.clicked.connect(self.onMapAdd)
     self.ui.pbnMapDelete.clicked.connect(self.onMapDelete)
@@ -103,7 +116,7 @@ class MainWindow(QMainWindow):
 
     self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
     self.ui.cbxMap.currentIndexChanged.connect(self.onMapChanged)
-    self.ui.listMap.itemSelectionChanged.connect(self.onItemMap)
+    self.ui.listMap.itemClicked.connect(self.onItemMap)
 
     self.ui.pbnAmpEnvAttackShapeEnable.clicked.connect(self.onAmpEnvAttackShapeEnabled)
     self.ui.pbnAmpEnvDecayShapeEnable.clicked.connect(self.onAmpEnvDecayShapeEnabled)
@@ -130,7 +143,7 @@ class MainWindow(QMainWindow):
 
   def onMapAdd(self):
     if self.enable_edit:
-      self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
+      self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
 
       self.pack_ls = list(self.current_pack_dict)
 
@@ -139,14 +152,35 @@ class MainWindow(QMainWindow):
       self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
 
       # Mapping object creation
-      self.sfz_map = Mapping(which_pack_str(self.ui.chkPercussion.isChecked()))
+      self.sfz_map = Mapping(which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked()))
       self.sfz_map.set_map(list(self.current_pack_dict)[0], self.map_ls[0])
+      self.sfz_map.change_type(which_pack_str(self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked()))
       self.map_objects.append(self.sfz_map)
 
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      #print(vars(self.map_objects[0]))
     else:
       self.msgbox_ok.setText("Please select a SFZBuilder folder.")
       self.msgbox_ok.exec()
+
+  def onCheckboxesWavetables(self):
+    if self.ui.listMap.count() != 0:
+      self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
+
+      self.pack_ls = list(self.current_pack_dict)
+
+      self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
+      self.map_ls = self.current_pack_dict[self.pack_ls[0]]
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+
+      # update
+      idx = self.ui.listMap.currentRow()
+
+      self.map_objects[idx].set_map(list(self.current_pack_dict)[0], self.map_ls[0])
+      self.map_objects[idx].change_type(which_pack_str(self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked()))
+
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(idx)
 
   def onMapDelete(self):
     if self.ui.listMap.count() != 0:
@@ -189,7 +223,7 @@ class MainWindow(QMainWindow):
       self.ui.listMap.setCurrentRow(clip(idx + 1, (0, len(self.map_objects) - 1)))
 
   def onPackChanged(self):
-    self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked())
+    self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]]
     self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
 
@@ -219,9 +253,8 @@ class MainWindow(QMainWindow):
     else:
       None
 
-
   def onItemMap(self):
-    None
+    self.get_map_values()
 
   def onAmpEnvAttackShapeEnabled(self):
     self.ui.pnlAmpEnvAttackShape.setEnabled(not self.ui.pnlAmpEnvAttackShape.isEnabled())
@@ -264,3 +297,29 @@ class MainWindow(QMainWindow):
       self.ui.pbnFilEnvReleaseShapeEnable.setText(self.tr("Disable"))
     else:
       self.ui.pbnFilEnvReleaseShapeEnable.setText(self.tr("Enable"))
+
+  def get_map_values(self):
+    idx = self.ui.listMap.currentRow()
+    map_dict = vars(self.map_objects[idx])
+    for k in map_dict:
+      match k:
+        case "map_key_range":
+          self.ui.sbxKeyLo.setValue(map_dict.get(k)[0])
+          self.ui.sbxKeyHi.setValue(map_dict.get(k)[1])
+        case "map_vel_range":
+          self.ui.sbxVelLo.setValue(map_dict.get(k)[0])
+          self.ui.sbxVelHi.setValue(map_dict.get(k)[1])
+        case "on_cc_rangebool":
+          self.ui.chkNoteOn.setChecked(map_dict.get(k))
+        case "on_cc_range":
+          self.ui.sbxCc.setValue(map_dict.get(k)[0])
+          self.ui.sbxCcLo.setValue(map_dict.get(k)[1])
+          self.ui.sbxCcHi.setValue(map_dict.get(k)[2])
+        case "random_rangebool":
+          self.ui.chkRandom.setChecked(map_dict.get(k))
+        case "random_range":
+          self.ui.dsbRandomLo.setValue(map_dict.get(k)[0])
+          self.ui.dsbRandomLo.setValue(map_dict.get(k)[1])
+
+  def update_obj(self):
+    None

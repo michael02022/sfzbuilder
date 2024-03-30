@@ -182,7 +182,9 @@ class Mapping:
       case "MSamples":
         return f"M: {self.name}"
       case "PSamples":
-        return f"P({self.keycenter[1]}): {self.name}"
+        return f"P({self.keycenter}): {self.name}"
+      case "Wavetables":
+        return f"W: {self.name}"
 
   def set_map(self, pack, map):
     self.pack = pack

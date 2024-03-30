@@ -7,69 +7,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1207</width>
-    <height>802</height>
+    <width>920</width>
+    <height>638</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <layout class="QHBoxLayout" name="layMainFolder">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <widget class="QPushButton" name="pbnMainFolder">
-        <property name="text">
-         <string>Main Folder</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtMainFolder">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="layPreset">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <widget class="QPushButton" name="pbnPresetFolder">
-        <property name="text">
-         <string>Preset Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblPresetPrefix">
-        <property name="text">
-         <string>NONE/</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtPreset">
-        <property name="text">
-         <string>MyPreset</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSfzExt">
-        <property name="text">
-         <string>.sfz</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="2" column="0" colspan="5">
      <widget class="QGroupBox" name="gbxGlobal">
       <property name="title">
        <string>Global</string>
@@ -105,7 +49,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="sbxKeyswitchLo"/>
+        <widget class="QSpinBox" name="sbxKeyswitchLo">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="lblSep1">
@@ -115,7 +63,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="sbxKeyswitchHi"/>
+        <widget class="QSpinBox" name="sbxKeyswitchHi">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="lblKeyswitchDefault">
@@ -125,7 +77,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="sbxKeyswitchDefault"/>
+        <widget class="QSpinBox" name="sbxKeyswitchDefault">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="hspKeyswitch">
@@ -143,237 +99,7 @@
       </layout>
      </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="layKey">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="lblKey">
-        <property name="text">
-         <string>Key:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxKeyLo"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSep2">
-        <property name="text">
-         <string notr="true">-</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxKeyHi"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblVel">
-        <property name="text">
-         <string>Vel:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxVelLo"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSep3">
-        <property name="text">
-         <string notr="true">-</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxVelHi"/>
-      </item>
-      <item>
-       <widget class="Line" name="line_4">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkNoteOn">
-        <property name="text">
-         <string>&quot;note on&quot;</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblCc">
-        <property name="text">
-         <string>CC:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxCc"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblEqual">
-        <property name="text">
-         <string notr="true">=</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxCcLo"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSep">
-        <property name="text">
-         <string notr="true">-</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="sbxCcHi"/>
-      </item>
-      <item>
-       <spacer name="hspKey">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="layPackMap">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="lblPack">
-        <property name="text">
-         <string>Pack:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbxPack">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblMap">
-        <property name="text">
-         <string>Map:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbxMap">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chkPercussion">
-        <property name="text">
-         <string>Percussion</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="cbxWavetable">
-        <property name="text">
-         <string>Wavetable</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="layRandom">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <widget class="QCheckBox" name="chkRandom">
-        <property name="text">
-         <string>Random:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblRandomLo">
-        <property name="text">
-         <string>lo:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="dsbRandomLo">
-        <property name="decimals">
-         <number>3</number>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblRandomHi">
-        <property name="text">
-         <string>hi:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="dsbRandomHi"/>
-      </item>
-      <item>
-       <widget class="Line" name="line_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblVolume">
-        <property name="text">
-         <string>Vol (dB):</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="dsbVolume"/>
-      </item>
-      <item>
-       <spacer name="hspRandom">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
+    <item row="14" column="0" colspan="6">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -549,7 +275,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="sbxOutput"/>
+            <widget class="QSpinBox" name="sbxOutput">
+             <property name="maximum">
+              <number>7</number>
+             </property>
+            </widget>
            </item>
            <item>
             <spacer name="hspOutput">
@@ -595,12 +325,16 @@
               <item>
                <widget class="QCheckBox" name="chkUseGlobalPitchKeycenter">
                 <property name="text">
-                 <string>Global `pitch_keycenter`</string>
+                 <string>Set 'pitch_keycenter' to all</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="sbxUsePitchKeycenter4All"/>
+               <widget class="QSpinBox" name="sbxUsePitchKeycenter4All">
+                <property name="maximum">
+                 <number>127</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -636,7 +370,14 @@
              <number>6</number>
             </property>
             <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="dsbRtDecay"/>
+             <widget class="QDoubleSpinBox" name="dsbRtDecay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QCheckBox" name="chkRtDecay">
@@ -713,7 +454,11 @@
              <number>6</number>
             </property>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxKeyswitchCount"/>
+             <widget class="QSpinBox" name="sbxKeyswitchCount">
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="1" colspan="2">
              <widget class="QLineEdit" name="txtKeyswitchLabel"/>
@@ -741,7 +486,7 @@
             <item row="0" column="0">
              <widget class="QCheckBox" name="chkKeySwitchCount">
               <property name="text">
-               <string>Number:</string>
+               <string>Key:</string>
               </property>
              </widget>
             </item>
@@ -790,7 +535,14 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxPolyphony"/>
+             <widget class="QSpinBox" name="sbxPolyphony">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>512</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0">
              <widget class="QCheckBox" name="chkPolyphony">
@@ -800,7 +552,14 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="sbxNotePolyphony"/>
+             <widget class="QSpinBox" name="sbxNotePolyphony">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>512</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QCheckBox" name="chkNoteSelfmask">
@@ -812,7 +571,7 @@
            </layout>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="3" column="0" colspan="2">
           <widget class="QGroupBox" name="gbxWavetable">
            <property name="title">
             <string>Wavetable</string>
@@ -820,6 +579,12 @@
            <layout class="QGridLayout" name="gridLayout">
             <item row="2" column="1">
              <widget class="QComboBox" name="cbxWave">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <item>
                <property name="text">
                 <string>Sine</string>
@@ -885,6 +650,9 @@
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>40</width>
@@ -904,7 +672,11 @@
              </widget>
             </item>
             <item row="5" column="3">
-             <widget class="QSpinBox" name="sbxWaveDetune"/>
+             <widget class="QSpinBox" name="sbxWaveDetune">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+             </widget>
             </item>
             <item row="4" column="7">
              <widget class="QSpinBox" name="sbxWaveModDepthCcVal">
@@ -990,6 +762,12 @@
             </item>
             <item row="4" column="1">
              <widget class="QComboBox" name="cbxWaveMode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <item>
                <property name="text">
                 <string>Normal/RM</string>
@@ -1112,13 +890,25 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetRandom"/>
+             <widget class="QSpinBox" name="sbxSampleOffsetRandom">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+             </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetVelocity"/>
+             <widget class="QSpinBox" name="sbxSampleOffsetVelocity">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetValue"/>
+             <widget class="QSpinBox" name="sbxSampleOffsetValue">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -1168,6 +958,9 @@
               <property name="decimals">
                <number>3</number>
               </property>
+              <property name="singleStep">
+               <double>0.001000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -1192,7 +985,14 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="sbxSampleQuality"/>
+             <widget class="QSpinBox" name="sbxSampleQuality">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="lblDirection">
@@ -1254,36 +1054,11 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="5" column="1">
-             <widget class="QComboBox" name="cbxOffTime">
-              <item>
-               <property name="text">
-                <string>fast</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>normal</string>
-               </property>
-              </item>
-             </widget>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="sbxGroup"/>
             </item>
             <item row="2" column="1">
              <widget class="QSpinBox" name="sbxOffBy"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lblGroup">
-              <property name="text">
-               <string>Group:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLabel" name="cbxOffMode">
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="lblOffTime">
@@ -1292,8 +1067,12 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="dsbOffMode"/>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblGroup">
+              <property name="text">
+               <string>Group:</string>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="lblOffBy">
@@ -1309,13 +1088,34 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="sbxGroup"/>
-            </item>
             <item row="0" column="0" colspan="3">
              <widget class="QCheckBox" name="chkRegionExclusiveClass">
               <property name="text">
                <string>Exclusive Class</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="cbxOffTime">
+              <item>
+               <property name="text">
+                <string>fast</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>normal</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QDoubleSpinBox" name="dsbOffMode">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
@@ -1343,25 +1143,64 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="sbxSampleTransposeNote">
+              <property name="minimum">
+               <number>-127</number>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sbxSampleTransposePitch">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimum">
+               <number>-127</number>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="lblSampleTransposePitch">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>Pitch</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxSampleTransposePitch"/>
-            </item>
-            <item row="1" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="lblSampleTransposeNote">
               <property name="text">
                <string>Note</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="sbxSampleTransposeNote"/>
+            <item row="0" column="2">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
@@ -1441,7 +1280,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="sbxPanKeycenter"/>
+               <widget class="QSpinBox" name="sbxPanKeycenter">
+                <property name="maximum">
+                 <number>127</number>
+                </property>
+               </widget>
               </item>
               <item>
                <spacer name="hspPanKeycenter">
@@ -1825,6 +1668,9 @@
                 <property name="inputMethodHints">
                  <set>Qt::ImhDigitsOnly</set>
                 </property>
+                <property name="decimals">
+                 <number>3</number>
+                </property>
                 <property name="minimum">
                  <double>-99.989999999999995</double>
                 </property>
@@ -1879,6 +1725,9 @@
                   <width>0</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="decimals">
+                 <number>3</number>
                 </property>
                 <property name="maximum">
                  <double>1.000000000000000</double>
@@ -2735,7 +2584,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="sbxFilterKeycenter"/>
+               <widget class="QSpinBox" name="sbxFilterKeycenter">
+                <property name="maximum">
+                 <number>127</number>
+                </property>
+               </widget>
               </item>
               <item>
                <spacer name="hspFilterType">
@@ -4537,6 +4390,415 @@
       </widget>
      </widget>
     </item>
+    <item row="10" column="3">
+     <widget class="QLabel" name="lblPack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>PACK</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="3">
+     <widget class="QLabel" name="lblMap">
+      <property name="text">
+       <string>MAP</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="layKey">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblVolume">
+        <property name="text">
+         <string>Vol (dB):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="dsbVolume"/>
+      </item>
+      <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblKey">
+        <property name="text">
+         <string>Key:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxKeyLo">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxKeyHi">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblVel">
+        <property name="text">
+         <string>Vel:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxVelLo">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxVelHi">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkNoteOn">
+        <property name="text">
+         <string>&quot;note on&quot;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblCc">
+        <property name="text">
+         <string>CC:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxCc">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblEqual">
+        <property name="text">
+         <string notr="true">=</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxCcLo">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSep">
+        <property name="text">
+         <string notr="true">-</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbxCcHi">
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layRandom">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetNoConstraint</enum>
+        </property>
+        <item>
+         <widget class="Line" name="line_10">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkRandom">
+          <property name="text">
+           <string>Random:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblRandomLo">
+          <property name="text">
+           <string>lo:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="dsbRandomLo">
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblRandomHi">
+          <property name="text">
+           <string>hi:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="dsbRandomHi">
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="hspRandom">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="layMainFolder">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbnMainFolder">
+        <property name="text">
+         <string>Main Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtMainFolder">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="layPreset">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbnPresetFolder">
+        <property name="text">
+         <string>Preset Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPresetPrefix">
+        <property name="text">
+         <string>NONE/</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPreset">
+        <property name="text">
+         <string>MyPreset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSfzExt">
+        <property name="text">
+         <string>.sfz</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="chkPercussion">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Percussion</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="chkMap">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Map</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="chkWavetable">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Wavetable</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QComboBox" name="cbxMap">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QComboBox" name="cbxPack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -4544,7 +4806,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1207</width>
+     <width>920</width>
      <height>21</height>
     </rect>
    </property>

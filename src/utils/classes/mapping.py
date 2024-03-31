@@ -9,6 +9,17 @@ class Mapping:
     self.map = ""
     self.name = ""
 
+    # WAVETABLE
+    self.wave = "Sine"
+    self.wave_mode = "Normal/RM"
+    self.wave_unison = 1
+    self.wave_quality = 0
+    self.wave_phase = -1
+    self.wave_mod_depth = 0
+    self.wave_mod_depth_cc = [1, 0]
+    self.wave_detune = 0
+    self.wave_detune_cc = [1, 0]
+
     # MAP PROPERTIES
     self.map_key_range = [0, 127]
     self.map_vel_range = [0, 127]
@@ -184,7 +195,10 @@ class Mapping:
       case "PSamples":
         return f"P({self.keycenter}): {self.name}"
       case "Wavetables":
-        return f"W: {self.name}"
+        if self.wave == "Sample":
+          return f"W: {self.name}"
+        else:
+          return f"W: {self.wave}"
 
   def set_map(self, pack, map):
     self.pack = pack

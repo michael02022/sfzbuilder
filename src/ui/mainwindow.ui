@@ -484,7 +484,7 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QCheckBox" name="chkKeySwitchCount">
+             <widget class="QCheckBox" name="chkKeyswitchCount">
               <property name="text">
                <string>Key:</string>
               </property>
@@ -987,10 +987,13 @@
             <item row="1" column="1">
              <widget class="QSpinBox" name="sbxSampleQuality">
               <property name="minimum">
-               <number>1</number>
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>10</number>
+              </property>
+              <property name="value">
+               <number>2</number>
               </property>
              </widget>
             </item>
@@ -1096,7 +1099,7 @@
              </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QComboBox" name="cbxOffTime">
+             <widget class="QComboBox" name="cbxOffMode">
               <item>
                <property name="text">
                 <string>fast</string>
@@ -1110,7 +1113,7 @@
              </widget>
             </item>
             <item row="5" column="1">
-             <widget class="QDoubleSpinBox" name="dsbOffMode">
+             <widget class="QDoubleSpinBox" name="dsbOffTime">
               <property name="decimals">
                <number>3</number>
               </property>
@@ -1528,7 +1531,7 @@
             <string>General</string>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -1549,7 +1552,36 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="6" column="0" rowspan="2" colspan="2">
+            <item row="1" column="2">
+             <spacer name="hspAmpVelFloor_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>50</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblAmpKeycenter">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Keycenter:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0" rowspan="2" colspan="3">
              <layout class="QGridLayout" name="layAmpKeyVeltrackRandom">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
@@ -1651,7 +1683,7 @@
               </item>
              </layout>
             </item>
-            <item row="2" column="0" colspan="2">
+            <item row="5" column="0" colspan="3">
              <layout class="QHBoxLayout" name="layAmpVelAttack">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
@@ -1694,7 +1726,7 @@
               </item>
              </layout>
             </item>
-            <item row="1" column="0" colspan="2">
+            <item row="4" column="0" colspan="3">
              <layout class="QHBoxLayout" name="layAmpVelFloor">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
@@ -1738,20 +1770,6 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="lblAmpKeycenter">
-                <property name="text">
-                 <string>Keycenter:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="sbxAmpKeycenter">
-                <property name="maximum">
-                 <number>127</number>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="hspAmpVelFloor">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -1768,6 +1786,13 @@
                </spacer>
               </item>
              </layout>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="sbxAmpKeycenter">
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

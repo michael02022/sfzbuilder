@@ -11,9 +11,11 @@ from .rc_resources     import *
 from collections       import defaultdict
 from utils.opcodes     import *
 from utils.classes.mapping import Mapping
+from utils.enums       import *
 import os
 import glob
 import pathlib
+
 
 def get_mappings(config_path):
   mappings_dict = {}
@@ -303,6 +305,28 @@ class MainWindow(QMainWindow):
     map_dict = vars(self.map_objects[idx])
     for k in map_dict:
       match k:
+        ## WAVETABLE
+        case "wave":
+          self.ui.cbxWave.setCurrentIndex(wavetables.index(map_dict.get(k)))
+        case "wave_mode":
+          self.ui.cbxWaveMode.setCurrentIndex(wave_modes.index(map_dict.get(k)))
+        case "wave_unison":
+          self.ui.sbxWaveUnison.setValue(map_dict.get(k))
+        case "wave_quality":
+          self.ui.sbxWaveQuality.setValue(map_dict.get(k))
+        case "wave_phase":
+          self.ui.sbxWavePhase.setValue(map_dict.get(k))
+        case "wave_mod_depth":
+          self.ui.sbxWaveModDepth.setValue(map_dict.get(k))
+        case "wave_mod_depth_cc":
+          self.ui.sbxWaveModDepthCc.setValue(map_dict.get(k)[0])
+          self.ui.sbxWaveModDepthCcVal.setValue(map_dict.get(k)[1])
+        case "wave_detune":
+          self.ui.sbxWaveDetune.setValue(map_dict.get(k))
+        case "wave_detune_cc":
+          self.ui.sbxWaveDetuneCc.setValue(map_dict.get(k)[0])
+          self.ui.sbxWaveDetuneCcVal.setValue(map_dict.get(k)[1])
+        ## MAP
         case "map_key_range":
           self.ui.sbxKeyLo.setValue(map_dict.get(k)[0])
           self.ui.sbxKeyHi.setValue(map_dict.get(k)[1])
@@ -320,6 +344,132 @@ class MainWindow(QMainWindow):
         case "random_range":
           self.ui.dsbRandomLo.setValue(map_dict.get(k)[0])
           self.ui.dsbRandomLo.setValue(map_dict.get(k)[1])
+        case "volume":
+          self.ui.dsbVolume.setValue(map_dict.get(k))
+        case "keyswitchbool":
+          self.ui.chkKeyswitchCount.setChecked(map_dict.get(k))
+        case "keyswitch":
+          self.ui.sbxKeyswitchCount.setValue(map_dict.get(k))
+        case "sw_label":
+          self.ui.txtKeyswitchLabel.setText(map_dict.get(k))
+        case "output":
+          self.ui.sbxOutput.setValue(map_dict.get(k))
+        case "polybool":
+          self.ui.chkPolyphony.setChecked(map_dict.get(k))
+        case "poly":
+          self.ui.sbxPolyphony.setValue(map_dict.get(k))
+        case "note_polybool":
+          self.ui.chkNotePolyphony.setChecked(map_dict.get(k))
+        case "note_poly":
+          self.ui.sbxNotePolyphony.setValue(map_dict.get(k))
+        case "note_selfmask":
+          self.ui.chkNoteSelfmask.setChecked(map_dict.get(k))
+        case "trigger":
+          self.ui.cbxRtDeadMode.setCurrentIndex(trigger_modes.index(map_dict.get(k)))
+        case "rt_dead":
+          self.ui.chkRtDead.setChecked(map_dict.get(k))
+        case "rt_decaybool":
+          self.ui.chkRtDecay.setChecked(map_dict.get(k))
+        case "rt_decay":
+          self.ui.dsbRtDecay.setValue(map_dict.get(k))
+        case "key_opcode":
+          self.ui.chkUseKey.setChecked(map_dict.get(k))
+        case "keycenterbool":
+          self.ui.chkUseGlobalPitchKeycenter.setChecked(map_dict.get(k))
+        case "keycenter":
+          self.ui.sbxUsePitchKeycenter4All.setValue(map_dict.get(k))
+
+        ## SAMPLE
+        case "offsetbool":
+          self.ui.chkSampleOffsetValue.setChecked(map_dict.get(k))
+        case "offset":
+          self.ui.sbxSampleOffsetValue.setValue(map_dict.get(k))
+        case "offset_random":
+          self.ui.sbxSampleOffsetRandom.setValue(map_dict.get(k))
+        case "delay":
+          self.ui.dsbSampleMapDelay.setValue(map_dict.get(k))
+        case "note_offset":
+          self.ui.sbxSampleTransposeNote.setValue(map_dict.get(k))
+        case "pitch_transpose":
+          self.ui.sbxSampleTransposePitch.setValue(map_dict.get(k))
+        case "quality":
+          self.ui.sbxSampleQuality.setValue(map_dict.get(k))
+        case "loop_mode":
+          self.ui.cbxLoopMode.setCurrentIndex(loop_modes.index(map_dict.get(k)))
+        case "direction":
+          self.ui.cbxDirection.setCurrentIndex(loop_directions.index(map_dict.get(k)))
+        case "vel2offset":
+          self.ui.sbxSampleOffsetVelocity.setValue(map_dict.get(k))
+        case "exclass":
+          self.ui.chkRegionExclusiveClass.setChecked(map_dict.get(k))
+        case "group":
+          self.ui.sbxGroup.setValue(map_dict.get(k))
+        case "off_by":
+          self.ui.sbxOffBy.setValue(map_dict.get(k))
+        case "off_mode":
+          self.ui.cbxOffMode.setCurrentIndex(off_modes.index(map_dict.get(k)))
+        case "off_time":
+          self.ui.dsbOffTime.setValue(map_dict.get(k))
+
+        ## PAN
+        case "panbool":
+          self.ui.gbxPan.setChecked(map_dict.get(k))
+        case "pan_keycenter":
+          self.ui.sbxPanKeycenter.setValue(map_dict.get(k))
+
+        ## AMP
+        case "amp_keycenter":
+          self.ui.sbxAmpKeycenter.setValue(map_dict.get(k))
+        case "amp_velfloorbool":
+          self.ui.chkAmpVelFloor.setChecked(map_dict.get(k))
+        case "amp_velfloor":
+          self.ui.sbxAmpVelFloor.setValue(map_dict.get(k))
+        case "amp_env_vel2attackbool":
+          self.ui.chkAmpVelAttack.setChecked(map_dict.get(k))
+        case "amp_env_vel2attack":
+          self.ui.sbxAmpVelAttack.setValue(map_dict.get(k))
+
+        ## AMP LFO
+        case "amp_lfo":
+          self.ui.gbxAmpLfo.setChecked(map_dict.get(k))
+
+        ## AMP ENV
+        case "amp_env":
+          self.ui.gbxAmpEnv.setChecked(map_dict.get(k))
+
+        ## FILTER
+        case "fil":
+          self.ui.gbxFilterGeneral.setChecked(map_dict.get(k))
+        case "fil_type":
+          self.ui.cbxFilterType.setCurrentIndex(filter_type.index(map_dict.get(k)))
+        case "fil_keycenter":
+          self.ui.sbxFilterKeycenter.setValue(map_dict.get(k))
+
+        ## FILTER LFO
+        case "fil_lfo":
+          self.ui.gbxFilterLfo.setChecked(map_dict.get(k))
+
+        ## FILTER ENV
+        case "fil_env":
+          self.ui.gbxFilEnv.setChecked(map_dict.get(k))
+
+        ## PITCH
+        case "pitch":
+          self.ui.gbxFilterGeneral.setChecked(map_dict.get(k))
+
+        ## PITCH LFO
+        case "pit_lfo":
+          self.ui.gbxPitchLfo.setChecked(map_dict.get(k))
+
+        ## PITCH ENV
+        case "pit_env":
+          self.ui.gbxPitchEnv.setChecked(map_dict.get(k))
+
+        ## OPCODES
+        case "opcode_notepad":
+          self.ui.txtOpcodes.setPlainText(map_dict.get(k))
+
+
 
   def update_obj(self):
     None

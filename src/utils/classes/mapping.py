@@ -100,7 +100,7 @@ class Mapping:
     # AMP PROPERTIES
     self.amp_keycenter = 60
     self.amp_keytrack = 0
-    self.amp_veltrack = 100
+    self.amp_veltrack = 90
     self.amp_random = 0
     # (PERC RELATED)
     self.amp_velfloorbool = False

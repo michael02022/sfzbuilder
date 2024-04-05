@@ -6,7 +6,7 @@ from PySide6.QtCore    import QSettings
 from PySide6.QtGui     import QIcon
 from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup
 from .ui_mainwindow    import Ui_MainWindow
-from .tabpan           import setupKnobs
+#from .tabpan           import setupKnobs
 from .rc_resources     import *
 from collections       import defaultdict
 from utils.opcodes     import *
@@ -66,6 +66,21 @@ def clip(n, range):
     else:
         return n
 
+def float_to_int(flt, decimals):
+  negative = False
+  ls = str(float(flt)).split(".")
+  if "-" in ls[0]:
+    negative = True
+    s = ls[0][1:]
+  else:
+    s = ls[0]
+  zeros = (decimals - len(ls[1]))
+  d = ls[1] + ("0" * zeros)
+  r = s + d
+  if negative:
+    r = "-" + r
+  return int(r)
+
 class MainWindow(QMainWindow):
   def __init__(self, parent=None):
     super().__init__(parent)
@@ -73,7 +88,7 @@ class MainWindow(QMainWindow):
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
 
-    setupKnobs(self.ui)
+    #setupKnobs(self.ui)
 
     self.current_map_ls = []
     self.current_pack_dict = {}
@@ -119,6 +134,10 @@ class MainWindow(QMainWindow):
     self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
     self.ui.cbxMap.currentIndexChanged.connect(self.onMapChanged)
     self.ui.listMap.itemClicked.connect(self.onItemMap)
+
+    # ENVELOPES
+    #self.ui.knbPan.setMinimum(-100.0)
+    #self.ui.knbPan.setMaximum(100.0)
 
     self.ui.pbnAmpEnvAttackShapeEnable.clicked.connect(self.onAmpEnvAttackShapeEnabled)
     self.ui.pbnAmpEnvDecayShapeEnable.clicked.connect(self.onAmpEnvDecayShapeEnabled)
@@ -414,9 +433,22 @@ class MainWindow(QMainWindow):
         ## PAN
         case "panbool":
           self.ui.gbxPan.setChecked(map_dict.get(k))
-        case "pan_keycenter":
-          self.ui.sbxPanKeycenter.setValue(map_dict.get(k))
-
+        case "pan_value":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPan.setValue(dialval)
+          self.ui.dsbPan.setValue(map_dict.get(k))
+        case "pan_keytrack":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanKeytrack.setValue(dialval)
+          self.ui.dsbPanKeytrack.setValue(map_dict.get(k))
+        case "pan_veltrack":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanVeltrack.setValue(dialval)
+          self.ui.dsbPanVeltrack.setValue(map_dict.get(k))
+        case "pan_random":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanRandom.setValue(dialval)
+          self.ui.dsbPanRandom.setValue(map_dict.get(k))
         ## AMP
         case "amp_keycenter":
           self.ui.sbxAmpKeycenter.setValue(map_dict.get(k))
@@ -428,11 +460,38 @@ class MainWindow(QMainWindow):
           self.ui.chkAmpVelAttack.setChecked(map_dict.get(k))
         case "amp_env_vel2attack":
           self.ui.sbxAmpVelAttack.setValue(map_dict.get(k))
-
+        case "amp_keytrack":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpKeytrack.setValue(dialval)
+          self.ui.dsbAmpKeytrack.setValue(map_dict.get(k))
+        case "amp_veltrack":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpVeltrack.setValue(dialval)
+          self.ui.dsbAmpVeltrack.setValue(map_dict.get(k))
+        case "amp_random":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpRandom.setValue(dialval)
+          self.ui.dsbAmpRandom.setValue(map_dict.get(k))
         ## AMP LFO
         case "amp_lfo":
           self.ui.gbxAmpLfo.setChecked(map_dict.get(k))
-
+        case "amp_lfo_delay":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpLfoDelay.setValue(dialval)
+          self.ui.dsbAmpLfoDelay.setValue(map_dict.get(k))
+        case "amp_lfo_fade":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpLfoFade.setValue(dialval)
+          self.ui.dsbAmpLfoFade.setValue(map_dict.get(k))
+        case "amp_lfo_depth":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialAmpLfoDepth.setValue(dialval)
+          self.ui.dsbAmpLfoDepth.setValue(map_dict.get(k))
+        case "amp_lfo_freq":
+          dialval = float_to_int(map_dict.get(k), 3)
+          print(dialval)
+          self.ui.dialAmpLfoFreq.setValue(dialval)
+          self.ui.dsbAmpLfoFreq.setValue(map_dict.get(k))
         ## AMP ENV
         case "amp_env":
           self.ui.gbxAmpEnv.setChecked(map_dict.get(k))

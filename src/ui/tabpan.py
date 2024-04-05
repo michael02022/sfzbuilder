@@ -11,7 +11,7 @@ def setupKnobs(ui):
   knbPixmap = QPixmap(r":/pan")
   knbPixmap.scaledToWidth(48, Qt.SmoothTransformation)
   ui.knbPan.setPixmap(knbPixmap)
-  ui.knbPan.valueChanged.connect(lambda v: ui.lblPanVal.setText("{:.3f}".format(v)))
+  ui.knbPan.valueChanged.connect(lambda v: ui.dspPan.setValue(float("{:.3f}".format(v))))
 
   names = [ "Keytrack", "Veltrack", "Random" ]
   for name in names:

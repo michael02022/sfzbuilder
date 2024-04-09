@@ -803,7 +803,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="cbxRtDeadMode">
+             <widget class="QComboBox" name="cbxTriggerMode">
               <item>
                <property name="text">
                 <string>attack</string>
@@ -1382,7 +1382,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="lblLoopMode">
               <property name="text">
-               <string>Loop Mode:</string>
+               <string>Loop Mode (override):</string>
               </property>
              </widget>
             </item>
@@ -1409,7 +1409,7 @@
             <item row="3" column="0">
              <widget class="QLabel" name="lblDirection">
               <property name="text">
-               <string>Direction:</string>
+               <string>Direction (override):</string>
               </property>
              </widget>
             </item>
@@ -1555,16 +1555,6 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="3" column="1">
-             <widget class="QSpinBox" name="sbxSampleTransposeNote">
-              <property name="minimum">
-               <number>-127</number>
-              </property>
-              <property name="maximum">
-               <number>127</number>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QSpinBox" name="sbxSampleTransposePitch">
               <property name="sizePolicy">
@@ -1594,13 +1584,6 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lblSampleTransposeNote">
-              <property name="text">
-               <string>Note</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="2">
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
@@ -1613,6 +1596,23 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="sbxSampleTransposeNote">
+              <property name="minimum">
+               <number>-127</number>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblSampleTransposeNote">
+              <property name="text">
+               <string>Note</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -4019,6 +4019,12 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="minimum">
+                  <number>-12000</number>
+                 </property>
+                 <property name="maximum">
+                  <number>12000</number>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -4054,6 +4060,12 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="minimum">
+                  <number>-12000</number>
+                 </property>
+                 <property name="maximum">
+                  <number>12000</number>
                  </property>
                 </widget>
                </item>
@@ -4246,7 +4258,7 @@
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QDoubleSpinBox" name="dsbFilEnvSustain_2">
+                <widget class="QDoubleSpinBox" name="dsbFilEnvRelease">
                  <property name="decimals">
                   <number>3</number>
                  </property>

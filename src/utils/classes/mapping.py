@@ -110,18 +110,19 @@ class Mapping:
 
     # AMP ENVELOPE
     self.amp_env = False
+    self.amp_env_start = 0
     self.amp_env_delay = 0
     self.amp_env_attack = 0
     self.amp_env_attack_shapebool = False
-    self.amp_env_attack_shape = LINEAR_CURVE
+    self.amp_env_attack_shape = 0 # linear
     self.amp_env_hold = 0
     self.amp_env_sustain = 100
     self.amp_env_decay = 0
     self.amp_env_decay_shapebool = False
-    self.amp_env_decay_shape = 1.04
+    self.amp_env_decay_shape = DECAY_CURVE_B
     self.amp_env_release = 0
     self.amp_env_release_shapebool = False
-    self.amp_env_release_shape = 1.04
+    self.amp_env_release_shape = DECAY_CURVE_B
     # AMP LFO
     self.amp_lfo = False
     self.amp_lfo_delay = 0
@@ -141,20 +142,21 @@ class Mapping:
     self.resonance = 0
     # FILTER ENVELOPE
     self.fil_env = False
+    self.fil_env_start = 0
     self.fil_env_depth = 0
     self.fil_vel2depth = 0
     self.fil_env_delay = 0
     self.fil_env_attack = 0
     self.fil_env_attack_shapebool = False
-    self.fil_env_attack_shape = LINEAR_CURVE
+    self.fil_env_attack_shape = 0 # linear
     self.fil_env_hold = 0
     self.fil_env_sustain = 100
     self.fil_env_decay = 0
-    self.amp_env_decay_shapebool = False
-    self.amp_env_decay_shape = LINEAR_CURVE
+    self.fil_env_decay_shapebool = False
+    self.fil_env_decay_shape = 0 # linear
     self.fil_env_release = 0
-    self.amp_env_release_shapebool = False
-    self.amp_env_release_shape = LINEAR_CURVE
+    self.fil_env_release_shapebool = False
+    self.fil_env_release_shape = 0 # linear
     # FILTER LFO
     self.fil_lfo = False
     self.fil_lfo_delay = 0
@@ -170,6 +172,7 @@ class Mapping:
     self.pitch_random = 0
     # PITCH ENVELOPE
     self.pit_env = False
+    self.pit_env_start = 0
     self.pit_env_depth = 0
     self.pit_env_delay = 0
     self.pit_env_attack = 0
@@ -207,3 +210,6 @@ class Mapping:
 
   def change_type(self, type):
     self.type = type
+
+  def change_value(self, var, val):
+    exec(f"self.{var} = {val}")

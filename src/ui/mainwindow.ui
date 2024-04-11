@@ -13,92 +13,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_5">
-    <item row="2" column="0" colspan="5">
-     <widget class="QGroupBox" name="gbxGlobal">
-      <property name="title">
-       <string>Global</string>
-      </property>
-      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetNoConstraint</enum>
-       </property>
-       <property name="leftMargin">
-        <number>6</number>
-       </property>
-       <property name="topMargin">
-        <number>6</number>
-       </property>
-       <property name="rightMargin">
-        <number>6</number>
-       </property>
-       <property name="bottomMargin">
-        <number>6</number>
-       </property>
-       <item>
-        <widget class="QCheckBox" name="chkKeyswitch">
-         <property name="text">
-          <string>Keyswitch</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblKeyswitchRange">
-         <property name="text">
-          <string>Range:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="sbxKeyswitchLo">
-         <property name="maximum">
-          <number>127</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblSep1">
-         <property name="text">
-          <string notr="true">-</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="sbxKeyswitchHi">
-         <property name="maximum">
-          <number>127</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblKeyswitchDefault">
-         <property name="text">
-          <string>Default:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="sbxKeyswitchDefault">
-         <property name="maximum">
-          <number>127</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="hspKeyswitch">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="10" column="3">
      <widget class="QLabel" name="lblPack">
       <property name="sizePolicy">
@@ -331,6 +245,161 @@
       </item>
      </layout>
     </item>
+    <item row="2" column="0" colspan="5">
+     <widget class="QGroupBox" name="gbxGlobal">
+      <property name="title">
+       <string>Global</string>
+      </property>
+      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="chkKeyswitch">
+         <property name="text">
+          <string>Keyswitch</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblKeyswitchRange">
+         <property name="text">
+          <string>Range:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sbxKeyswitchLo">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblSep1">
+         <property name="text">
+          <string notr="true">-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sbxKeyswitchHi">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblKeyswitchDefault">
+         <property name="text">
+          <string>Default:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sbxKeyswitchDefault">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="hspKeyswitch">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="chkPercussion">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Percussion</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="chkMap">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Map</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="chkWavetable">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Wavetable</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="5">
      <layout class="QHBoxLayout" name="layMainFolder">
       <property name="sizeConstraint">
@@ -418,75 +487,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="chkPercussion">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Percussion</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="chkMap">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Map</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="chkWavetable">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Wavetable</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </item>
     <item row="12" column="1">
      <widget class="QComboBox" name="cbxMap">
@@ -2589,6 +2589,204 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
+            <item row="1" column="1">
+             <widget class="QGroupBox" name="gbxAmpEnvDelay">
+              <property name="title">
+               <string>Delay</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="layAmpEnvDelay" stretch="0,0,0,1">
+               <property name="sizeConstraint">
+                <enum>QLayout::SetNoConstraint</enum>
+               </property>
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QDial" name="dialAmpEnvDelay">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximum">
+                  <number>60000</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="KnobPy" name="knbAmpEnvDelay" native="true"/>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsbAmpEnvDelay">
+                 <property name="decimals">
+                  <number>3</number>
+                 </property>
+                 <property name="maximum">
+                  <double>60.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.001000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="vspEnvAmpDelay">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QGroupBox" name="gbxAmpEnvRelease">
+              <property name="title">
+               <string>Release</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="layAmpEnvRelease" stretch="0,0,0,0,0,0,0">
+               <property name="sizeConstraint">
+                <enum>QLayout::SetNoConstraint</enum>
+               </property>
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QDial" name="dialAmpEnvRelease">
+                 <property name="maximum">
+                  <number>60000</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="KnobPy" name="knbAmpEnvRelease" native="true"/>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="dsbAmpEnvRelease">
+                 <property name="decimals">
+                  <number>3</number>
+                 </property>
+                 <property name="maximum">
+                  <double>60.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.001000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxAmpEnvReleaseShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="Line" name="line_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QWidget" name="pnlAmpEnvReleaseShape" native="true">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_5">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="lblAmpEnvReleaseShape">
+                    <property name="text">
+                     <string>Shape</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QDial" name="dialAmpEnvReleaseShape">
+                    <property name="minimum">
+                     <number>-11000</number>
+                    </property>
+                    <property name="maximum">
+                     <number>11000</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="KnobPy" name="knbAmpEnvReleaseShape" native="true"/>
+                  </item>
+                  <item>
+                   <widget class="QDoubleSpinBox" name="dsbAmpEnvReleaseShape">
+                    <property name="decimals">
+                     <number>3</number>
+                    </property>
+                    <property name="minimum">
+                     <double>-11.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>11.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.001000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pbnAmpEnvReleaseShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+              <zorder>line_5</zorder>
+              <zorder>pnlAmpEnvReleaseShape</zorder>
+              <zorder>pbnAmpEnvReleaseShapeReset</zorder>
+              <zorder>knbAmpEnvRelease</zorder>
+              <zorder>dsbAmpEnvRelease</zorder>
+              <zorder>dialAmpEnvRelease</zorder>
+              <zorder>cbxAmpEnvReleaseShapeEnable</zorder>
+             </widget>
+            </item>
             <item row="1" column="3">
              <widget class="QGroupBox" name="gbxAmpEnvHold">
               <property name="title">
@@ -2700,16 +2898,16 @@
                 </widget>
                </item>
                <item>
-                <widget class="Line" name="line_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                <widget class="QCheckBox" name="cbxAmpEnvDecayShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pbnAmpEnvDecayShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
+                <widget class="Line" name="line_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -2834,16 +3032,16 @@
                 </widget>
                </item>
                <item>
-                <widget class="Line" name="line">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                <widget class="QCheckBox" name="cbxAmpEnvAttackShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pbnAmpEnvAttackShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
+                <widget class="Line" name="line">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -2908,6 +3106,52 @@
               </layout>
              </widget>
             </item>
+            <item row="1" column="0">
+             <widget class="QSlider" name="sldAmpEnvStart">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <spacer name="vspAmpEnv">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblStart">
+              <property name="text">
+               <string>Start</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblAmpEnvStart">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="5">
              <widget class="QGroupBox" name="gbxAmpEnvSustain">
               <property name="title">
@@ -2969,250 +3213,6 @@
                 </spacer>
                </item>
               </layout>
-             </widget>
-            </item>
-            <item row="1" column="6">
-             <widget class="QGroupBox" name="gbxAmpEnvRelease">
-              <property name="title">
-               <string>Release</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QVBoxLayout" name="layAmpEnvRelease" stretch="0,0,0,0,0,0,0">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetNoConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QDial" name="dialAmpEnvRelease">
-                 <property name="maximum">
-                  <number>60000</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="KnobPy" name="knbAmpEnvRelease" native="true"/>
-               </item>
-               <item>
-                <widget class="QDoubleSpinBox" name="dsbAmpEnvRelease">
-                 <property name="decimals">
-                  <number>3</number>
-                 </property>
-                 <property name="maximum">
-                  <double>60.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.001000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="Line" name="line_5">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pbnAmpEnvReleaseShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QWidget" name="pnlAmpEnvReleaseShape" native="true">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <layout class="QVBoxLayout" name="layAmpEnvAttackShape_5">
-                  <property name="sizeConstraint">
-                   <enum>QLayout::SetNoConstraint</enum>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="lblAmpEnvReleaseShape">
-                    <property name="text">
-                     <string>Shape</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QDial" name="dialAmpEnvReleaseShape">
-                    <property name="minimum">
-                     <number>-11000</number>
-                    </property>
-                    <property name="maximum">
-                     <number>11000</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="KnobPy" name="knbAmpEnvReleaseShape" native="true"/>
-                  </item>
-                  <item>
-                   <widget class="QDoubleSpinBox" name="dsbAmpEnvReleaseShape">
-                    <property name="decimals">
-                     <number>3</number>
-                    </property>
-                    <property name="minimum">
-                     <double>-11.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>11.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.001000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pbnAmpEnvReleaseShapeReset">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-              <zorder>line_5</zorder>
-              <zorder>pbnAmpEnvReleaseShapeEnable</zorder>
-              <zorder>pnlAmpEnvReleaseShape</zorder>
-              <zorder>pbnAmpEnvReleaseShapeReset</zorder>
-              <zorder>knbAmpEnvRelease</zorder>
-              <zorder>dsbAmpEnvRelease</zorder>
-              <zorder>dialAmpEnvRelease</zorder>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QGroupBox" name="gbxAmpEnvDelay">
-              <property name="title">
-               <string>Delay</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <layout class="QVBoxLayout" name="layAmpEnvDelay" stretch="0,0,0,1">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetNoConstraint</enum>
-               </property>
-               <property name="leftMargin">
-                <number>6</number>
-               </property>
-               <property name="topMargin">
-                <number>6</number>
-               </property>
-               <property name="rightMargin">
-                <number>6</number>
-               </property>
-               <property name="bottomMargin">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QDial" name="dialAmpEnvDelay">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximum">
-                  <number>60000</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="KnobPy" name="knbAmpEnvDelay" native="true"/>
-               </item>
-               <item>
-                <widget class="QDoubleSpinBox" name="dsbAmpEnvDelay">
-                 <property name="decimals">
-                  <number>3</number>
-                 </property>
-                 <property name="maximum">
-                  <double>60.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.001000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="vspEnvAmpDelay">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QSlider" name="sldAmpEnvStart">
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <spacer name="vspAmpEnv">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblStart">
-              <property name="text">
-               <string>Start</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lblAmpEnvStart">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
              </widget>
             </item>
            </layout>
@@ -3493,7 +3493,7 @@
                  </sizepolicy>
                 </property>
                 <property name="maximum">
-                 <number>40</number>
+                 <number>40000</number>
                 </property>
                </widget>
               </item>
@@ -3910,8 +3910,11 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="minimum">
+                     <number>-11000</number>
+                    </property>
                     <property name="maximum">
-                     <number>60000</number>
+                     <number>11000</number>
                     </property>
                    </widget>
                   </item>
@@ -3923,8 +3926,11 @@
                     <property name="decimals">
                      <number>3</number>
                     </property>
+                    <property name="minimum">
+                     <double>-11.000000000000000</double>
+                    </property>
                     <property name="maximum">
-                     <double>60.000000000000000</double>
+                     <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.001000000000000</double>
@@ -3932,27 +3938,6 @@
                    </widget>
                   </item>
                  </layout>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="Line" name="line_7">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvAttackShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="0">
-                <widget class="QPushButton" name="pbnFilEnvAttackShapeReset">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
                 </widget>
                </item>
                <item row="2" column="0">
@@ -3971,6 +3956,20 @@
                  </property>
                 </widget>
                </item>
+               <item row="5" column="0">
+                <widget class="Line" name="line_7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QPushButton" name="pbnFilEnvAttackShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
+               </item>
                <item row="1" column="0">
                 <widget class="QDial" name="dialFilEnvAttack">
                  <property name="sizePolicy">
@@ -3981,6 +3980,13 @@
                  </property>
                  <property name="maximum">
                   <number>60000</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="cbxFilEnvAttackShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
@@ -4219,8 +4225,14 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="minimum">
+                     <number>-11000</number>
+                    </property>
                     <property name="maximum">
-                     <number>60000</number>
+                     <number>11000</number>
+                    </property>
+                    <property name="value">
+                     <number>0</number>
                     </property>
                    </widget>
                   </item>
@@ -4232,8 +4244,11 @@
                     <property name="decimals">
                      <number>3</number>
                     </property>
+                    <property name="minimum">
+                     <double>-11.000000000000000</double>
+                    </property>
                     <property name="maximum">
-                     <double>60.000000000000000</double>
+                     <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.001000000000000</double>
@@ -4244,18 +4259,14 @@
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvReleaseShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
                 <widget class="Line" name="line_9">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="KnobPy" name="knbFilEnvRelease" native="true"/>
                </item>
                <item row="3" column="0">
                 <widget class="QDoubleSpinBox" name="dsbFilEnvRelease">
@@ -4277,9 +4288,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="KnobPy" name="knbFilEnvRelease" native="true"/>
-               </item>
                <item row="1" column="0">
                 <widget class="QDial" name="dialFilEnvRelease">
                  <property name="sizePolicy">
@@ -4290,6 +4298,13 @@
                  </property>
                  <property name="maximum">
                   <number>60000</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="cbxFilEnvReleaseShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>
@@ -4374,43 +4389,6 @@
                <set>Qt::AlignCenter</set>
               </property>
               <layout class="QGridLayout" name="gridLayout_8">
-               <item row="7" column="0">
-                <widget class="QPushButton" name="pbnFilEnvDecayShapeReset">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QDoubleSpinBox" name="dsbFilEnvDecay">
-                 <property name="decimals">
-                  <number>3</number>
-                 </property>
-                 <property name="maximum">
-                  <double>60.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.001000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="KnobPy" name="knbFilEnvDecay" native="true"/>
-               </item>
-               <item row="4" column="0">
-                <widget class="Line" name="line_8">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QPushButton" name="pbnFilEnvDecayShapeEnable">
-                 <property name="text">
-                  <string>Enable</string>
-                 </property>
-                </widget>
-               </item>
                <item row="6" column="0">
                 <widget class="QWidget" name="pnlFilEnvDecayShape" native="true">
                  <property name="enabled">
@@ -4450,8 +4428,11 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="minimum">
+                     <number>-11000</number>
+                    </property>
                     <property name="maximum">
-                     <number>60000</number>
+                     <number>11000</number>
                     </property>
                    </widget>
                   </item>
@@ -4463,8 +4444,11 @@
                     <property name="decimals">
                      <number>3</number>
                     </property>
+                    <property name="minimum">
+                     <double>-11.000000000000000</double>
+                    </property>
                     <property name="maximum">
-                     <double>60.000000000000000</double>
+                     <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.001000000000000</double>
@@ -4472,6 +4456,36 @@
                    </widget>
                   </item>
                  </layout>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QPushButton" name="pbnFilEnvDecayShapeReset">
+                 <property name="text">
+                  <string>Reset</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="KnobPy" name="knbFilEnvDecay" native="true"/>
+               </item>
+               <item row="5" column="0">
+                <widget class="Line" name="line_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QDoubleSpinBox" name="dsbFilEnvDecay">
+                 <property name="decimals">
+                  <number>3</number>
+                 </property>
+                 <property name="maximum">
+                  <double>60.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.001000000000000</double>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="0">
@@ -4484,6 +4498,13 @@
                  </property>
                  <property name="maximum">
                   <number>60000</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QCheckBox" name="cbxFilEnvDecayShapeEnable">
+                 <property name="text">
+                  <string>Enable</string>
                  </property>
                 </widget>
                </item>

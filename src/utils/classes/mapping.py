@@ -116,10 +116,10 @@ class Mapping:
     self.amp_env_attack_shapebool = False
     self.amp_env_attack_shape = 0 # linear
     self.amp_env_hold = 0
-    self.amp_env_sustain = 100
     self.amp_env_decay = 0
     self.amp_env_decay_shapebool = False
     self.amp_env_decay_shape = DECAY_CURVE_B
+    self.amp_env_sustain = 100
     self.amp_env_release = 0
     self.amp_env_release_shapebool = False
     self.amp_env_release_shape = DECAY_CURVE_B
@@ -150,10 +150,10 @@ class Mapping:
     self.fil_env_attack_shapebool = False
     self.fil_env_attack_shape = 0 # linear
     self.fil_env_hold = 0
-    self.fil_env_sustain = 100
     self.fil_env_decay = 0
     self.fil_env_decay_shapebool = False
     self.fil_env_decay_shape = 0 # linear
+    self.fil_env_sustain = 100
     self.fil_env_release = 0
     self.fil_env_release_shapebool = False
     self.fil_env_release_shape = 0 # linear
@@ -177,8 +177,8 @@ class Mapping:
     self.pit_env_delay = 0
     self.pit_env_attack = 0
     self.pit_env_hold = 0
-    self.pit_env_sustain = 100
     self.pit_env_decay = 0
+    self.pit_env_sustain = 100
     self.pit_env_release = 0
     # PITCH LFO
     self.pit_lfo = False

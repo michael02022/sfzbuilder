@@ -2,19 +2,21 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 # This Python file uses the following encoding: utf-8
-from PySide6.QtCore    import QSettings
-from PySide6.QtGui     import QIcon
-from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup
-from .ui_mainwindow    import Ui_MainWindow
-#from .tabpan           import setupKnobs
-from .rc_resources     import *
-from collections       import defaultdict
-from utils.opcodes     import *
-from utils.classes.mapping import Mapping
-from utils.enums       import *
+from PySide6.QtCore           import QSettings, Qt, QEvent
+from PySide6.QtGui            import QIcon, QCursor, QAction
+from PySide6.QtWidgets        import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup, QMenu
+from .ui_mainwindow           import Ui_MainWindow
+#from .tabpan                 import setupKnobs
+from .rc_resources            import *
+from collections              import defaultdict
+from utils.opcodes            import *
+from utils.classes.mapping    import Mapping
+from utils.classes.sfzglobal  import SfzGlobal
+from utils.enums              import *
 import os
 import glob
 import pathlib
+import copy
 
 
 def get_mappings(config_path):
@@ -104,8 +106,9 @@ def int_to_float(integer, decimals):
   return float(r)
 
 class MainWindow(QMainWindow):
-  def __init__(self, parent=None):
+  def __init__(self, app, parent=None):
     super().__init__(parent)
+    self._window = parent
 
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
@@ -145,6 +148,10 @@ class MainWindow(QMainWindow):
       self.enable_edit = True
       #print(self.mappings_dict)
 
+    # init global header
+    self.global_header = SfzGlobal()
+    self.get_global_values()
+
     self.chk_group.buttonClicked.connect(self.onCheckboxesWavetables)
 
     self.ui.pbnMapAdd.clicked.connect(self.onMapAdd)
@@ -153,8 +160,8 @@ class MainWindow(QMainWindow):
     self.ui.pbnMapDown.clicked.connect(self.onMapDown)
     self.ui.pbnMapClone.clicked.connect(self.onMapClone)
 
-    self.ui.cbxPack.currentIndexChanged.connect(self.onPackChanged)
-    self.ui.cbxMap.currentIndexChanged.connect(self.onMapChanged)
+    self.ui.cbxPack.activated.connect(self.onPackChanged)
+    self.ui.cbxMap.activated.connect(self.onMapChanged)
     self.ui.listMap.itemClicked.connect(self.onItemMap)
 
     # ENVELOPES
@@ -169,10 +176,104 @@ class MainWindow(QMainWindow):
     self.ui.cbxFilEnvDecayShapeEnable.stateChanged.connect(self.onFilEnvDecayShapeEnabled)
     self.ui.cbxFilEnvReleaseShapeEnable.stateChanged.connect(self.onFilEnvReleaseShapeEnabled)
 
+    # MENUS
+    self.save_menu = QMenu(self)
+    save_sfz = self.save_menu.addAction("Save SFZ")
+    save_auto = self.save_menu.addAction("✅ Autosave") # 🟩
+
+    save_sfz.triggered.connect(self.onSaveSfz)
+
+    # cc menu
+    self.cc_menu = QMenu(self)
+    self.cc_submenu_1 = self.cc_menu.addMenu("0-19")
+    self.cc_submenu_2 = self.cc_menu.addMenu("20-31")
+    self.cc_submenu_3 = self.cc_menu.addMenu("32-45")
+    self.cc_submenu_4 = self.cc_menu.addMenu("46-63")
+    self.cc_submenu_5 = self.cc_menu.addMenu("64-79")
+    self.cc_submenu_6 = self.cc_menu.addMenu("80-90")
+    self.cc_submenu_7 = self.cc_menu.addMenu("91-101")
+    self.cc_submenu_8 = self.cc_menu.addMenu("102-119")
+    self.cc_submenu_9 = self.cc_menu.addMenu("120-127")
+    self.cc_submenu_10 = self.cc_menu.addMenu("SFZ CCs")
+
+    for i in range(len(cc_list)):
+      if i <= 19:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_1.addAction(self.btn_action)
+      if 20 <= i <= 31:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_2.addAction(self.btn_action)
+      if 32 <= i <= 45:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_3.addAction(self.btn_action)
+      if 46 <= i <= 63:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_4.addAction(self.btn_action)
+      if 64 <= i <= 79:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_5.addAction(self.btn_action)
+      if 80 <= i <= 90:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_6.addAction(self.btn_action)
+      if 91 <= i <= 101:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_7.addAction(self.btn_action)
+      if 102 <= i <= 119:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_8.addAction(self.btn_action)
+      if 120 <= i <= 127:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_9.addAction(self.btn_action)
+      if 128 <= i <= 137:
+        self.btn_action = QAction(self, text=str(cc_list[i]))
+        self.cc_submenu_10.addAction(self.btn_action)
+
+    # drum menu
+    self.drum_menu = QMenu(self)
+    self.drum_submenu_1 = self.drum_menu.addMenu("Low Perc (XG)")
+    for i in range(len(xg_list_1)):
+        self.prc_action = QAction(self, text=str(xg_list_1[i]))
+        self.drum_submenu_1.addAction(self.prc_action)
+    self.drum_submenu_2 = self.drum_menu.addMenu("Low Perc (GS)")
+    for i in range(len(gs_list_1)):
+        self.prc_action = QAction(self, text=str(gs_list_1[i]))
+        self.drum_submenu_2.addAction(self.prc_action)
+    self.drum_submenu_3 = self.drum_menu.addMenu("GM Drums")
+    for i in range(len(gm_list_drums)):
+        self.prc_action = QAction(self, text=str(gm_list_drums[i]))
+        self.drum_submenu_3.addAction(self.prc_action)
+    self.drum_submenu_4 = self.drum_menu.addMenu("GM Cymbals")
+    for i in range(len(gm_list_cym)):
+        self.prc_action = QAction(self, text=str(gm_list_cym[i]))
+        self.drum_submenu_4.addAction(self.prc_action)
+    self.drum_submenu_5 = self.drum_menu.addMenu("GM Perc")
+    for i in range(len(gm_list_perc)):
+      self.prc_action = QAction(self, text=str(gm_list_perc[i]))
+      self.drum_submenu_5.addAction(self.prc_action)
+
+    # Event filter
+    self.ui.dialPan.installEventFilter(self)
+
+  def eventFilter(self, obj, event):
+    #print(self.window)
+    #print(obj)
+    #print(event.type())
+    #print(obj.className())
+    #if event.type() == QEvent.MouseButtonRelease:
+    if obj.objectName().find("dial") and event.type() == QEvent.MouseButtonRelease:
+      print("button released")
+    return super().eventFilter(obj, event)
+
+  def mousePressEvent(self, QMouseEvent):
+    if QMouseEvent.button() == Qt.RightButton:
+      self.save_menu.exec(QCursor.pos())
+      #self.cc_menu.exec(QCursor.pos())
+      #self.drum_menu.exec(QCursor.pos())
+
   def onMainFolder(self):
     main_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a SFZBuilder folder", options=QFileDialog.ShowDirsOnly)
     if False in (os.path.exists(f"{main_folder_path}/MappingPool"), os.path.exists(f"{main_folder_path}/Presets"), os.path.exists(f"{main_folder_path}/Projects")):
-      self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Projects folders.")
+      self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets, Projects and Wavetables folders.")
       self.msgbox_ok.exec()
     else:
       self.ui.txtMainFolder.setText(main_folder_path)
@@ -201,7 +302,7 @@ class MainWindow(QMainWindow):
       self.map_objects.append(self.sfz_map)
 
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
-      #print(vars(self.map_objects[0]))
+      #print(self.map_objects)
     else:
       self.msgbox_ok.setText("Please select a SFZBuilder folder.")
       self.msgbox_ok.exec()
@@ -242,11 +343,11 @@ class MainWindow(QMainWindow):
               self.ui.listMap.setCurrentRow(idx)
         case QMessageBox.No:
           None
-  # TODO: FIX A BUG WHERE MULTIPLE MAP OBJECTS ARE CHANGING THEIR MAPS INSTEAD OF THE SELECTED ONE ONLY
+
   def onMapClone(self):
     if self.ui.listMap.count() != 0:
       idx = self.ui.listMap.currentRow()
-      element = self.map_objects[idx]
+      element = copy.deepcopy(self.map_objects[idx])
       self.map_objects.insert(clip(idx + 1, (0, len(self.map_objects))), element)
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(idx + 1)
@@ -313,6 +414,18 @@ class MainWindow(QMainWindow):
     self.ui.pnlFilEnvReleaseShape.setEnabled(not self.ui.pnlFilEnvReleaseShape.isEnabled())
 
   # UPDATE OBJECT -> WIDGET
+  def get_global_values(self):
+    global_dict = vars(self.global_header)
+    for k in global_dict:
+      match k:
+        case "keysw":
+          self.ui.chkKeyswitch.setChecked(global_dict.get(k))
+        case "keysw_range":
+          self.ui.sbxKeyswitchLo.setValue(global_dict.get(k)[0])
+          self.ui.sbxKeyswitchHi.setValue(global_dict.get(k)[1])
+        case "sw_default":
+          self.ui.sbxKeyswitchDefault.setValue(global_dict.get(k))
+
   def get_map_values(self):
     idx = self.ui.listMap.currentRow()
     map_dict = vars(self.map_objects[idx])
@@ -493,6 +606,8 @@ class MainWindow(QMainWindow):
         ## AMP ENV
         case "amp_env":
           self.ui.gbxAmpEnv.setChecked(map_dict.get(k))
+        case "amp_env_ver":
+          self.ui.cbxAmpEnvVer.setCurrentIndex(map_dict.get(k))
         case "amp_env_start":
           self.ui.sldAmpEnvStart.setValue(map_dict.get(k))
         case "amp_env_delay":
@@ -579,6 +694,8 @@ class MainWindow(QMainWindow):
         ## FILTER ENV
         case "fil_env":
           self.ui.gbxFilEnv.setChecked(map_dict.get(k))
+        case "fil_env_ver":
+          self.ui.cbxAmpEnvVer.setCurrentIndex(map_dict.get(k))
 
         case "fil_env_depth":
           self.ui.dialFilEnvDepth.setValue(map_dict.get(k))
@@ -699,8 +816,13 @@ class MainWindow(QMainWindow):
           self.ui.txtOpcodes.setPlainText(map_dict.get(k))
 
     # /// WIDGET MONITORING
+    # global header
+    self.ui.chkKeyswitch.stateChanged.connect(self.onUiValueChanged)
+    self.ui.sbxKeyswitchLo.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxKeyswitchHi.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxKeyswitchDefault.valueChanged.connect(self.onUiValueChanged)
+
     # Spinboxes
-    # self.map_objects[self.ui.listMap.currentRow()])
     self.ui.sbxKeyLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxKeyHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxVelLo.valueChanged.connect(self.onUiValueChanged)
@@ -930,6 +1052,15 @@ class MainWindow(QMainWindow):
   def onUiValueChanged(self):
     obj = self.map_objects[self.ui.listMap.currentRow()]
     match self.sender().objectName():
+      # GLOBAL HEADER
+      case "chkKeyswitch":
+        self.global_header.change_value("keysw", self.sender().isChecked())
+      case "sbxKeyswitchLo":
+        self.global_header.change_value("keysw_range", [self.sender().value(), self.global_header.keysw_range[1]])
+      case "sbxKeyswitchHi":
+        self.global_header.change_value("keysw_range", [self.global_header.keysw_range[0], self.sender().value()])
+      case "sbxKeyswitchDefault":
+        self.global_header.change_value("sw_default", self.sender().value())
       # SPINBOXES
       case "sbxKeyLo":
         obj.change_value("map_key_range", [self.sender().value(), obj.map_key_range[1]])
@@ -1082,6 +1213,10 @@ class MainWindow(QMainWindow):
       # COMBO BOXES
       case "cbxWave":
         obj.change_value("wave", wavetables[self.sender().currentIndex()])
+
+        idx = self.ui.listMap.currentRow()
+        self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+        self.ui.listMap.setCurrentRow(idx)
       case "cbxWaveMode":
         obj.change_value("wave_mode", wave_modes[self.sender().currentIndex()])
       case "cbxTriggerMode":
@@ -1094,12 +1229,16 @@ class MainWindow(QMainWindow):
         obj.change_value("off_mode", off_modes[self.sender().currentIndex()])
       case "cbxFilterType":
         obj.change_value("fil_type", filter_type[self.sender().currentIndex()])
+      case "cbxAmpEnvVer":
+        obj.change_value("amp_env_ver", self.sender().currentIndex())
+      case "cbxFilterEnvVer":
+        obj.change_value("amp_env_ver", self.sender().currentIndex())
 
       # TEXT
       case "txtKeyswitchLabel":
         obj.change_value("sw_label", self.sender().text())
       case "txtOpcodes":
-        obj.change_value("opcode_notepad", f"'{self.sender().toPlainText()}'")
+        obj.change_value("opcode_notepad", self.sender().toPlainText())
 
       # KNOBS / DIALS
       # PAN
@@ -1198,6 +1337,7 @@ class MainWindow(QMainWindow):
 
       # AMP ENVELOPE
       case "sldAmpEnvStart":
+        self.ui.lblAmpEnvStart.setText(str(self.sender().value()))
         obj.change_value("amp_env_start", self.sender().value())
 
       case "dialAmpEnvDelay":
@@ -1367,6 +1507,7 @@ class MainWindow(QMainWindow):
         obj.change_value("fil_vel2depth", self.sender().value())
 
       case "sldFilEnvStart":
+        self.ui.lblFilEnvStart.setText(str(self.sender().value()))
         obj.change_value("fil_env_start", self.sender().value())
 
       case "dialFilEnvDelay":
@@ -1601,3 +1742,298 @@ class MainWindow(QMainWindow):
       case _:
         None
 
+  def generate_eg(self, type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
+    output = ""
+    output += "\n\n"
+    match destination:
+      case "amp":
+        eg = 0
+      case "fil":
+        eg = 1
+      case "pit":
+        eg = 2
+
+    if type == 0:
+      match eg:
+        case 0:
+          output += f"ampeg_start={start}\n"
+          output += f"ampeg_delay={delay}\n"
+          output += f"ampeg_attack={attack}\n"
+          if shapes[0][0]:
+              output += f"ampeg_attack_shape={shapes[0][1]}\n"
+
+          output += f"ampeg_hold={hold}\n"
+          output += f"ampeg_sustain={sustain}\n"
+          output += f"ampeg_decay={decay}\n"
+          if shapes[1][0]:
+              output += f"ampeg_decay_shape={shapes[1][1]}\n"
+
+          output += f"ampeg_release={release}\n"
+          if shapes[2][0]:
+              output += f"ampeg_release_shape={shapes[2][1]}\n"
+        case 1:
+          output += f"fileg_start={start}\n"
+          output += f"fileg_delay={delay}\n"
+          output += f"fileg_attack={attack}\n"
+          if shapes[0][0]:
+              output += f"fileg_attack_shape={shapes[0][1]}\n"
+
+          output += f"fileg_hold={hold}\n"
+          output += f"fileg_sustain={sustain}\n"
+          output += f"fileg_decay={decay}\n"
+          if shapes[1][0]:
+              output += f"fileg_decay_shape={shapes[1][1]}\n"
+
+          output += f"fileg_release={release}\n"
+          if shapes[2][0]:
+              output += f"fileg_release_shape={shapes[2][1]}\n"
+        case 2:
+          output += f"pitcheg_start={start}\n"
+          output += f"pitcheg_delay={delay}\n"
+          output += f"pitcheg_attack={attack}\n"
+          if shapes[0][0]:
+              output += f"pitcheg_attack_shape={shapes[0][1]}\n"
+
+          output += f"pitcheg_hold={hold}\n"
+          output += f"pitcheg_sustain={sustain}\n"
+          output += f"pitcheg_decay={decay}\n"
+          if shapes[1][0]:
+              output += f"pitcheg_decay_shape={shapes[1][1]}\n"
+
+          output += f"pitcheg_release={release}\n"
+          if shapes[2][0]:
+              output += f"pitcheg_release_shape={shapes[2][1]}\n"
+    else: # Flex
+      match eg:
+        case 0:
+          output += f"eg{idx}_ampeg=100"
+          output += f"eg{idx}_sustain=4"
+          output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=0"
+          output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
+          output += f"eg{idx}_level2=1 eg{idx}_timel2={attack}\n"
+          if shapes[0][0]:
+              output += f"eg{idx}_shape2={shapes[0][1]}\n"
+          output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
+          output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
+          if shapes[1][0]:
+              output += f"eg{idx}_shape4={shapes[1][1]}\n"
+          output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
+          if shapes[2][0]:
+              output += f"eg{idx}_shape5={shapes[2][1]}\n"
+        case 1:
+          output += f"eg{idx+1}_sustain=4"
+          output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=0"
+          output += f"eg{idx+1}_level1={float(start) / 100} eg{idx+1}_time1={delay}\n"
+          output += f"eg{idx+1}_level2=1 eg{idx+1}_timel2={attack}\n"
+          if shapes[0][0]:
+              output += f"eg{idx+1}_shape2={shapes[0][1]}\n"
+          output += f"eg{idx+1}_level3=1 eg{idx+1}_time3={hold}\n"
+          output += f"eg{idx+1}_level4={float(sustain) / 100} eg{idx+1}_time4={decay}\n"
+          if shapes[1][0]:
+              output += f"eg{idx+1}_shape4={shapes[1][1]}\n"
+          output += f"eg{idx+1}_level5=0 eg{idx+1}_time5={release}\n"
+          if shapes[2][0]:
+              output += f"eg{idx+1}_shape5={shapes[2][1]}\n"
+        case 2:
+          output += f"eg{idx+2}_sustain=4"
+          output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=0"
+          output += f"eg{idx+2}_level1={float(start) / 100} eg{idx+2}_time1={delay}\n"
+          output += f"eg{idx+2}_level2=1 eg{idx+2}_timel2={attack}\n"
+          if shapes[0][0]:
+              output += f"eg{idx+2}_shape2={shapes[0][1]}\n"
+          output += f"eg{idx+2}_level3=1 eg{idx+2}_time3={hold}\n"
+          output += f"eg{idx+2}_level4={float(sustain) / 100} eg{idx+2}_time4={decay}\n"
+          if shapes[1][0]:
+              output += f"eg{idx+2}_shape4={shapes[1][1]}\n"
+          output += f"eg{idx+2}_level5=0 eg{idx+2}_time5={release}\n"
+          if shapes[2][0]:
+              output += f"eg{idx+2}_shape5={shapes[2][1]}\n"
+    return output
+
+  def onSaveSfz(self):
+    self.save_sfz(self.global_header, self.map_objects)
+
+  def save_sfz(self, global_obj, mappings):
+    if len(mappings) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      sfz_idx = 1
+      # calculate the dots for relative path
+      config_path = self.settings.value("mainfolderpath")
+      preset_path = self.settings.value("presetfolderpath")
+
+      common_path = os.path.commonprefix([config_path, preset_path])
+      dots = (len(preset_path.split(os.sep)) - (len(common_path.split(os.sep)) - 1))
+      r = ""
+      for i in range(dots):
+          r += f"../"
+      define_userpath = r[:-1]
+      pathstr = f"{preset_path}/{self.ui.txtPreset.text()}"
+      print(define_userpath)
+      print(pathstr)
+
+      # generating sfz
+      sfz_content = f"//THIS SFZ WAS GENERATED BY SFZBUILDER 0.1.0\n\n"
+      sfz_content += f"<control>\n#define $USERPATH {define_userpath}\n\n"
+
+      if global_obj.keysw:
+        sfz_global = f"<global>\nsw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n-"
+        sfz_content += sfz_global
+
+      for m in mappings:
+        sfz_content += f"<master>\n"
+        sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n\n"
+        sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
+        sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
+        if m.on_cc_rangebool:
+          sfz_content += f"on_locc{m.on_cc_range[0]}={m.on_cc_range[1]} on_hicc{m.on_cc_range[0]}={m.on_cc_range[2]}\n"
+        if m.random_rangebool:
+          sfz_content += f"lorand={m.random_range[0]} hirand={m.random_range[0]}\n"
+        sfz_content += f"volume={m.volume}\n\n"
+
+        # MAP
+        if m.polybool:
+          sfz_content += f"polyphony={m.poly}\n"
+        if m.note_polybool:
+          sfz_content += f"note_polyphony={m.note_poly}\n"
+
+        sfz_content += f"output={m.output}\n"
+        sfz_content += f"trigger={m.trigger}\n"
+        if m.rt_dead:
+          sfz_content += f"rt_dead={m.rt_dead}\n"
+        if m.rt_decaybool:
+          sfz_content += f"rt_decay={m.rt_decay}\n"
+        if m.keyswitchbool:
+          sfz_content += f"sw_last={m.keyswitch}\n"
+          sfz_content += f"sw_label={m.sw_label}\n"
+        if m.keycenterbool:
+          if m.key_opcode:
+            sfz_content += f"key={m.keycenter}\n"
+          else:
+            sfz_content += f"pitch_keycenter={m.keycenter}\n"
+        # SAMPLE
+        if m.offsetbool:
+          sfz_content += f"offset={m.offset}\n"
+        sfz_content += f"offset={m.offset_random}\n"
+        sfz_content += f"offset_cc131={m.vel2offset}\n\n"
+        sfz_content += f"delay={m.delay}\n\n"
+        sfz_content += f"transpose={m.pitch_transpose}\n"
+        sfz_content += f"sample_quality={m.quality}\n"
+        if m.loop_mode != "None":
+          sfz_content += f"loop_mode={m.loop_mode}\n"
+        else:
+            pass
+        if m.direction != "None":
+          sfz_content += f"direction={m.direction}\n"
+
+        if m.exclass:
+          sfz_content += "\n\n"
+          sfz_content += f"group={m.group}\n"
+          sfz_content += f"off_by={m.off_by}\n"
+          sfz_content += f"off_mode={m.off_mode}\n"
+          sfz_content += f"off_time={m.off_time}\n"
+
+        # PAN
+        if m.panbool:
+          sfz_content += "\n\n"
+          sfz_content += f"pan={m.pan_value}\n"
+          sfz_content += f"pan_keycenter={m.pan_keycenter}\n"
+          sfz_content += f"pan_keytrack={m.pan_keytrack}\n"
+          sfz_content += f"pan_veltrack={m.pan_veltrack}\n"
+          sfz_content += f"pan_random={m.pan_random}\n"
+
+        # AMP
+        sfz_content += "\n\n"
+        sfz_content += f"amp_keycenter={m.amp_keycenter}\n"
+        sfz_content += f"amp_keytrack={m.amp_keytrack}\n"
+        sfz_content += f"amp_veltrack={m.amp_veltrack}\n"
+        sfz_content += f"amp_random={m.amp_random}\n"
+
+        if m.amp_lfo:
+          sfz_content += "\n\n"
+          sfz_content += f"lfo{sfz_idx}_delay={m.amp_lfo_delay}\n"
+          sfz_content += f"lfo{sfz_idx}_fade={m.amp_lfo_fade}\n"
+          sfz_content += f"lfo{sfz_idx}_volume={m.amp_lfo_depth}\n"
+          sfz_content += f"lfo{sfz_idx}_freq={m.amp_lfo_freq}\n"
+        if m.amp_velfloorbool:
+          sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
+        if m.amp_env_vel2attackbool:
+          sfz_content += f"ampeg_vel2attack={m.amp_env_vel2attack}\n"
+
+        if m.amp_env:
+          eg_ver = m.amp_env_ver
+          shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
+          sfz_content += self.generate_eg(eg_ver, "amp", sfz_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
+
+        # FILTER
+        if m.fil:
+          sfz_content += "\n\n"
+          sfz_content += f"fil_type={m.fil_type}\n"
+          sfz_content += f"cutoff={m.cutoff}\n"
+          sfz_content += f"resonance={m.resonance}\n\n"
+
+          sfz_content += f"fil_keycenter={m.fil_keycenter}\n"
+          sfz_content += f"fil_keytrack={m.fil_keytrack}\n"
+          sfz_content += f"fil_veltrack={m.fil_veltrack}\n"
+          sfz_content += f"fil_random={m.fil_random}\n"
+
+          if m.fil_lfo:
+            sfz_content += "\n\n"
+            sfz_content += f"lfo{sfz_idx+1}_delay={m.fil_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx+1}_fade={m.fil_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx+1}_cutoff={m.fil_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx+1}_freq={m.fil_lfo_freq}\n"
+
+          if m.fil_env:
+            eg_ver = m.fil_env_ver
+            match m.fil_env_ver:
+              case 0:
+                sfz_content += f"fileg_depth={m.fil_env_depth}"
+                sfz_content += f"fileg_vel2depth={m.fil_vel2depth}"
+              case 1:
+                sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}" # TODO convert cents to hz
+                sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}" # TODO convert cents to hz
+
+            shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
+            sfz_content += self.generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
+
+        if m.pitch:
+          sfz_content += "\n\n"
+          sfz_content += f"pitch_keytrack={m.pitch_keytrack}\n"
+          sfz_content += f"pitch_veltrack={m.pitch_veltrack}\n"
+          sfz_content += f"pitch_random={m.pitch_random}\n"
+
+          if m.pit_lfo:
+            sfz_content += "\n\n"
+            sfz_content += f"lfo{sfz_idx+2}_delay={m.pit_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx+2}_fade={m.pit_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx+2}_cutoff={m.pit_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx+2}_freq={m.pit_lfo_freq}\n"
+
+          if m.pit_env:
+            eg_ver = m.pit_env_ver
+            match m.pit_env_ver:
+              case 0:
+                sfz_content += f"pitcheg_depth={m.pit_env_depth}"
+              case 1:
+                sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}"
+
+            #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
+            sfz_content += self.generate_eg(eg_ver, "pit", sfz_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+
+        sfz_content += "\n\n"
+        sfz_content += "// ADDITIONAL OPCODES\n"
+        sfz_content += f"{m.opcode_notepad}\n\n"
+
+        sfz_content += "//MAPPING\n"
+        sfz_content += f"<control>\n"
+        sfz_content += f"note_offset={m.note_offset}\n"
+        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+        sfz_idx += 1
+
+      # write sfz
+      f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")
+      f_sfz.write(sfz_content)
+      f_sfz.close()
+      print(f"""{os.path.normpath(str(pathstr) + ".sfz")} written.""")

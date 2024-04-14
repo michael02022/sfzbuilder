@@ -1,6 +1,7 @@
 from ..constants import *
 from ..enums import *
 import pathlib
+import os
 
 class Mapping:
   def __init__(self, type):
@@ -110,6 +111,7 @@ class Mapping:
 
     # AMP ENVELOPE
     self.amp_env = False
+    self.amp_env_ver = 0
     self.amp_env_start = 0
     self.amp_env_delay = 0
     self.amp_env_attack = 0
@@ -142,6 +144,7 @@ class Mapping:
     self.resonance = 0
     # FILTER ENVELOPE
     self.fil_env = False
+    self.fil_env_ver = 0
     self.fil_env_start = 0
     self.fil_env_depth = 0
     self.fil_vel2depth = 0
@@ -172,6 +175,7 @@ class Mapping:
     self.pitch_random = 0
     # PITCH ENVELOPE
     self.pit_env = False
+    self.pit_env_ver = 0
     self.pit_env_start = 0
     self.pit_env_depth = 0
     self.pit_env_delay = 0
@@ -190,6 +194,12 @@ class Mapping:
 
     # MISC
     self.opcode_notepad = ""
+
+  def get_default_path(self):
+    return f"{self.pack}/{os.path.dirname(self.map).replace(os.sep, '/')}"
+
+  def get_include_path(self):
+    return f"{self.pack}/{self.map.replace(os.sep, '/')}"
 
   def get_name(self):
     match self.type:
@@ -212,4 +222,7 @@ class Mapping:
     self.type = type
 
   def change_value(self, var, val):
-    exec(f"self.{var} = {val}")
+    if isinstance(val, str):
+      exec(f"self.{var} = '{val}'")
+    else:
+      exec(f"self.{var} = {val}")

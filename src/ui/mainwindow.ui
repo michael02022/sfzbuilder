@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1002</width>
+    <width>1010</width>
     <height>708</height>
    </rect>
   </property>
@@ -1345,11 +1345,6 @@
             </property>
             <item row="3" column="1">
              <widget class="QComboBox" name="cbxDirection">
-              <item>
-               <property name="text">
-                <string>None</string>
-               </property>
-              </item>
               <item>
                <property name="text">
                 <string>forward</string>
@@ -3215,6 +3210,36 @@
               </layout>
              </widget>
             </item>
+            <item row="0" column="6">
+             <widget class="QComboBox" name="cbxAmpEnvVer">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Normal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Flex</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>EG type:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -4642,6 +4667,30 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="10">
+             <widget class="QComboBox" name="cbxFilterEnvVer">
+              <item>
+               <property name="text">
+                <string>Normal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Flex</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="9">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>EG type:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -5694,7 +5743,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1002</width>
+     <width>1010</width>
      <height>21</height>
     </rect>
    </property>

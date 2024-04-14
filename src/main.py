@@ -38,7 +38,7 @@ if __name__ == "__main__":
   translator.load("../resources/translations/sfzbuilder_" + locale.name(), os.path.dirname(__file__))
   app.installTranslator(translator)
 
-  window = MainWindow()
+  window = MainWindow(app)
 # window = QUiLoader().load("src/ui/mainwindow.ui", None)
   centerOnScreen(window)
   window.show()

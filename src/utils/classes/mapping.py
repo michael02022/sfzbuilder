@@ -17,8 +17,10 @@ class Mapping:
     self.wave_quality = 0
     self.wave_phase = -1
     self.wave_mod_depth = 0
+    self.wave_mod_depth_ccbool = False
     self.wave_mod_depth_cc = [1, 0]
     self.wave_detune = 0
+    self.wave_detune_ccbool = False
     self.wave_detune_cc = [1, 0]
 
     # MAP PROPERTIES
@@ -96,7 +98,7 @@ class Mapping:
     self.pan_lfo_fade = 0
     self.pan_lfo_depth = 0
     self.pan_lfo_freq = 15
-    self.pan_lfo_wave = lfo_waves[1]
+    self.pan_lfo_wave = lfo_waves[0]
 
     # AMP PROPERTIES
     self.amp_keycenter = 60
@@ -131,7 +133,7 @@ class Mapping:
     self.amp_lfo_fade = 0
     self.amp_lfo_depth = 0
     self.amp_lfo_freq = 15
-    self.amp_lfo_wave = lfo_waves[1]
+    self.amp_lfo_wave = lfo_waves[0]
 
     # FILTER PROPERTIES
     self.fil = False
@@ -166,7 +168,7 @@ class Mapping:
     self.fil_lfo_fade = 0
     self.fil_lfo_depth = 0
     self.fil_lfo_freq = 15
-    self.fil_lfo_wave = lfo_waves[1]
+    self.fil_lfo_wave = lfo_waves[0]
 
     # PITCH PROPERTIES
     self.pitch = False
@@ -190,7 +192,7 @@ class Mapping:
     self.pit_lfo_fade = 0
     self.pit_lfo_depth = 0
     self.pit_lfo_freq = 15
-    self.pit_lfo_wave = lfo_waves[1]
+    self.pit_lfo_wave = lfo_waves[0]
 
     # MISC
     self.opcode_notepad = ""
@@ -213,6 +215,21 @@ class Mapping:
         else:
           return f"W: {self.wave}"
 
+  def get_wave(self):
+    match self.wave:
+      case "Sine":
+        return "*sine"
+      case "Triangle":
+        return "*triangle"
+      case "Square":
+        return "*square"
+      case "Saw":
+        return "*saw"
+      case "Noise":
+        return "*noise"
+      case "Sample":
+        return self.map
+
   def set_map(self, pack, map):
     self.pack = pack
     self.map = map
@@ -223,6 +240,9 @@ class Mapping:
 
   def change_value(self, var, val):
     if isinstance(val, str):
-      exec(f"self.{var} = '{val}'")
+      if var == "opcode_notepad":
+        self.opcode_notepad = val
+      else:
+        exec(f"self.{var} = '{val}'")
     else:
       exec(f"self.{var} = {val}")

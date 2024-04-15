@@ -1,12 +1,41 @@
-filter_type = ("lpf_1p", "hpf_1p", "lpf_2p", "hpf_2p", "bpf_2p", "brf_2p")
+filter_type = ("lpf_1p",
+               "lpf_2p",
+               "lpf_2p_sv",
+               "lpf_4p",
+               "lpf_6p",
+
+               "hpf_1p",
+               "hpf_2p",
+               "hpf_2p_sv",
+               "hpf_4p",
+               "hpf_6p",
+
+               "bpf_1p",
+               "bpf_2p",
+               "bpf_2p_sv",
+
+               "brf_1p",
+               "brf_2p",
+               "brf_2p_sv",
+
+               "apf_1p",
+               "pkf_2p",
+
+               "comb",
+               "pink"
+               "lsh",
+               "hsh",
+               "peq")
+
 off_modes = ("fast", "normal")
 loop_modes = ("None", "no_loop", "one_shot", "loop_continuous", "loop_sustain")
 loop_directions = ("forward", "reverse")
 loop_types = ("forward", "backward", "alternate")
 trigger_modes = ("attack", "release", "first", "legato", "release_key")
-lfo_waves = ("triangle", "sine", "75% pulse", "square", "25% pulse", "12.5% pulse", "saw going up", "saw going down")
+lfo_waves = ("Triangle", "Sine", "75% Pulse", "Square", "25% Pulse", "12.5% Pulse", "Saw going up", "Saw going down")
 wavetables = ("Sine", "Triangle", "Square", "Saw", "Noise", "Sample")
 wave_modes = ("Normal/RM", "PM", "FM")
+eg_types = ("Normal", "Flex")
 # drums
 xg_list_1 =   ("13 Surdo Mute",
                "14 Surdo Open",

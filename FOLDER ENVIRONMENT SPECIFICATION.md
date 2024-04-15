@@ -59,7 +59,11 @@ The essential opcodes for mappings are:
 + hikey
 * tune
 
-DO NOT use `key` opcode because this are used when a preset is made. This means for percussion instruments must be `pitch_keycenter=60 lokey=0 hikey=127`, for flexibility reasons.
+DO NOT use `key` opcode because this are used when a preset is made.
+
+`lovel/hivel` are allowed, but maps with seperated dynamics would be nice to have for flexibility reasons.
+
+For percussion instruments only is allowed `lovel/hivel` (do not write `pitch_keycenter` `lokey` `hikey`), everything else will be written in the preset, for flexibility reasons.
 
 These opcodes should be present if FLAC/OGG files are involved (not all sfz players/importers support this metadata for those formats):
 * loop_mode

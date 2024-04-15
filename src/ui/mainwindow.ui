@@ -7,12 +7,127 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1010</width>
-    <height>708</height>
+    <width>1016</width>
+    <height>728</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="layMainFolder">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbnMainFolder">
+        <property name="text">
+         <string>Main Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtMainFolder">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0" colspan="5">
+     <layout class="QHBoxLayout" name="layPreset">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbnPresetFolder">
+        <property name="text">
+         <string>Preset Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPresetPrefix">
+        <property name="text">
+         <string>NONE/</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPreset">
+        <property name="text">
+         <string>MyPreset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSfzExt">
+        <property name="text">
+         <string>.sfz</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAutoname">
+        <property name="text">
+         <string>Autoname</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="10" column="1">
+     <widget class="QComboBox" name="cbxPack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QComboBox" name="cbxMap">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
     <item row="10" column="3">
      <widget class="QLabel" name="lblPack">
       <property name="sizePolicy">
@@ -23,13 +138,6 @@
       </property>
       <property name="text">
        <string>PACK</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="3">
-     <widget class="QLabel" name="lblMap">
-      <property name="text">
-       <string>MAP</string>
       </property>
      </widget>
     </item>
@@ -204,7 +312,7 @@
            <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.250000000000000</double>
           </property>
          </widget>
         </item>
@@ -224,7 +332,7 @@
            <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.250000000000000</double>
           </property>
          </widget>
         </item>
@@ -244,6 +352,75 @@
        </layout>
       </item>
      </layout>
+    </item>
+    <item row="3" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="chkPercussion">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Percussion</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QRadioButton" name="chkMap">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Map</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="chkWavetable">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Wavetable</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item row="2" column="0" colspan="5">
      <widget class="QGroupBox" name="gbxGlobal">
@@ -331,180 +508,17 @@
       </layout>
      </widget>
     </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="chkPercussion">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="autoFillBackground">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Percussion</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QRadioButton" name="chkMap">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Map</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="chkWavetable">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Wavetable</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="5">
-     <layout class="QHBoxLayout" name="layMainFolder">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbnMainFolder">
-        <property name="text">
-         <string>Main Folder</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtMainFolder">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0" colspan="5">
-     <layout class="QHBoxLayout" name="layPreset">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbnPresetFolder">
-        <property name="text">
-         <string>Preset Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblPresetPrefix">
-        <property name="text">
-         <string>NONE/</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtPreset">
-        <property name="text">
-         <string>MyPreset</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSfzExt">
-        <property name="text">
-         <string>.sfz</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="12" column="1">
-     <widget class="QComboBox" name="cbxMap">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="15" column="0">
+     <widget class="QLabel" name="lblLog">
+      <property name="text">
+       <string>Log</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="1">
-     <widget class="QComboBox" name="cbxPack">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="12" column="3">
+     <widget class="QLabel" name="lblMap">
+      <property name="text">
+       <string>MAP</string>
       </property>
      </widget>
     </item>
@@ -726,7 +740,14 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="0" column="0">
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="chkUseKey">
+              <property name="text">
+               <string>Use `key` opcode instead</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
              <layout class="QHBoxLayout" name="layUsePitchKeycenter4All">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
@@ -747,12 +768,38 @@
               </item>
              </layout>
             </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="chkUseKey">
-              <property name="text">
-               <string>Use `key` opcode instead</string>
-              </property>
-             </widget>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QCheckBox" name="cbxTune">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Tune</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="sbxTune">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimum">
+                 <number>-100</number>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -1031,19 +1078,15 @@
               <property name="maximum">
                <number>999999</number>
               </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
              </widget>
             </item>
             <item row="4" column="2">
              <widget class="QLabel" name="lblWaveModDepth">
               <property name="text">
                <string>Mod Depth:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="4">
-             <widget class="QLabel" name="lblWaveModDepthCc">
-              <property name="text">
-               <string>&lt;- CC</string>
               </property>
              </widget>
             </item>
@@ -1095,6 +1138,9 @@
               <property name="maximum">
                <number>999999</number>
               </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
              </widget>
             </item>
             <item row="5" column="2">
@@ -1115,13 +1161,6 @@
              <widget class="QLabel" name="lblWaveMode">
               <property name="text">
                <string>Mode:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="4">
-             <widget class="QLabel" name="lblWaveDetuneCc">
-              <property name="text">
-               <string>&lt;- CC</string>
               </property>
              </widget>
             </item>
@@ -1223,6 +1262,29 @@
               <property name="maximum">
                <number>999999</number>
               </property>
+              <property name="singleStep">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QCheckBox" name="cbxWaveModDepthCc">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>&lt;- CC</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="4">
+             <widget class="QCheckBox" name="cbxWaveDetuneCc">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>&lt;- CC</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -1303,6 +1365,9 @@
               <property name="maximum">
                <number>999999999</number>
               </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
              </widget>
             </item>
             <item row="4" column="1">
@@ -1310,12 +1375,18 @@
               <property name="maximum">
                <number>999999999</number>
               </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
              </widget>
             </item>
             <item row="0" column="1">
              <widget class="QSpinBox" name="sbxSampleOffsetValue">
               <property name="maximum">
                <number>999999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
               </property>
              </widget>
             </item>
@@ -1363,7 +1434,7 @@
                <number>3</number>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
@@ -1631,23 +1702,8 @@
         <attribute name="title">
          <string>Pan</string>
         </attribute>
-        <layout class="QGridLayout" name="layPan">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetNoConstraint</enum>
-         </property>
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>6</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>6</number>
-         </property>
-         <item row="0" column="0" colspan="2">
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="0" column="0">
           <widget class="QGroupBox" name="gbxPan">
            <property name="title">
             <string>Enable</string>
@@ -1857,6 +1913,9 @@
                 <property name="maximum">
                  <double>100.000000000000000</double>
                 </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
                </widget>
               </item>
               <item row="2" column="5">
@@ -1931,6 +1990,9 @@
                 <property name="maximum">
                  <double>100.000000000000000</double>
                 </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
                </widget>
               </item>
               <item row="4" column="4">
@@ -1943,6 +2005,9 @@
                 </property>
                 <property name="maximum">
                  <double>100.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -1957,6 +2022,9 @@
                 <property name="maximum">
                  <double>100.000000000000000</double>
                 </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
                </widget>
               </item>
              </layout>
@@ -1964,8 +2032,241 @@
            </layout>
           </widget>
          </item>
-         <item row="2" column="0" colspan="2">
-          <spacer name="vspPan">
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="gbxPanLfo">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="title">
+            <string>LFO</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="layAmpLfo_2">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item row="1" column="6">
+             <spacer name="hspPanLfoR">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <spacer name="hspPanLfoL">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="lblPanLfoDelay">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Delay</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="lblPanLfoFade">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Fade</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QDial" name="dialPanLfoFreq">
+              <property name="maximum">
+               <number>20000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="KnobPy" name="knbPanLfoDepth" native="true"/>
+            </item>
+            <item row="3" column="4">
+             <widget class="KnobPy" name="knbPanLfoFreq" native="true"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLabel" name="lblPanLfoDepth">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Depth</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QDoubleSpinBox" name="dsbPanLfoDelay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QDial" name="dialPanLfoDepth">
+              <property name="minimum">
+               <number>-100000</number>
+              </property>
+              <property name="maximum">
+               <number>100000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QDoubleSpinBox" name="dsbPanLfoFade">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QDoubleSpinBox" name="dsbPanLfoDepth">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="minimum">
+               <double>-100.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="KnobPy" name="knbPanLfoDelay" native="true"/>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLabel" name="lblPanLfoFreq">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Freq</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="KnobPy" name="knbPanLfoFade" native="true"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDial" name="dialPanLfoDelay">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>15000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QDial" name="dialPanLfoFade">
+              <property name="maximum">
+               <number>15000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QDoubleSpinBox" name="dsbPanLfoFreq">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>20.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <widget class="QComboBox" name="cbxPanLfoWave"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -2011,22 +2312,6 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="1" column="2">
-             <spacer name="hspAmpVelFloor_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::MinimumExpanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>50</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="lblAmpKeycenter">
               <property name="sizePolicy">
@@ -2040,7 +2325,7 @@
               </property>
              </widget>
             </item>
-            <item row="9" column="0" rowspan="2" colspan="3">
+            <item row="8" column="0" rowspan="2" colspan="3">
              <layout class="QGridLayout" name="layAmpKeyVeltrackRandom">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
@@ -2134,6 +2419,9 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="maximum">
+                 <number>24000</number>
+                </property>
                </widget>
               </item>
               <item row="1" column="2">
@@ -2163,6 +2451,9 @@
                 <property name="maximum">
                  <double>12.000000000000000</double>
                 </property>
+                <property name="singleStep">
+                 <double>5.000000000000000</double>
+                </property>
                </widget>
               </item>
               <item row="3" column="2">
@@ -2176,6 +2467,9 @@
                 <property name="maximum">
                  <double>100.000000000000000</double>
                 </property>
+                <property name="singleStep">
+                 <double>5.000000000000000</double>
+                </property>
                </widget>
               </item>
               <item row="3" column="3">
@@ -2184,57 +2478,24 @@
                  <number>3</number>
                 </property>
                 <property name="minimum">
-                 <double>-100.000000000000000</double>
+                 <double>0.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>100.000000000000000</double>
+                 <double>24.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>5.000000000000000</double>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
-            <item row="5" column="0" colspan="3">
-             <layout class="QHBoxLayout" name="layAmpVelAttack">
-              <property name="sizeConstraint">
-               <enum>QLayout::SetNoConstraint</enum>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="sbxAmpKeycenter">
+              <property name="maximum">
+               <number>127</number>
               </property>
-              <item>
-               <widget class="QCheckBox" name="chkAmpVelAttack">
-                <property name="text">
-                 <string>Velocity -&gt; Amp Env Attack:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="sbxAmpVelAttack">
-                <property name="inputMethodHints">
-                 <set>Qt::ImhDigitsOnly</set>
-                </property>
-                <property name="decimals">
-                 <number>3</number>
-                </property>
-                <property name="minimum">
-                 <double>-99.989999999999995</double>
-                </property>
-                <property name="singleStep">
-                 <double>0.010000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="hspAmpVelAttack">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             </widget>
             </item>
             <item row="4" column="0" colspan="3">
              <layout class="QHBoxLayout" name="layAmpVelFloor">
@@ -2280,6 +2541,36 @@
                </widget>
               </item>
               <item>
+               <widget class="Line" name="line_6">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkAmpVelAttack">
+                <property name="text">
+                 <string>Velocity -&gt; Amp Env Attack:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="sbxAmpVelAttack">
+                <property name="inputMethodHints">
+                 <set>Qt::ImhDigitsOnly</set>
+                </property>
+                <property name="decimals">
+                 <number>3</number>
+                </property>
+                <property name="minimum">
+                 <double>-99.989999999999995</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="hspAmpVelFloor">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -2297,12 +2588,21 @@
               </item>
              </layout>
             </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="sbxAmpKeycenter">
-              <property name="maximum">
-               <number>127</number>
+            <item row="1" column="2">
+             <spacer name="hspAmpVelFloor_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
               </property>
-             </widget>
+              <property name="sizeType">
+               <enum>QSizePolicy::MinimumExpanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>50</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
@@ -2357,6 +2657,19 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <spacer name="hspAmpLfoL">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="1" column="1">
              <widget class="QDial" name="dialAmpLfoDelay">
               <property name="sizePolicy">
@@ -2370,6 +2683,22 @@
               </property>
               <property name="maximum">
                <number>15000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLabel" name="lblAmpLfoDepth">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Depth</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -2389,36 +2718,10 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <spacer name="hspAmpLfoL">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+            <item row="2" column="4">
+             <widget class="KnobPy" name="knbAmpLfoFreq" native="true"/>
             </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="lblAmpLfoDepth">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Depth</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="5">
+            <item row="0" column="6">
              <spacer name="hspAmpLfoR">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -2430,9 +2733,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item row="2" column="4">
-             <widget class="KnobPy" name="knbAmpLfoFreq" native="true"/>
             </item>
             <item row="0" column="2">
              <widget class="QLabel" name="lblAmpLfoFade">
@@ -2450,8 +2750,8 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="KnobPy" name="knbAmpLfoDelay" native="true"/>
+            <item row="2" column="3">
+             <widget class="KnobPy" name="knbAmpLfoDepth" native="true"/>
             </item>
             <item row="0" column="1">
              <widget class="QLabel" name="lblAmpLfoDelay">
@@ -2469,24 +2769,11 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="1">
+             <widget class="KnobPy" name="knbAmpLfoDelay" native="true"/>
+            </item>
             <item row="2" column="2">
              <widget class="KnobPy" name="knbAmpLfoFade" native="true"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="KnobPy" name="knbAmpLfoDepth" native="true"/>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="dsbAmpLfoDelay">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>15.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.001000000000000</double>
-              </property>
-             </widget>
             </item>
             <item row="3" column="2">
              <widget class="QDoubleSpinBox" name="dsbAmpLfoFade">
@@ -2497,7 +2784,7 @@
                <double>15.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -2513,7 +2800,20 @@
                <double>10.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="dsbAmpLfoDelay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -2536,7 +2836,7 @@
                <double>20.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -2544,6 +2844,16 @@
              <widget class="QDial" name="dialAmpLfoFreq">
               <property name="maximum">
                <number>20000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QComboBox" name="cbxAmpLfoWave">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
              </widget>
             </item>
@@ -2633,7 +2943,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -2696,7 +3006,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -2758,7 +3068,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.010000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -2825,7 +3135,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -2888,7 +3198,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -2962,7 +3272,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.010000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -3022,7 +3332,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -3084,7 +3394,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.010000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -3190,7 +3500,7 @@
                   <double>100.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.010000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -3313,12 +3623,12 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>hpf_1p</string>
+                  <string>lpf_2p</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>lpf_2p</string>
+                  <string>hpf_1p</string>
                  </property>
                 </item>
                 <item>
@@ -3575,6 +3885,9 @@
                 <property name="maximum">
                  <number>20000</number>
                 </property>
+                <property name="singleStep">
+                 <number>25</number>
+                </property>
                </widget>
               </item>
               <item row="4" column="2">
@@ -3586,7 +3899,7 @@
                  <double>40.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.001000000000000</double>
+                 <double>0.100000000000000</double>
                 </property>
                </widget>
               </item>
@@ -3594,6 +3907,9 @@
                <widget class="QSpinBox" name="sbxFilterKeytrack">
                 <property name="maximum">
                  <number>12000</number>
+                </property>
+                <property name="singleStep">
+                 <number>5</number>
                 </property>
                </widget>
               </item>
@@ -3605,12 +3921,18 @@
                 <property name="maximum">
                  <number>9600</number>
                 </property>
+                <property name="singleStep">
+                 <number>5</number>
+                </property>
                </widget>
               </item>
               <item row="4" column="5">
                <widget class="QSpinBox" name="sbxFilterRandom">
                 <property name="maximum">
                  <number>9600</number>
+                </property>
+                <property name="singleStep">
+                 <number>5</number>
                 </property>
                </widget>
               </item>
@@ -3646,6 +3968,22 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
+            <item row="1" column="4">
+             <widget class="QDial" name="dialFilterLfoFreq">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>20000</number>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="lblFilterLfoDelay">
               <property name="sizePolicy">
@@ -3694,6 +4032,9 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="4">
+             <widget class="KnobPy" name="knbFilterLfoFreq" native="true"/>
+            </item>
             <item row="0" column="2">
              <widget class="QLabel" name="lblFilterLfoFade">
               <property name="sizePolicy">
@@ -3710,6 +4051,15 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="2">
+             <widget class="KnobPy" name="knbFilterLfoFade" native="true"/>
+            </item>
+            <item row="2" column="3">
+             <widget class="KnobPy" name="knbFilterLfoDepth" native="true"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="KnobPy" name="knbFilterLfoDelay" native="true"/>
+            </item>
             <item row="2" column="0">
              <spacer name="hspFilterLfoL">
               <property name="orientation">
@@ -3722,57 +4072,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item row="2" column="2">
-             <widget class="KnobPy" name="knbFilterLfoFade" native="true"/>
-            </item>
-            <item row="2" column="4">
-             <widget class="KnobPy" name="knbFilterLfoFreq" native="true"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="KnobPy" name="knbFilterLfoDepth" native="true"/>
-            </item>
-            <item row="2" column="1">
-             <widget class="KnobPy" name="knbFilterLfoDelay" native="true"/>
-            </item>
-            <item row="2" column="5">
-             <spacer name="hspFilterLfoR">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="1">
-             <widget class="QDial" name="dialFilterLfoDelay">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximum">
-               <number>15000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QDial" name="dialFilterLfoFade">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximum">
-               <number>15000</number>
-              </property>
-             </widget>
             </item>
             <item row="1" column="3">
              <widget class="QDial" name="dialFilterLfoDepth">
@@ -3790,19 +4089,58 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="4">
-             <widget class="QDial" name="dialFilterLfoFreq">
+            <item row="1" column="2">
+             <widget class="QDial" name="dialFilterLfoFade">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimum">
-               <number>0</number>
+              <property name="maximum">
+               <number>15000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QDial" name="dialFilterLfoDelay">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
               <property name="maximum">
-               <number>20000</number>
+               <number>15000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <spacer name="hspFilterLfoR">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="4">
+             <widget class="QDoubleSpinBox" name="dsbFilterLfoFreq">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="minimum">
+               <double>0.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>20.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -3815,7 +4153,7 @@
                <double>15.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -3828,7 +4166,7 @@
                <double>15.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -3844,25 +4182,12 @@
                <double>1200.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>1.000000000000000</double>
+               <double>25.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="3" column="4">
-             <widget class="QDoubleSpinBox" name="dsbFilterLfoFreq">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>0.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>20.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.001000000000000</double>
-              </property>
-             </widget>
+            <item row="1" column="6">
+             <widget class="QComboBox" name="cbxFilterLfoWave"/>
             </item>
            </layout>
           </widget>
@@ -3958,7 +4283,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.100000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -3977,7 +4302,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -4069,6 +4394,9 @@
                  <property name="maximum">
                   <number>12000</number>
                  </property>
+                 <property name="singleStep">
+                  <number>25</number>
+                 </property>
                  <property name="value">
                   <number>0</number>
                  </property>
@@ -4107,6 +4435,9 @@
                  </property>
                  <property name="maximum">
                   <number>12000</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>25</number>
                  </property>
                  <property name="value">
                   <number>0</number>
@@ -4172,10 +4503,10 @@
                   <number>3</number>
                  </property>
                  <property name="maximum">
-                  <double>60.000000000000000</double>
+                  <double>100.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -4276,7 +4607,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.100000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -4302,7 +4633,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -4385,7 +4716,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -4476,7 +4807,7 @@
                      <double>11.000000000000000</double>
                     </property>
                     <property name="singleStep">
-                     <double>0.001000000000000</double>
+                     <double>0.100000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -4585,7 +4916,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -4938,8 +5269,8 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="0" column="1">
-             <widget class="QLabel" name="lblPitchLfoDelay">
+            <item row="0" column="3">
+             <widget class="QLabel" name="lblPitchLfoDepth">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -4947,10 +5278,45 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Delay</string>
+               <string>Depth</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="KnobPy" name="knbPitchDepth" native="true"/>
+            </item>
+            <item row="0" column="4">
+             <widget class="QLabel" name="lblPitchLfoFreq">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Freq</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="KnobPy" name="knbPitchFade" native="true"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QDoubleSpinBox" name="dsbPitchLfoFade">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -4970,8 +5336,8 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="lblPitchLfoDepth">
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblPitchLfoDelay">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -4979,43 +5345,15 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Depth</string>
+               <string>Delay</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
-            <item row="0" column="4">
-             <widget class="QLabel" name="lblPitchLfoFreq">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Freq</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="KnobPy" name="knbPitchDepth" native="true"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="KnobPy" name="knbPitchFade" native="true"/>
-            </item>
-            <item row="2" column="4">
-             <widget class="KnobPy" name="knbPitchFreq" native="true"/>
-            </item>
-            <item row="2" column="1">
-             <widget class="KnobPy" name="knbPitchDelay" native="true"/>
-            </item>
-            <item row="2" column="5">
-             <spacer name="hspPitchLfoR">
+            <item row="2" column="0">
+             <spacer name="hspPitchLfoL">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -5027,8 +5365,18 @@
               </property>
              </spacer>
             </item>
-            <item row="2" column="0">
-             <spacer name="hspPitchLfoL">
+            <item row="1" column="3">
+             <widget class="QDial" name="dialPitchLfoDepth">
+              <property name="minimum">
+               <number>-1200000</number>
+              </property>
+              <property name="maximum">
+               <number>1200000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <spacer name="hspPitchLfoR">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -5047,6 +5395,9 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="1">
+             <widget class="KnobPy" name="knbPitchDelay" native="true"/>
+            </item>
             <item row="1" column="2">
              <widget class="QDial" name="dialPitchLfoFade">
               <property name="maximum">
@@ -5054,25 +5405,8 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QDial" name="dialPitchLfoDepth">
-              <property name="minimum">
-               <number>-1200000</number>
-              </property>
-              <property name="maximum">
-               <number>1200000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QDial" name="dialPitchLfoFreq">
-              <property name="minimum">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <number>20000</number>
-              </property>
-             </widget>
+            <item row="2" column="4">
+             <widget class="KnobPy" name="knbPitchFreq" native="true"/>
             </item>
             <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="dsbPitchLfoDelay">
@@ -5083,36 +5417,17 @@
                <double>15.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QDoubleSpinBox" name="dsbPitchLfoFade">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>15.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.001000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QDoubleSpinBox" name="dsbPitchLfoDepth">
-              <property name="decimals">
-               <number>3</number>
-              </property>
+            <item row="1" column="4">
+             <widget class="QDial" name="dialPitchLfoFreq">
               <property name="minimum">
-               <double>-1200.000000000000000</double>
+               <number>0</number>
               </property>
               <property name="maximum">
-               <double>1200.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.001000000000000</double>
+               <number>20000</number>
               </property>
              </widget>
             </item>
@@ -5128,9 +5443,28 @@
                <double>20.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.001000000000000</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QDoubleSpinBox" name="dsbPitchLfoDepth">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="minimum">
+               <double>-1200.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1200.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QComboBox" name="cbxPitchLfoWave"/>
             </item>
            </layout>
           </widget>
@@ -5250,7 +5584,7 @@
                   <double>100.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5379,7 +5713,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5445,7 +5779,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5511,7 +5845,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5577,7 +5911,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5643,7 +5977,7 @@
                   <double>60.000000000000000</double>
                  </property>
                  <property name="singleStep">
-                  <double>0.001000000000000</double>
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -5743,7 +6077,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1010</width>
+     <width>1016</width>
      <height>21</height>
     </rect>
    </property>

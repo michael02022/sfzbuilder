@@ -13,6 +13,7 @@ from utils.opcodes            import *
 from utils.classes.mapping    import Mapping
 from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
+from pathlib                  import Path
 import os
 import glob
 import pathlib
@@ -137,6 +138,22 @@ class MainWindow(QMainWindow):
     self.ui.pbnMapDown.setIcon(QIcon.fromTheme("go-down",            QIcon(":/go-down")))
     self.ui.pbnMapImport.setIcon(QIcon.fromTheme("emblem-downloads", QIcon(":/import")))
     self.ui.pbnMapUp.setIcon(QIcon.fromTheme("go-up",                QIcon(":/go-up")))
+
+    # init comboxes
+    self.ui.cbxTriggerMode.clear();self.ui.cbxTriggerMode.addItems(trigger_modes)
+    self.ui.cbxWave.clear();self.ui.cbxWave.addItems(wavetables)
+    self.ui.cbxWaveMode.clear();self.ui.cbxWaveMode.addItems(wave_modes)
+    self.ui.cbxLoopMode.clear();self.ui.cbxLoopMode.addItems(loop_modes)
+    self.ui.cbxDirection.clear();self.ui.cbxDirection.addItems(loop_directions)
+    self.ui.cbxOffMode.clear();self.ui.cbxOffMode.addItems(off_modes)
+    self.ui.cbxAmpEnvVer.clear();self.ui.cbxAmpEnvVer.addItems(eg_types)
+    self.ui.cbxFilterType.clear();self.ui.cbxFilterType.addItems(filter_type)
+    self.ui.cbxFilterEnvVer.clear();self.ui.cbxFilterEnvVer.addItems(eg_types)
+
+    self.ui.cbxPanLfoWave.clear();self.ui.cbxPanLfoWave.addItems(lfo_waves)
+    self.ui.cbxAmpLfoWave.clear();self.ui.cbxAmpLfoWave.addItems(lfo_waves)
+    self.ui.cbxFilterLfoWave.clear();self.ui.cbxFilterLfoWave.addItems(lfo_waves)
+    self.ui.cbxPitchLfoWave.clear();self.ui.cbxPitchLfoWave.addItems(lfo_waves)
 
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
@@ -444,11 +461,15 @@ class MainWindow(QMainWindow):
           self.ui.sbxWavePhase.setValue(map_dict.get(k))
         case "wave_mod_depth":
           self.ui.sbxWaveModDepth.setValue(map_dict.get(k))
+        case "wave_mod_depth_ccbool":
+          self.ui.cbxWaveModDepthCc.setChecked(map_dict.get(k))
         case "wave_mod_depth_cc":
           self.ui.sbxWaveModDepthCc.setValue(map_dict.get(k)[0])
           self.ui.sbxWaveModDepthCcVal.setValue(map_dict.get(k)[1])
         case "wave_detune":
           self.ui.sbxWaveDetune.setValue(map_dict.get(k))
+        case "wave_detune_ccbool":
+          self.ui.cbxWaveDetuneCc.setChecked(map_dict.get(k))
         case "wave_detune_cc":
           self.ui.sbxWaveDetuneCc.setValue(map_dict.get(k)[0])
           self.ui.sbxWaveDetuneCcVal.setValue(map_dict.get(k)[1])
@@ -559,6 +580,28 @@ class MainWindow(QMainWindow):
           self.ui.dialPanRandom.setValue(dialval)
           self.ui.dsbPanRandom.setValue(map_dict.get(k))
 
+        ## PAN LFO
+        case "pan_lfo":
+          self.ui.gbxPanLfo.setChecked(map_dict.get(k))
+        case "pan_lfo_delay":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanLfoDelay.setValue(dialval)
+          self.ui.dsbPanLfoDelay.setValue(map_dict.get(k))
+        case "pan_lfo_fade":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanLfoFade.setValue(dialval)
+          self.ui.dsbPanLfoFade.setValue(map_dict.get(k))
+        case "pan_lfo_depth":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanLfoDepth.setValue(dialval)
+          self.ui.dsbPanLfoDepth.setValue(map_dict.get(k))
+        case "pan_lfo_freq":
+          dialval = float_to_int(map_dict.get(k), 3)
+          self.ui.dialPanLfoFreq.setValue(dialval)
+          self.ui.dsbPanLfoFreq.setValue(map_dict.get(k))
+        case "pan_lfo_wave":
+          self.ui.cbxPanLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+
         ## AMP
         case "amp_keycenter":
           self.ui.sbxAmpKeycenter.setValue(map_dict.get(k))
@@ -602,6 +645,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpLfoFreq.setValue(dialval)
           self.ui.dsbAmpLfoFreq.setValue(map_dict.get(k))
+        case "amp_lfo_wave":
+          self.ui.cbxAmpLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
 
         ## AMP ENV
         case "amp_env":
@@ -622,6 +667,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvAttackShape.setValue(dialval)
           self.ui.dsbAmpEnvAttackShape.setValue(map_dict.get(k))
+        case "amp_env_attack_shapebool":
+          self.ui.cbxAmpEnvAttackShapeEnable.setChecked(map_dict.get(k))
         case "amp_env_hold":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvHold.setValue(dialval)
@@ -630,6 +677,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvDecay.setValue(dialval)
           self.ui.dsbAmpEnvDecay.setValue(map_dict.get(k))
+        case "amp_env_decay_shapebool":
+          self.ui.cbxAmpEnvDecayShapeEnable.setChecked(map_dict.get(k))
         case "amp_env_decay_shape":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvDecayShape.setValue(dialval)
@@ -642,6 +691,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvRelease.setValue(dialval)
           self.ui.dsbAmpEnvRelease.setValue(map_dict.get(k))
+        case "amp_env_release_shapebool":
+          self.ui.cbxAmpEnvReleaseShapeEnable.setChecked(map_dict.get(k))
         case "amp_env_release_shape":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialAmpEnvReleaseShape.setValue(dialval)
@@ -690,12 +741,14 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilterLfoFreq.setValue(dialval)
           self.ui.dsbFilterLfoFreq.setValue(map_dict.get(k))
+        case "fil_lfo_wave":
+          self.ui.cbxFilterLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
 
         ## FILTER ENV
         case "fil_env":
           self.ui.gbxFilEnv.setChecked(map_dict.get(k))
         case "fil_env_ver":
-          self.ui.cbxAmpEnvVer.setCurrentIndex(map_dict.get(k))
+          self.ui.cbxFilterEnvVer.setCurrentIndex(map_dict.get(k))
 
         case "fil_env_depth":
           self.ui.dialFilEnvDepth.setValue(map_dict.get(k))
@@ -714,6 +767,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvAttack.setValue(dialval)
           self.ui.dsbFilEnvAttack.setValue(map_dict.get(k))
+        case "fil_env_attack_shapebool":
+          self.ui.cbxFilEnvAttackShapeEnable.setChecked(map_dict.get(k))
         case "fil_env_attack_shape":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvAttackShape.setValue(dialval)
@@ -726,6 +781,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvDecay.setValue(dialval)
           self.ui.dsbFilEnvDecay.setValue(map_dict.get(k))
+        case "fil_env_decay_shapebool":
+          self.ui.cbxFilEnvDecayShapeEnable.setChecked(map_dict.get(k))
         case "fil_env_decay_shape":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvDecayShape.setValue(dialval)
@@ -738,6 +795,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvRelease.setValue(dialval)
           self.ui.dsbFilEnvRelease.setValue(map_dict.get(k))
+        case "fil_env_release_shapebool":
+          self.ui.cbxFilEnvReleaseShapeEnable.setChecked(map_dict.get(k))
         case "fil_env_release_shape":
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialFilEnvReleaseShape.setValue(dialval)
@@ -745,7 +804,7 @@ class MainWindow(QMainWindow):
 
         ## PITCH
         case "pitch":
-          self.ui.gbxFilterGeneral.setChecked(map_dict.get(k))
+          self.ui.gbxPitch.setChecked(map_dict.get(k))
         case "pitch_keytrack":
           self.ui.dialPitchKeytrack.setValue(map_dict.get(k))
           self.ui.sbxPitchKeytrack.setValue(map_dict.get(k))
@@ -775,6 +834,8 @@ class MainWindow(QMainWindow):
           dialval = float_to_int(map_dict.get(k), 3)
           self.ui.dialPitchLfoFreq.setValue(dialval)
           self.ui.dsbPitchLfoFreq.setValue(map_dict.get(k))
+        case "pit_lfo_wave":
+          self.ui.cbxPitchLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
 
         ## PITCH ENV
         case "pit_env":
@@ -830,6 +891,8 @@ class MainWindow(QMainWindow):
     self.ui.sbxCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcHi.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbRandomLo.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbRandomHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxOutput.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxPolyphony.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxNotePolyphony.valueChanged.connect(self.onUiValueChanged)
@@ -879,6 +942,8 @@ class MainWindow(QMainWindow):
     self.ui.chkUseKey.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkSampleOffsetValue.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkRegionExclusiveClass.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxWaveModDepthCc.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxWaveDetuneCc.stateChanged.connect(self.onUiValueChanged)
 
     self.ui.gbxPan.toggled.connect(self.onUiValueChanged)
 
@@ -908,6 +973,14 @@ class MainWindow(QMainWindow):
 
     self.ui.cbxFilterType.currentIndexChanged.connect(self.onUiValueChanged)
 
+    self.ui.cbxAmpEnvVer.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFilterEnvVer.currentIndexChanged.connect(self.onUiValueChanged)
+
+    self.ui.cbxPanLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxAmpLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFilterLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxPitchLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+
     # Text
     self.ui.txtKeyswitchLabel.textEdited.connect(self.onUiValueChanged)
     self.ui.txtOpcodes.textChanged.connect(self.onUiValueChanged)
@@ -921,6 +994,15 @@ class MainWindow(QMainWindow):
     self.ui.dsbPanVeltrack.valueChanged.connect(self.onUiValueChanged)
     self.ui.dialPanRandom.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbPanRandom.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.dialPanLfoDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbPanLfoDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dialPanLfoFade.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbPanLfoFade.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dialPanLfoDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbPanLfoDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dialPanLfoFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbPanLfoFreq.valueChanged.connect(self.onUiValueChanged)
 
     self.ui.dialAmpKeytrack.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbAmpKeytrack.valueChanged.connect(self.onUiValueChanged)
@@ -1018,6 +1100,9 @@ class MainWindow(QMainWindow):
     self.ui.dsbPitchLfoDepth.valueChanged.connect(self.onUiValueChanged)
     self.ui.dialPitchLfoFreq.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbPitchLfoFreq.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.sbxPitchEnvDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dialPitchEnvDepth.valueChanged.connect(self.onUiValueChanged)
 
     self.ui.sldPitchEnvStart.valueChanged.connect(self.onUiValueChanged)
     self.ui.dialPitchEnvDelay.valueChanged.connect(self.onUiValueChanged)
@@ -1169,12 +1254,18 @@ class MainWindow(QMainWindow):
         obj.change_value("keycenterbool", self.sender().isChecked())
       case "chkUseKey":
         obj.change_value("key_opcode", self.sender().isChecked())
+      case "cbxWaveModDepthCc":
+        obj.change_value("wave_mod_depth_ccbool", self.sender().isChecked())
+      case "cbxWaveDetuneCc":
+        obj.change_value("wave_detune_ccbool", self.sender().isChecked())
       case "chkSampleOffsetValue":
         obj.change_value("offsetbool", self.sender().isChecked())
       case "chkRegionExclusiveClass":
         obj.change_value("exclass", self.sender().isChecked())
       case "gbxPan":
         obj.change_value("panbool", self.sender().isChecked())
+      case "gbxPanLfo":
+        obj.change_value("pan_lfo", self.sender().isChecked())
       case "chkAmpVelFloor":
         obj.change_value("amp_velfloorbool", self.sender().isChecked())
       case "chkAmpVelAttack":
@@ -1232,7 +1323,15 @@ class MainWindow(QMainWindow):
       case "cbxAmpEnvVer":
         obj.change_value("amp_env_ver", self.sender().currentIndex())
       case "cbxFilterEnvVer":
-        obj.change_value("amp_env_ver", self.sender().currentIndex())
+        obj.change_value("fil_env_ver", self.sender().currentIndex())
+      case "cbxPanLfoWave":
+        obj.change_value("pan_lfo_wave", self.sender().currentIndex())
+      case "cbxAmpLfoWave":
+        obj.change_value("amp_lfo_wave", self.sender().currentIndex())
+      case "cbxFilterLfoWave":
+        obj.change_value("fil_lfo_wave", self.sender().currentIndex())
+      case "cbxPitchLfoWave":
+        obj.change_value("pit_lfo_wave", self.sender().currentIndex())
 
       # TEXT
       case "txtKeyswitchLabel":
@@ -1274,6 +1373,40 @@ class MainWindow(QMainWindow):
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanRandom.setValue(val)
         obj.change_value("pan_random", val)
+
+      # PAN LFO
+      case "dialPanLfoDelay":
+        val = int_to_float(self.sender().value(), 3)
+        self.ui.dsbPanLfoDelay.setValue(val)
+        obj.change_value("pan_lfo_delay", val)
+      case "dsbPanLfoDelay":
+        val = float_to_int(self.sender().value(), 3)
+        self.ui.dialPanLfoDelay.setValue(val)
+        obj.change_value("pan_lfo_delay", val)
+      case "dialPanLfoFade":
+        val = int_to_float(self.sender().value(), 3)
+        self.ui.dsbPanLfoFade.setValue(val)
+        obj.change_value("pan_lfo_fade", val)
+      case "dsbPanLfoFade":
+        val = float_to_int(self.sender().value(), 3)
+        self.ui.dialPanLfoFade.setValue(val)
+        obj.change_value("pan_lfo_fade", val)
+      case "dialPanLfoDepth":
+        val = int_to_float(self.sender().value(), 3)
+        self.ui.dsbPanLfoDepth.setValue(val)
+        obj.change_value("pan_lfo_depth", val)
+      case "dsbPanLfoDepth":
+        val = float_to_int(self.sender().value(), 3)
+        self.ui.dialPanLfoDepth.setValue(val)
+        obj.change_value("pan_lfo_depth", val)
+      case "dialPanLfoFreq":
+        val = int_to_float(self.sender().value(), 3)
+        self.ui.dsbPanLfoFreq.setValue(val)
+        obj.change_value("pan_lfo_freq", val)
+      case "dsbPanLfoFreq":
+        val = float_to_int(self.sender().value(), 3)
+        self.ui.dialPanLfoFreq.setValue(val)
+        obj.change_value("pan_lfo_freq", val)
 
       # AMP
       case "dialAmpKeytrack":
@@ -1406,20 +1539,20 @@ class MainWindow(QMainWindow):
       case "dialAmpEnvRelease":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpEnvRelease.setValue(val)
-        obj.change_value("amp_env_sustain", val)
+        obj.change_value("amp_env_release", val)
       case "dsbAmpEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvRelease.setValue(val)
-        obj.change_value("amp_env_sustain", val)
+        obj.change_value("amp_env_release", val)
 
       case "dialAmpEnvReleaseShape":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpEnvReleaseShape.setValue(val)
-        obj.change_value("amp_env_sustain", val)
+        obj.change_value("amp_env_release_shape", val)
       case "dsbAmpEnvReleaseShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvReleaseShape.setValue(val)
-        obj.change_value("amp_env_sustain", val)
+        obj.change_value("amp_env_release_shape", val)
 
       # FILTER
       case "dialFilterCutoff":
@@ -1576,20 +1709,20 @@ class MainWindow(QMainWindow):
       case "dialFilEnvRelease":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbFilEnvRelease.setValue(val)
-        obj.change_value("fil_env_sustain", val)
+        obj.change_value("fil_env_release", val)
       case "dsbFilEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvRelease.setValue(val)
-        obj.change_value("fil_env_sustain", val)
+        obj.change_value("fil_env_release", val)
 
       case "dialFilEnvReleaseShape":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbFilEnvReleaseShape.setValue(val)
-        obj.change_value("fil_env_sustain", val)
+        obj.change_value("fil_env_release_shape", val)
       case "dsbFilEnvReleaseShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvReleaseShape.setValue(val)
-        obj.change_value("fil_env_sustain", val)
+        obj.change_value("fil_env_release_shape", val)
 
       # PITCH
       case "dialPitchKeytrack":
@@ -1614,11 +1747,11 @@ class MainWindow(QMainWindow):
       # PITCH LFO
       case "dialPitchLfoDelay":
         val = int_to_float(self.sender().value(), 3)
-        self.ui.dsbAmpLfoDelay.setValue(val)
+        self.ui.dsbPitchLfoDelay.setValue(val)
         obj.change_value("pit_lfo_delay", val)
       case "dsbPitchLfoDelay":
         val = float_to_int(self.sender().value(), 3)
-        self.ui.dialAmpLfoDelay.setValue(val)
+        self.ui.dialPitchLfoDelay.setValue(val)
         obj.change_value("pit_lfo_delay", val)
       case "dialPitchLfoFade":
         val = int_to_float(self.sender().value(), 3)
@@ -1654,6 +1787,7 @@ class MainWindow(QMainWindow):
         obj.change_value("pit_env_depth", self.sender().value())
 
       case "sldPitchEnvStart":
+        self.ui.lblPitchEnvStart.setText(str(self.sender().value()))
         obj.change_value("pit_env_start", self.sender().value())
 
       case "dialPitchEnvDelay":
@@ -1704,11 +1838,11 @@ class MainWindow(QMainWindow):
       case "dialPitchEnvRelease":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPitchEnvRelease.setValue(val)
-        obj.change_value("pit_env_sustain", val)
+        obj.change_value("pit_env_release", val)
       case "dsbPitchEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvRelease.setValue(val)
-        obj.change_value("pit_env_sustain", val)
+        obj.change_value("pit_env_release", val)
 
       # Reset buttons
       case "pbnAmpEnvAttackShapeReset":
@@ -1716,14 +1850,14 @@ class MainWindow(QMainWindow):
         self.ui.dsbAmpEnvAttackShape.setValue(0.0)
         obj.change_value("amp_env_attack_shape", 0)
       case "pbnAmpEnvDecayShapeReset":
-        val = float_to_int(-10.361, 3)
+        val = float_to_int(-7.16, 3)
         self.ui.dialAmpEnvDecayShape.setValue(val)
-        self.ui.dsbAmpEnvDecayShape.setValue(-10.361)
+        self.ui.dsbAmpEnvDecayShape.setValue(-7.16)
         obj.change_value("amp_env_decay_shape", val)
       case "pbnAmpEnvReleaseShapeReset":
-        val = float_to_int(-10.361, 3)
+        val = float_to_int(-7.16, 3)
         self.ui.dialAmpEnvReleaseShape.setValue(val)
-        self.ui.dsbAmpEnvReleaseShape.setValue(-10.361)
+        self.ui.dsbAmpEnvReleaseShape.setValue(-7.16)
         obj.change_value("amp_env_release_shape", val)
 
       case "pbnFilEnvAttackShapeReset":
@@ -1806,21 +1940,7 @@ class MainWindow(QMainWindow):
     else: # Flex
       match eg:
         case 0:
-          output += f"eg{idx}_ampeg=100"
-          output += f"eg{idx}_sustain=4"
-          output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=0"
-          output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
-          output += f"eg{idx}_level2=1 eg{idx}_timel2={attack}\n"
-          if shapes[0][0]:
-              output += f"eg{idx}_shape2={shapes[0][1]}\n"
-          output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
-          output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
-          if shapes[1][0]:
-              output += f"eg{idx}_shape4={shapes[1][1]}\n"
-          output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
-          if shapes[2][0]:
-              output += f"eg{idx}_shape5={shapes[2][1]}\n"
-        case 1:
+          output += f"eg{idx+1}_ampeg=100"
           output += f"eg{idx+1}_sustain=4"
           output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=0"
           output += f"eg{idx+1}_level1={float(start) / 100} eg{idx+1}_time1={delay}\n"
@@ -1834,7 +1954,7 @@ class MainWindow(QMainWindow):
           output += f"eg{idx+1}_level5=0 eg{idx+1}_time5={release}\n"
           if shapes[2][0]:
               output += f"eg{idx+1}_shape5={shapes[2][1]}\n"
-        case 2:
+        case 1:
           output += f"eg{idx+2}_sustain=4"
           output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=0"
           output += f"eg{idx+2}_level1={float(start) / 100} eg{idx+2}_time1={delay}\n"
@@ -1848,6 +1968,20 @@ class MainWindow(QMainWindow):
           output += f"eg{idx+2}_level5=0 eg{idx+2}_time5={release}\n"
           if shapes[2][0]:
               output += f"eg{idx+2}_shape5={shapes[2][1]}\n"
+        case 2:
+          output += f"eg{idx+3}_sustain=4"
+          output += f"eg{idx+3}_level0={float(start) / 100} eg{idx+3}_time0=0"
+          output += f"eg{idx+3}_level1={float(start) / 100} eg{idx+3}_time1={delay}\n"
+          output += f"eg{idx+3}_level2=1 eg{idx+3}_timel2={attack}\n"
+          if shapes[0][0]:
+              output += f"eg{idx+3}_shape2={shapes[0][1]}\n"
+          output += f"eg{idx+3}_level3=1 eg{idx+3}_time3={hold}\n"
+          output += f"eg{idx+3}_level4={float(sustain) / 100} eg{idx+3}_time4={decay}\n"
+          if shapes[1][0]:
+              output += f"eg{idx+3}_shape4={shapes[1][1]}\n"
+          output += f"eg{idx+3}_level5=0 eg{idx+3}_time5={release}\n"
+          if shapes[2][0]:
+              output += f"eg{idx+3}_shape5={shapes[2][1]}\n"
     return output
 
   def onSaveSfz(self):
@@ -1871,7 +2005,7 @@ class MainWindow(QMainWindow):
       define_userpath = r[:-1]
       pathstr = f"{preset_path}/{self.ui.txtPreset.text()}"
       print(define_userpath)
-      print(pathstr)
+      #print(pathstr)
 
       # generating sfz
       sfz_content = f"//THIS SFZ WAS GENERATED BY SFZBUILDER 0.1.0\n\n"
@@ -1913,9 +2047,9 @@ class MainWindow(QMainWindow):
           else:
             sfz_content += f"pitch_keycenter={m.keycenter}\n"
         # SAMPLE
-        if m.offsetbool:
-          sfz_content += f"offset={m.offset}\n"
-        sfz_content += f"offset={m.offset_random}\n"
+        #if m.offsetbool:
+        sfz_content += f"offset={m.offset}\n"
+        sfz_content += f"offset_random={m.offset_random}\n"
         sfz_content += f"offset_cc131={m.vel2offset}\n\n"
         sfz_content += f"delay={m.delay}\n\n"
         sfz_content += f"transpose={m.pitch_transpose}\n"
@@ -1943,6 +2077,13 @@ class MainWindow(QMainWindow):
           sfz_content += f"pan_veltrack={m.pan_veltrack}\n"
           sfz_content += f"pan_random={m.pan_random}\n"
 
+          if m.pan_lfo:
+            sfz_content += f"lfo{sfz_idx}_delay={m.pan_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx}_fade={m.pan_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx}_pan={m.pan_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx}_freq={m.pan_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx}_wave={m.pan_lfo_wave}\n"
+
         # AMP
         sfz_content += "\n\n"
         sfz_content += f"amp_keycenter={m.amp_keycenter}\n"
@@ -1952,10 +2093,11 @@ class MainWindow(QMainWindow):
 
         if m.amp_lfo:
           sfz_content += "\n\n"
-          sfz_content += f"lfo{sfz_idx}_delay={m.amp_lfo_delay}\n"
-          sfz_content += f"lfo{sfz_idx}_fade={m.amp_lfo_fade}\n"
-          sfz_content += f"lfo{sfz_idx}_volume={m.amp_lfo_depth}\n"
-          sfz_content += f"lfo{sfz_idx}_freq={m.amp_lfo_freq}\n"
+          sfz_content += f"lfo{sfz_idx+1}_delay={m.amp_lfo_delay}\n"
+          sfz_content += f"lfo{sfz_idx+1}_fade={m.amp_lfo_fade}\n"
+          sfz_content += f"lfo{sfz_idx+1}_volume={m.amp_lfo_depth}\n"
+          sfz_content += f"lfo{sfz_idx+1}_freq={m.amp_lfo_freq}\n"
+          sfz_content += f"lfo{sfz_idx+1}_wave={m.amp_lfo_wave}\n"
         if m.amp_velfloorbool:
           sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
         if m.amp_env_vel2attackbool:
@@ -1980,20 +2122,21 @@ class MainWindow(QMainWindow):
 
           if m.fil_lfo:
             sfz_content += "\n\n"
-            sfz_content += f"lfo{sfz_idx+1}_delay={m.fil_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx+1}_fade={m.fil_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx+1}_cutoff={m.fil_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx+1}_freq={m.fil_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx+2}_delay={m.fil_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx+2}_fade={m.fil_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx+2}_freq={m.fil_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx+2}_wave={m.fil_lfo_wave}\n"
 
           if m.fil_env:
             eg_ver = m.fil_env_ver
             match m.fil_env_ver:
               case 0:
-                sfz_content += f"fileg_depth={m.fil_env_depth}"
-                sfz_content += f"fileg_vel2depth={m.fil_vel2depth}"
+                sfz_content += f"fileg_depth={m.fil_env_depth}\n"
+                sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
               case 1:
-                sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}" # TODO convert cents to hz
-                sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}" # TODO convert cents to hz
+                sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}\n" # TODO convert cents to hz
+                sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}\n" # TODO convert cents to hz
 
             shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
             sfz_content += self.generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
@@ -2006,18 +2149,19 @@ class MainWindow(QMainWindow):
 
           if m.pit_lfo:
             sfz_content += "\n\n"
-            sfz_content += f"lfo{sfz_idx+2}_delay={m.pit_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx+2}_fade={m.pit_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx+2}_cutoff={m.pit_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx+2}_freq={m.pit_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx+3}_delay={m.pit_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx+3}_fade={m.pit_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx+3}_cutoff={m.pit_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx+3}_freq={m.pit_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx+3}_wave={m.pit_lfo_wave}\n"
 
           if m.pit_env:
             eg_ver = m.pit_env_ver
             match m.pit_env_ver:
               case 0:
-                sfz_content += f"pitcheg_depth={m.pit_env_depth}"
+                sfz_content += f"pitcheg_depth={m.pit_env_depth}\n"
               case 1:
-                sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}"
+                sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}\n"
 
             #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
             sfz_content += self.generate_eg(eg_ver, "pit", sfz_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
@@ -2027,13 +2171,30 @@ class MainWindow(QMainWindow):
         sfz_content += f"{m.opcode_notepad}\n\n"
 
         sfz_content += "//MAPPING\n"
-        sfz_content += f"<control>\n"
-        sfz_content += f"note_offset={m.note_offset}\n"
-        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+        if m.type == "Wavetables":
+          sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+          if m.wave == "Sample":
+            sfz_content += f"oscillator=on\n"
+          sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
+          sfz_content += f"oscillator_detune={m.wave_detune} oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+          sfz_content += f"oscillator_mod_depth={m.wave_mod_depth} oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n\n"
+        else:
+          sfz_content += f"<control>\n"
+          sfz_content += f"note_offset={m.note_offset}\n"
+          sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
         sfz_idx += 1
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")
       f_sfz.write(sfz_content)
       f_sfz.close()
-      print(f"""{os.path.normpath(str(pathstr) + ".sfz")} written.""")
+
+      # write project
+      proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
+      proj_file = f"{common_path}/Projects/{proj_path}/{self.ui.txtPreset.text()}.sfzproj"
+      print(proj_file)
+      #for i in range(len())
+      self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
+
+  def save_project(self, global_obj, map_objects):
+    None

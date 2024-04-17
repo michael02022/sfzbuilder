@@ -24,6 +24,7 @@ class Mapping:
     self.wave_detune_cc = [1, 0]
 
     # MAP PROPERTIES
+    self.mute = False
     self.map_key_range = [0, 127]
     self.map_vel_range = [0, 127]
     #self.map_chan_range = [1, 1]
@@ -60,6 +61,8 @@ class Mapping:
     self.key_opcode = False # enable/disable key= opcode if the user want to use one note for each percussion
     self.keycenterbool = False
     self.keycenter = 60 # pitch_keycenter
+    self.tunebool = False
+    self.tune = 0
 
     # SAMPLE PROPERTIES
     self.offsetbool = False

@@ -9,102 +9,12 @@ from .ui_mainwindow           import Ui_MainWindow
 #from .tabpan                 import setupKnobs
 from .rc_resources            import *
 from collections              import defaultdict
-from utils.opcodes            import *
+from utils.functions          import *
 from utils.classes.mapping    import Mapping
 from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
-from pathlib                  import Path
 import os
-import glob
-import pathlib
 import copy
-
-
-def get_mappings(config_path):
-  mappings_dict = {}
-  mappings_dict["MSamples"] = [p for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
-  mappings_dict["PSamples"] = [p for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
-  mappings_dict["Wavetables"] = [p for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav")]
-  return mappings_dict
-
-def get_pack(ls):
-  pack_dict = defaultdict(list)
-  for p in ls:
-      path_ls = pathlib.Path(p).parts # split path into list
-      pack_dict[path_ls[0]].append(os.path.join(*path_ls[1:]))
-  return pack_dict
-
-def which_pack(mappings_dict, pbool, wbool):
-    pack = {}
-    if pbool:
-        pack = get_pack(mappings_dict["PSamples"])
-        return pack
-    else:
-        if wbool:
-          pack = get_pack(mappings_dict["Wavetables"])
-        else:
-          pack = get_pack(mappings_dict["MSamples"])
-        return pack
-
-def which_pack_str(pbool, wbool):
-    if pbool:
-        return "PSamples"
-    else:
-        if wbool:
-          return "Wavetables"
-        else:
-          return "MSamples"
-
-def get_map_names(map_objects):
-    ls = []
-    for map in map_objects:
-        ls.append(map.get_name())
-    return ls
-
-def clip(n, range):
-    if n < range[0]:
-        return range[0]
-    elif n > range[1]:
-        return range[1]
-    else:
-        return n
-
-def float_to_int(_flt, decimals):
-  negative = False
-  flt = "{:.3f}".format(float(_flt))
-  ls = str(flt).split(".")
-  if "-" in ls[0]:
-    negative = True
-    s = ls[0][1:]
-  else:
-    s = ls[0]
-  zeros = (decimals - len(ls[1]))
-  d = ls[1] + ("0" * zeros)
-  r = s + d
-  if negative:
-    r = "-" + r
-  return int(r)
-
-def int_to_float(integer, decimals):
-  decimals = 3
-  negative = False
-  ls = str(integer)
-  if "-" in ls[0]:
-    negative = True
-    s = ls[1:]
-  else:
-    s = ls
-  if len(s) <= decimals:
-    predecimal = 0
-  else:
-    predecimal = s[:-abs(decimals)]
-
-  postdecimal = s[-abs(decimals):]
-  r = f"{predecimal}.{postdecimal}"
-  if negative:
-    r = "-" + r
-
-  return float(r)
 
 class MainWindow(QMainWindow):
   def __init__(self, app, parent=None):
@@ -128,8 +38,8 @@ class MainWindow(QMainWindow):
 
     self.ui.actNew.setIcon(QIcon.fromTheme("document-new",        QIcon(":/document-new")))
     self.ui.actOpen.setIcon(QIcon.fromTheme("document-open",      QIcon(":/document-open")))
-    self.ui.actSave.setIcon(QIcon.fromTheme("document-save",      QIcon(":/document-save")))
-    self.ui.actSaveAs.setIcon(QIcon.fromTheme("document-save-as", QIcon(":/document-save-as")))
+    #self.ui.actSave.setIcon(QIcon.fromTheme("document-save",      QIcon(":/document-save")))
+    #self.ui.actSaveAs.setIcon(QIcon.fromTheme("document-save-as", QIcon(":/document-save-as")))
     self.ui.actQuit.setIcon(QIcon.fromTheme("application-exit",   QIcon(":/application-exit")))
 
     self.ui.pbnMapAdd.setIcon(QIcon.fromTheme("list-add",            QIcon(":/list-add")))
@@ -196,9 +106,15 @@ class MainWindow(QMainWindow):
     # MENUS
     self.save_menu = QMenu(self)
     save_sfz = self.save_menu.addAction("Save SFZ")
-    save_auto = self.save_menu.addAction("✅ Autosave") # 🟩
+    save_project = self.save_menu.addAction("Save as Project") # 🟩
+
+    save_sfz.setIcon(QIcon.fromTheme("Save SFZ", QIcon(":/x-office-document")))
+    save_project.setIcon(QIcon.fromTheme("Save as Project", QIcon(":/document-save-as")))
 
     save_sfz.triggered.connect(self.onSaveSfz)
+    save_project.triggered.connect(self.onSaveProject)
+
+    self.ui.actOpen.triggered.connect(self.onOpenProject)
 
     # cc menu
     self.cc_menu = QMenu(self)
@@ -415,6 +331,41 @@ class MainWindow(QMainWindow):
       None
 
   def onItemMap(self):
+    idx = self.ui.listMap.currentRow()
+
+    # check if the pack/map exist
+    try:
+      packmapstr = f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}"
+      self.mappings_dict[self.map_objects[idx].type].index(os.path.normpath(packmapstr)) # [].get())
+    except ValueError:
+      self.msgbox_ok.setText(f"""The pack-map "{os.path.normpath(packmapstr)}" was not found.\nPlease check if the pack exists or the sfz mapping exists.""")
+      self.msgbox_ok.exec()
+      pk_idx = 0
+      mp_idx = 0
+      self.current_pack_dict =  get_pack(self.mappings_dict[self.map_objects[idx].type])
+      self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx])
+
+    # just update the pack/map comboboxes
+    match self.map_objects[idx].type:
+      case "MSamples":
+        self.ui.chkMap.setChecked(True)
+      case "PSamples":
+        self.ui.chkPercussion.setChecked(True)
+      case "Wavetables":
+        self.ui.chkWavetable.setChecked(True)
+
+    self.current_pack_dict =  get_pack(self.mappings_dict[self.map_objects[idx].type])
+
+    self.pack_ls = list(self.current_pack_dict)
+
+    self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls) # add pack list
+    self.ui.cbxPack.setCurrentIndex(self.pack_ls.index(self.map_objects[idx].pack)) # set the pack
+
+    self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]] # add map list
+    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+    self.ui.cbxMap.setCurrentIndex(self.map_ls.index(self.map_objects[idx].map)) # set map list
+    #mappings_dict
+
     self.get_map_values()
 
   def onAmpEnvAttackShapeEnabled(self):
@@ -474,6 +425,8 @@ class MainWindow(QMainWindow):
           self.ui.sbxWaveDetuneCc.setValue(map_dict.get(k)[0])
           self.ui.sbxWaveDetuneCcVal.setValue(map_dict.get(k)[1])
         ## MAP
+        case "mute":
+          self.ui.cbxMapMute.setChecked(map_dict.get(k))
         case "map_key_range":
           self.ui.sbxKeyLo.setValue(map_dict.get(k)[0])
           self.ui.sbxKeyHi.setValue(map_dict.get(k)[1])
@@ -525,6 +478,10 @@ class MainWindow(QMainWindow):
           self.ui.chkUseGlobalPitchKeycenter.setChecked(map_dict.get(k))
         case "keycenter":
           self.ui.sbxUsePitchKeycenter4All.setValue(map_dict.get(k))
+        case "tunebool":
+          self.ui.cbxTune.setChecked(map_dict.get(k))
+        case "tune":
+          self.ui.sbxTune.setValue(map_dict.get(k))
 
         ## SAMPLE
         case "offsetbool":
@@ -899,6 +856,7 @@ class MainWindow(QMainWindow):
     self.ui.sbxKeyswitchCount.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxUsePitchKeycenter4All.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbRtDecay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxTune.valueChanged.connect(self.onUiValueChanged)
 
     self.ui.sbxWaveUnison.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxWaveQuality.valueChanged.connect(self.onUiValueChanged)
@@ -930,6 +888,7 @@ class MainWindow(QMainWindow):
     self.ui.sbxFilterKeycenter.valueChanged.connect(self.onUiValueChanged)
 
     # Checkboxes
+    self.ui.cbxMapMute.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNoteOn.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkRandom.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkPolyphony.stateChanged.connect(self.onUiValueChanged)
@@ -944,8 +903,10 @@ class MainWindow(QMainWindow):
     self.ui.chkRegionExclusiveClass.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveModDepthCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveDetuneCc.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxTune.stateChanged.connect(self.onUiValueChanged)
 
     self.ui.gbxPan.toggled.connect(self.onUiValueChanged)
+    self.ui.gbxPanLfo.toggled.connect(self.onUiValueChanged)
 
     self.ui.chkAmpVelFloor.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkAmpVelAttack.stateChanged.connect(self.onUiValueChanged)
@@ -1179,6 +1140,8 @@ class MainWindow(QMainWindow):
         obj.change_value("keycenter", self.sender().value())
       case "dsbRtDecay":
         obj.change_value("rt_decay", self.sender().value())
+      case "sbxTune":
+        obj.change_value("tune", self.sender().value())
       # wavetable
       case "sbxWaveUnison":
         obj.change_value("wave_unison", self.sender().value())
@@ -1234,6 +1197,8 @@ class MainWindow(QMainWindow):
         obj.change_value("fil_keycenter", self.sender().value())
 
       # BOOLEANS
+      case "cbxMapMute":
+        obj.change_value("mute", self.sender().isChecked())
       case "chkNoteOn":
         obj.change_value("on_cc_rangebool", self.sender().isChecked())
       case "chkRandom":
@@ -1254,6 +1219,8 @@ class MainWindow(QMainWindow):
         obj.change_value("keycenterbool", self.sender().isChecked())
       case "chkUseKey":
         obj.change_value("key_opcode", self.sender().isChecked())
+      case "cbxTune":
+        obj.change_value("tunebool", self.sender().isChecked())
       case "cbxWaveModDepthCc":
         obj.change_value("wave_mod_depth_ccbool", self.sender().isChecked())
       case "cbxWaveDetuneCc":
@@ -1348,7 +1315,7 @@ class MainWindow(QMainWindow):
       case "dsbPan":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPan.setValue(val)
-        obj.change_value("pan_value", val)
+        obj.change_value("pan_value", self.sender().value())
       case "dialPanKeytrack":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanKeytrack.setValue(val)
@@ -1356,7 +1323,7 @@ class MainWindow(QMainWindow):
       case "dsbPanKeytrack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanKeytrack.setValue(val)
-        obj.change_value("pan_keytrack", val)
+        obj.change_value("pan_keytrack", self.sender().value())
       case "dialPanVeltrack":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanVeltrack.setValue(val)
@@ -1364,7 +1331,7 @@ class MainWindow(QMainWindow):
       case "dsbPanVeltrack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanVeltrack.setValue(val)
-        obj.change_value("pan_veltrack", val)
+        obj.change_value("pan_veltrack", self.sender().value())
       case "dialPanRandom":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanRandom.setValue(val)
@@ -1372,7 +1339,7 @@ class MainWindow(QMainWindow):
       case "dsbPanRandom":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanRandom.setValue(val)
-        obj.change_value("pan_random", val)
+        obj.change_value("pan_random", self.sender().value())
 
       # PAN LFO
       case "dialPanLfoDelay":
@@ -1382,7 +1349,7 @@ class MainWindow(QMainWindow):
       case "dsbPanLfoDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanLfoDelay.setValue(val)
-        obj.change_value("pan_lfo_delay", val)
+        obj.change_value("pan_lfo_delay", self.sender().value())
       case "dialPanLfoFade":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanLfoFade.setValue(val)
@@ -1390,7 +1357,7 @@ class MainWindow(QMainWindow):
       case "dsbPanLfoFade":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanLfoFade.setValue(val)
-        obj.change_value("pan_lfo_fade", val)
+        obj.change_value("pan_lfo_fade", self.sender().value())
       case "dialPanLfoDepth":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanLfoDepth.setValue(val)
@@ -1398,7 +1365,7 @@ class MainWindow(QMainWindow):
       case "dsbPanLfoDepth":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanLfoDepth.setValue(val)
-        obj.change_value("pan_lfo_depth", val)
+        obj.change_value("pan_lfo_depth", self.sender().value())
       case "dialPanLfoFreq":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPanLfoFreq.setValue(val)
@@ -1406,7 +1373,7 @@ class MainWindow(QMainWindow):
       case "dsbPanLfoFreq":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPanLfoFreq.setValue(val)
-        obj.change_value("pan_lfo_freq", val)
+        obj.change_value("pan_lfo_freq", self.sender().value())
 
       # AMP
       case "dialAmpKeytrack":
@@ -1416,7 +1383,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpKeytrack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpKeytrack.setValue(val)
-        obj.change_value("amp_keytrack", val)
+        obj.change_value("amp_keytrack", self.sender().value())
       case "dialAmpVeltrack":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpVeltrack.setValue(val)
@@ -1424,7 +1391,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpVeltrack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpVeltrack.setValue(val)
-        obj.change_value("amp_veltrack", val)
+        obj.change_value("amp_veltrack", self.sender().value())
       case "dialAmpRandom":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpRandom.setValue(val)
@@ -1432,7 +1399,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpRandom":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpRandom.setValue(val)
-        obj.change_value("amp_random", val)
+        obj.change_value("amp_random", self.sender().value())
 
       # AMP LFO
       case "dialAmpLfoDelay":
@@ -1442,7 +1409,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpLfoDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpLfoDelay.setValue(val)
-        obj.change_value("amp_lfo_delay", val)
+        obj.change_value("amp_lfo_delay", self.sender().value())
       case "dialAmpLfoFade":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpLfoFade.setValue(val)
@@ -1450,7 +1417,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpLfoFade":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpLfoFade.setValue(val)
-        obj.change_value("amp_lfo_fade", val)
+        obj.change_value("amp_lfo_fade", self.sender().value())
       case "dialAmpLfoDepth":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpLfoDepth.setValue(val)
@@ -1458,7 +1425,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpLfoDepth":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpLfoDepth.setValue(val)
-        obj.change_value("amp_lfo_depth", val)
+        obj.change_value("amp_lfo_depth", self.sender().value())
       case "dialAmpLfoFreq":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbAmpLfoFreq.setValue(val)
@@ -1466,7 +1433,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpLfoFreq":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpLfoFreq.setValue(val)
-        obj.change_value("amp_lfo_freq", val)
+        obj.change_value("amp_lfo_freq", self.sender().value())
 
       # AMP ENVELOPE
       case "sldAmpEnvStart":
@@ -1480,7 +1447,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvDelay.setValue(val)
-        obj.change_value("amp_env_delay", val)
+        obj.change_value("amp_env_delay", self.sender().value())
 
       case "dialAmpEnvAttack":
         val = int_to_float(self.sender().value(), 3)
@@ -1489,7 +1456,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvAttack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvAttack.setValue(val)
-        obj.change_value("amp_env_attack", val)
+        obj.change_value("amp_env_attack", self.sender().value())
 
       case "dialAmpEnvAttackShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1498,7 +1465,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvAttackShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvAttackShape.setValue(val)
-        obj.change_value("amp_env_attack_shape", val)
+        obj.change_value("amp_env_attack_shape", self.sender().value())
 
       case "dialAmpEnvHold":
         val = int_to_float(self.sender().value(), 3)
@@ -1507,7 +1474,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvHold":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvHold.setValue(val)
-        obj.change_value("amp_env_hold", val)
+        obj.change_value("amp_env_hold", self.sender().value())
 
       case "dialAmpEnvDecay":
         val = int_to_float(self.sender().value(), 3)
@@ -1516,7 +1483,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvDecay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvDecay.setValue(val)
-        obj.change_value("amp_env_decay", val)
+        obj.change_value("amp_env_decay", self.sender().value())
 
       case "dialAmpEnvDecayShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1525,7 +1492,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvDecayShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvDecayShape.setValue(val)
-        obj.change_value("amp_env_decay_shape", val)
+        obj.change_value("amp_env_decay_shape", self.sender().value())
 
       case "dialAmpEnvSustain":
         val = int_to_float(self.sender().value(), 3)
@@ -1534,7 +1501,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvSustain":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvSustain.setValue(val)
-        obj.change_value("amp_env_sustain", val)
+        obj.change_value("amp_env_sustain", self.sender().value())
 
       case "dialAmpEnvRelease":
         val = int_to_float(self.sender().value(), 3)
@@ -1543,7 +1510,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvRelease.setValue(val)
-        obj.change_value("amp_env_release", val)
+        obj.change_value("amp_env_release", self.sender().value())
 
       case "dialAmpEnvReleaseShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1552,7 +1519,7 @@ class MainWindow(QMainWindow):
       case "dsbAmpEnvReleaseShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpEnvReleaseShape.setValue(val)
-        obj.change_value("amp_env_release_shape", val)
+        obj.change_value("amp_env_release_shape", self.sender().value())
 
       # FILTER
       case "dialFilterCutoff":
@@ -1569,7 +1536,7 @@ class MainWindow(QMainWindow):
       case "dsbFilterResonance":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilterResonance.setValue(val)
-        obj.change_value("resonance", val)
+        obj.change_value("resonance", self.sender().value())
 
       case "dialFilterKeytrack":
         self.ui.sbxFilterKeytrack.setValue(self.sender().value())
@@ -1598,7 +1565,7 @@ class MainWindow(QMainWindow):
       case "dsbFilterLfoDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialAmpLfoDelay.setValue(val)
-        obj.change_value("fil_lfo_delay", val)
+        obj.change_value("fil_lfo_delay", self.sender().value())
       case "dialFilterLfoFade":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbFilterLfoFade.setValue(val)
@@ -1606,7 +1573,7 @@ class MainWindow(QMainWindow):
       case "dsbFilterLfoFade":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilterLfoFade.setValue(val)
-        obj.change_value("fil_lfo_fade", val)
+        obj.change_value("fil_lfo_fade", self.sender().value())
       case "dialFilterLfoDepth":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbFilterLfoDepth.setValue(val)
@@ -1614,7 +1581,7 @@ class MainWindow(QMainWindow):
       case "dsbFilterLfoDepth":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilterLfoDepth.setValue(val)
-        obj.change_value("fil_lfo_depth", val)
+        obj.change_value("fil_lfo_depth", self.sender().value())
       case "dialFilterLfoFreq":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbFilterLfoFreq.setValue(val)
@@ -1622,7 +1589,7 @@ class MainWindow(QMainWindow):
       case "dsbFilterLfoFreq":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilterLfoFreq.setValue(val)
-        obj.change_value("fil_lfo_freq", val)
+        obj.change_value("fil_lfo_freq", self.sender().value())
 
       # FILTER ENVELOPE
       case "dialFilEnvDepth":
@@ -1650,7 +1617,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvDelay.setValue(val)
-        obj.change_value("fil_env_delay", val)
+        obj.change_value("fil_env_delay", self.sender().value())
 
       case "dialFilEnvAttack":
         val = int_to_float(self.sender().value(), 3)
@@ -1659,7 +1626,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvAttack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvAttack.setValue(val)
-        obj.change_value("fil_env_attack", val)
+        obj.change_value("fil_env_attack", self.sender().value())
 
       case "dialFilEnvAttackShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1668,7 +1635,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvAttackShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvAttackShape.setValue(val)
-        obj.change_value("fil_env_attack_shape", val)
+        obj.change_value("fil_env_attack_shape", self.sender().value())
 
       case "dialFilEnvHold":
         val = int_to_float(self.sender().value(), 3)
@@ -1677,7 +1644,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvHold":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvHold.setValue(val)
-        obj.change_value("fil_env_hold", val)
+        obj.change_value("fil_env_hold", self.sender().value())
 
       case "dialFilEnvDecay":
         val = int_to_float(self.sender().value(), 3)
@@ -1686,7 +1653,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvDecay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvDecay.setValue(val)
-        obj.change_value("fil_env_decay", val)
+        obj.change_value("fil_env_decay", self.sender().value())
 
       case "dialFilEnvDecayShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1695,7 +1662,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvDecayShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvDecayShape.setValue(val)
-        obj.change_value("fil_env_decay_shape", val)
+        obj.change_value("fil_env_decay_shape", self.sender().value())
 
       case "dialFilEnvSustain":
         val = int_to_float(self.sender().value(), 3)
@@ -1704,7 +1671,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvSustain":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvSustain.setValue(val)
-        obj.change_value("fil_env_sustain", val)
+        obj.change_value("fil_env_sustain", self.sender().value())
 
       case "dialFilEnvRelease":
         val = int_to_float(self.sender().value(), 3)
@@ -1713,7 +1680,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvRelease.setValue(val)
-        obj.change_value("fil_env_release", val)
+        obj.change_value("fil_env_release", self.sender().value())
 
       case "dialFilEnvReleaseShape":
         val = int_to_float(self.sender().value(), 3)
@@ -1722,7 +1689,7 @@ class MainWindow(QMainWindow):
       case "dsbFilEnvReleaseShape":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialFilEnvReleaseShape.setValue(val)
-        obj.change_value("fil_env_release_shape", val)
+        obj.change_value("fil_env_release_shape", self.sender().value())
 
       # PITCH
       case "dialPitchKeytrack":
@@ -1752,7 +1719,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchLfoDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchLfoDelay.setValue(val)
-        obj.change_value("pit_lfo_delay", val)
+        obj.change_value("pit_lfo_delay", self.sender().value())
       case "dialPitchLfoFade":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPitchLfoFade.setValue(val)
@@ -1760,7 +1727,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchLfoFade":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchLfoFade.setValue(val)
-        obj.change_value("pit_lfo_fade", val)
+        obj.change_value("pit_lfo_fade", self.sender().value())
       case "dialPitchLfoDepth":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPitchLfoDepth.setValue(val)
@@ -1768,7 +1735,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchLfoDepth":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchLfoDepth.setValue(val)
-        obj.change_value("pit_lfo_depth", val)
+        obj.change_value("pit_lfo_depth", self.sender().value())
       case "dialPitchLfoFreq":
         val = int_to_float(self.sender().value(), 3)
         self.ui.dsbPitchLfoFreq.setValue(val)
@@ -1776,7 +1743,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchLfoFreq":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchLfoFreq.setValue(val)
-        obj.change_value("pit_lfo_freq", val)
+        obj.change_value("pit_lfo_freq", self.sender().value())
 
       # PITCH ENVELOPE
       case "dialPitchEnvDepth":
@@ -1797,7 +1764,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvDelay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvDelay.setValue(val)
-        obj.change_value("pit_env_delay", val)
+        obj.change_value("pit_env_delay", self.sender().value())
 
       case "dialPitchEnvAttack":
         val = int_to_float(self.sender().value(), 3)
@@ -1806,7 +1773,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvAttack":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvAttack.setValue(val)
-        obj.change_value("pit_env_attack", val)
+        obj.change_value("pit_env_attack", self.sender().value())
 
       case "dialPitchEnvHold":
         val = int_to_float(self.sender().value(), 3)
@@ -1815,7 +1782,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvHold":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvHold.setValue(val)
-        obj.change_value("pit_env_hold", val)
+        obj.change_value("pit_env_hold", self.sender().value())
 
       case "dialPitchEnvDecay":
         val = int_to_float(self.sender().value(), 3)
@@ -1824,7 +1791,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvDecay":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvDecay.setValue(val)
-        obj.change_value("pit_env_decay", val)
+        obj.change_value("pit_env_decay", self.sender().value())
 
       case "dialPitchEnvSustain":
         val = int_to_float(self.sender().value(), 3)
@@ -1833,7 +1800,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvSustain":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvSustain.setValue(val)
-        obj.change_value("pit_env_sustain", val)
+        obj.change_value("pit_env_sustain", self.sender().value())
 
       case "dialPitchEnvRelease":
         val = int_to_float(self.sender().value(), 3)
@@ -1842,7 +1809,7 @@ class MainWindow(QMainWindow):
       case "dsbPitchEnvRelease":
         val = float_to_int(self.sender().value(), 3)
         self.ui.dialPitchEnvRelease.setValue(val)
-        obj.change_value("pit_env_release", val)
+        obj.change_value("pit_env_release", self.sender().value())
 
       # Reset buttons
       case "pbnAmpEnvAttackShapeReset":
@@ -1853,12 +1820,12 @@ class MainWindow(QMainWindow):
         val = float_to_int(-7.16, 3)
         self.ui.dialAmpEnvDecayShape.setValue(val)
         self.ui.dsbAmpEnvDecayShape.setValue(-7.16)
-        obj.change_value("amp_env_decay_shape", val)
+        obj.change_value("amp_env_decay_shape", -7.16)
       case "pbnAmpEnvReleaseShapeReset":
         val = float_to_int(-7.16, 3)
         self.ui.dialAmpEnvReleaseShape.setValue(val)
         self.ui.dsbAmpEnvReleaseShape.setValue(-7.16)
-        obj.change_value("amp_env_release_shape", val)
+        obj.change_value("amp_env_release_shape", -7.16)
 
       case "pbnFilEnvAttackShapeReset":
         self.ui.dialFilEnvAttackShape.setValue(0)
@@ -1876,114 +1843,6 @@ class MainWindow(QMainWindow):
       case _:
         None
 
-  def generate_eg(self, type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
-    output = ""
-    output += "\n\n"
-    match destination:
-      case "amp":
-        eg = 0
-      case "fil":
-        eg = 1
-      case "pit":
-        eg = 2
-
-    if type == 0:
-      match eg:
-        case 0:
-          output += f"ampeg_start={start}\n"
-          output += f"ampeg_delay={delay}\n"
-          output += f"ampeg_attack={attack}\n"
-          if shapes[0][0]:
-              output += f"ampeg_attack_shape={shapes[0][1]}\n"
-
-          output += f"ampeg_hold={hold}\n"
-          output += f"ampeg_sustain={sustain}\n"
-          output += f"ampeg_decay={decay}\n"
-          if shapes[1][0]:
-              output += f"ampeg_decay_shape={shapes[1][1]}\n"
-
-          output += f"ampeg_release={release}\n"
-          if shapes[2][0]:
-              output += f"ampeg_release_shape={shapes[2][1]}\n"
-        case 1:
-          output += f"fileg_start={start}\n"
-          output += f"fileg_delay={delay}\n"
-          output += f"fileg_attack={attack}\n"
-          if shapes[0][0]:
-              output += f"fileg_attack_shape={shapes[0][1]}\n"
-
-          output += f"fileg_hold={hold}\n"
-          output += f"fileg_sustain={sustain}\n"
-          output += f"fileg_decay={decay}\n"
-          if shapes[1][0]:
-              output += f"fileg_decay_shape={shapes[1][1]}\n"
-
-          output += f"fileg_release={release}\n"
-          if shapes[2][0]:
-              output += f"fileg_release_shape={shapes[2][1]}\n"
-        case 2:
-          output += f"pitcheg_start={start}\n"
-          output += f"pitcheg_delay={delay}\n"
-          output += f"pitcheg_attack={attack}\n"
-          if shapes[0][0]:
-              output += f"pitcheg_attack_shape={shapes[0][1]}\n"
-
-          output += f"pitcheg_hold={hold}\n"
-          output += f"pitcheg_sustain={sustain}\n"
-          output += f"pitcheg_decay={decay}\n"
-          if shapes[1][0]:
-              output += f"pitcheg_decay_shape={shapes[1][1]}\n"
-
-          output += f"pitcheg_release={release}\n"
-          if shapes[2][0]:
-              output += f"pitcheg_release_shape={shapes[2][1]}\n"
-    else: # Flex
-      match eg:
-        case 0:
-          output += f"eg{idx+1}_ampeg=100"
-          output += f"eg{idx+1}_sustain=4"
-          output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=0"
-          output += f"eg{idx+1}_level1={float(start) / 100} eg{idx+1}_time1={delay}\n"
-          output += f"eg{idx+1}_level2=1 eg{idx+1}_timel2={attack}\n"
-          if shapes[0][0]:
-              output += f"eg{idx+1}_shape2={shapes[0][1]}\n"
-          output += f"eg{idx+1}_level3=1 eg{idx+1}_time3={hold}\n"
-          output += f"eg{idx+1}_level4={float(sustain) / 100} eg{idx+1}_time4={decay}\n"
-          if shapes[1][0]:
-              output += f"eg{idx+1}_shape4={shapes[1][1]}\n"
-          output += f"eg{idx+1}_level5=0 eg{idx+1}_time5={release}\n"
-          if shapes[2][0]:
-              output += f"eg{idx+1}_shape5={shapes[2][1]}\n"
-        case 1:
-          output += f"eg{idx+2}_sustain=4"
-          output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=0"
-          output += f"eg{idx+2}_level1={float(start) / 100} eg{idx+2}_time1={delay}\n"
-          output += f"eg{idx+2}_level2=1 eg{idx+2}_timel2={attack}\n"
-          if shapes[0][0]:
-              output += f"eg{idx+2}_shape2={shapes[0][1]}\n"
-          output += f"eg{idx+2}_level3=1 eg{idx+2}_time3={hold}\n"
-          output += f"eg{idx+2}_level4={float(sustain) / 100} eg{idx+2}_time4={decay}\n"
-          if shapes[1][0]:
-              output += f"eg{idx+2}_shape4={shapes[1][1]}\n"
-          output += f"eg{idx+2}_level5=0 eg{idx+2}_time5={release}\n"
-          if shapes[2][0]:
-              output += f"eg{idx+2}_shape5={shapes[2][1]}\n"
-        case 2:
-          output += f"eg{idx+3}_sustain=4"
-          output += f"eg{idx+3}_level0={float(start) / 100} eg{idx+3}_time0=0"
-          output += f"eg{idx+3}_level1={float(start) / 100} eg{idx+3}_time1={delay}\n"
-          output += f"eg{idx+3}_level2=1 eg{idx+3}_timel2={attack}\n"
-          if shapes[0][0]:
-              output += f"eg{idx+3}_shape2={shapes[0][1]}\n"
-          output += f"eg{idx+3}_level3=1 eg{idx+3}_time3={hold}\n"
-          output += f"eg{idx+3}_level4={float(sustain) / 100} eg{idx+3}_time4={decay}\n"
-          if shapes[1][0]:
-              output += f"eg{idx+3}_shape4={shapes[1][1]}\n"
-          output += f"eg{idx+3}_level5=0 eg{idx+3}_time5={release}\n"
-          if shapes[2][0]:
-              output += f"eg{idx+3}_shape5={shapes[2][1]}\n"
-    return output
-
   def onSaveSfz(self):
     self.save_sfz(self.global_header, self.map_objects)
 
@@ -1992,13 +1851,15 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.setText("Please add a mapping.")
       self.msgbox_ok.exec()
     else:
+      self.ui.lblLog.setText(f"Generating SFZ...")
       sfz_idx = 1
+
       # calculate the dots for relative path
       config_path = self.settings.value("mainfolderpath")
       preset_path = self.settings.value("presetfolderpath")
 
       common_path = os.path.commonprefix([config_path, preset_path])
-      dots = (len(preset_path.split(os.sep)) - (len(common_path.split(os.sep)) - 1))
+      dots = (len(os.path.normpath(preset_path).split(os.sep)) - (len(os.path.normpath(common_path).split(os.sep)) - 1)) - 1
       r = ""
       for i in range(dots):
           r += f"../"
@@ -2016,172 +1877,182 @@ class MainWindow(QMainWindow):
         sfz_content += sfz_global
 
       for m in mappings:
-        sfz_content += f"<master>\n"
-        sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n\n"
-        sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
-        sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
-        if m.on_cc_rangebool:
-          sfz_content += f"on_locc{m.on_cc_range[0]}={m.on_cc_range[1]} on_hicc{m.on_cc_range[0]}={m.on_cc_range[2]}\n"
-        if m.random_rangebool:
-          sfz_content += f"lorand={m.random_range[0]} hirand={m.random_range[0]}\n"
-        sfz_content += f"volume={m.volume}\n\n"
+        if m.mute:
+          None
+        else:
+          sfz_content += f"<master>\n"
+          sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n\n"
+          sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
+          sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
+          if m.on_cc_rangebool:
+            sfz_content += f"on_locc{m.on_cc_range[0]}={m.on_cc_range[1]} on_hicc{m.on_cc_range[0]}={m.on_cc_range[2]}\n"
+          if m.random_rangebool:
+            sfz_content += f"lorand={m.random_range[0]} hirand={m.random_range[0]}\n"
+          sfz_content += f"volume={m.volume}\n\n"
 
-        # MAP
-        if m.polybool:
-          sfz_content += f"polyphony={m.poly}\n"
-        if m.note_polybool:
-          sfz_content += f"note_polyphony={m.note_poly}\n"
+          # MAP
+          if m.polybool:
+            sfz_content += f"polyphony={m.poly}\n"
+          if m.note_polybool:
+            sfz_content += f"note_polyphony={m.note_poly}\n"
 
-        sfz_content += f"output={m.output}\n"
-        sfz_content += f"trigger={m.trigger}\n"
-        if m.rt_dead:
-          sfz_content += f"rt_dead={m.rt_dead}\n"
-        if m.rt_decaybool:
-          sfz_content += f"rt_decay={m.rt_decay}\n"
-        if m.keyswitchbool:
-          sfz_content += f"sw_last={m.keyswitch}\n"
-          sfz_content += f"sw_label={m.sw_label}\n"
-        if m.keycenterbool:
-          if m.key_opcode:
-            sfz_content += f"key={m.keycenter}\n"
+          sfz_content += f"output={m.output}\n"
+          sfz_content += f"trigger={m.trigger}\n"
+          if m.rt_dead:
+            sfz_content += f"rt_dead={m.rt_dead}\n"
+          if m.rt_decaybool:
+            sfz_content += f"rt_decay={m.rt_decay}\n"
+          if m.keyswitchbool:
+            sfz_content += f"sw_last={m.keyswitch}\n"
+            sfz_content += f"sw_label={m.sw_label}\n"
+          if m.keycenterbool:
+            if m.key_opcode:
+              sfz_content += f"key={m.keycenter}\n"
+            else:
+              sfz_content += f"pitch_keycenter={m.keycenter}\n"
+          if m.tunebool:
+            sfz_content += f"tune={m.tune}\n"
+          # SAMPLE
+          #if m.offsetbool:
+          sfz_content += f"offset={m.offset}\n"
+          sfz_content += f"offset_random={m.offset_random}\n"
+          sfz_content += f"offset_cc131={m.vel2offset}\n\n"
+          sfz_content += f"delay={m.delay}\n\n"
+          sfz_content += f"transpose={m.pitch_transpose}\n"
+          sfz_content += f"sample_quality={m.quality}\n"
+          if m.loop_mode != "None":
+            sfz_content += f"loop_mode={m.loop_mode}\n"
           else:
-            sfz_content += f"pitch_keycenter={m.keycenter}\n"
-        # SAMPLE
-        #if m.offsetbool:
-        sfz_content += f"offset={m.offset}\n"
-        sfz_content += f"offset_random={m.offset_random}\n"
-        sfz_content += f"offset_cc131={m.vel2offset}\n\n"
-        sfz_content += f"delay={m.delay}\n\n"
-        sfz_content += f"transpose={m.pitch_transpose}\n"
-        sfz_content += f"sample_quality={m.quality}\n"
-        if m.loop_mode != "None":
-          sfz_content += f"loop_mode={m.loop_mode}\n"
-        else:
-            pass
-        if m.direction != "None":
-          sfz_content += f"direction={m.direction}\n"
+              pass
+          if m.direction != "None":
+            sfz_content += f"direction={m.direction}\n"
 
-        if m.exclass:
-          sfz_content += "\n\n"
-          sfz_content += f"group={m.group}\n"
-          sfz_content += f"off_by={m.off_by}\n"
-          sfz_content += f"off_mode={m.off_mode}\n"
-          sfz_content += f"off_time={m.off_time}\n"
-
-        # PAN
-        if m.panbool:
-          sfz_content += "\n\n"
-          sfz_content += f"pan={m.pan_value}\n"
-          sfz_content += f"pan_keycenter={m.pan_keycenter}\n"
-          sfz_content += f"pan_keytrack={m.pan_keytrack}\n"
-          sfz_content += f"pan_veltrack={m.pan_veltrack}\n"
-          sfz_content += f"pan_random={m.pan_random}\n"
-
-          if m.pan_lfo:
-            sfz_content += f"lfo{sfz_idx}_delay={m.pan_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx}_fade={m.pan_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx}_pan={m.pan_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx}_freq={m.pan_lfo_freq}\n"
-            sfz_content += f"lfo{sfz_idx}_wave={m.pan_lfo_wave}\n"
-
-        # AMP
-        sfz_content += "\n\n"
-        sfz_content += f"amp_keycenter={m.amp_keycenter}\n"
-        sfz_content += f"amp_keytrack={m.amp_keytrack}\n"
-        sfz_content += f"amp_veltrack={m.amp_veltrack}\n"
-        sfz_content += f"amp_random={m.amp_random}\n"
-
-        if m.amp_lfo:
-          sfz_content += "\n\n"
-          sfz_content += f"lfo{sfz_idx+1}_delay={m.amp_lfo_delay}\n"
-          sfz_content += f"lfo{sfz_idx+1}_fade={m.amp_lfo_fade}\n"
-          sfz_content += f"lfo{sfz_idx+1}_volume={m.amp_lfo_depth}\n"
-          sfz_content += f"lfo{sfz_idx+1}_freq={m.amp_lfo_freq}\n"
-          sfz_content += f"lfo{sfz_idx+1}_wave={m.amp_lfo_wave}\n"
-        if m.amp_velfloorbool:
-          sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
-        if m.amp_env_vel2attackbool:
-          sfz_content += f"ampeg_vel2attack={m.amp_env_vel2attack}\n"
-
-        if m.amp_env:
-          eg_ver = m.amp_env_ver
-          shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
-          sfz_content += self.generate_eg(eg_ver, "amp", sfz_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
-
-        # FILTER
-        if m.fil:
-          sfz_content += "\n\n"
-          sfz_content += f"fil_type={m.fil_type}\n"
-          sfz_content += f"cutoff={m.cutoff}\n"
-          sfz_content += f"resonance={m.resonance}\n\n"
-
-          sfz_content += f"fil_keycenter={m.fil_keycenter}\n"
-          sfz_content += f"fil_keytrack={m.fil_keytrack}\n"
-          sfz_content += f"fil_veltrack={m.fil_veltrack}\n"
-          sfz_content += f"fil_random={m.fil_random}\n"
-
-          if m.fil_lfo:
+          if m.exclass:
             sfz_content += "\n\n"
-            sfz_content += f"lfo{sfz_idx+2}_delay={m.fil_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx+2}_fade={m.fil_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx+2}_freq={m.fil_lfo_freq}\n"
-            sfz_content += f"lfo{sfz_idx+2}_wave={m.fil_lfo_wave}\n"
+            sfz_content += f"group={m.group}\n"
+            sfz_content += f"off_by={m.off_by}\n"
+            sfz_content += f"off_mode={m.off_mode}\n"
+            sfz_content += f"off_time={m.off_time}\n"
 
-          if m.fil_env:
-            eg_ver = m.fil_env_ver
-            match m.fil_env_ver:
-              case 0:
-                sfz_content += f"fileg_depth={m.fil_env_depth}\n"
-                sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
-              case 1:
-                sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}\n" # TODO convert cents to hz
-                sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}\n" # TODO convert cents to hz
-
-            shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
-            sfz_content += self.generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
-
-        if m.pitch:
-          sfz_content += "\n\n"
-          sfz_content += f"pitch_keytrack={m.pitch_keytrack}\n"
-          sfz_content += f"pitch_veltrack={m.pitch_veltrack}\n"
-          sfz_content += f"pitch_random={m.pitch_random}\n"
-
-          if m.pit_lfo:
+          # PAN
+          if m.panbool:
             sfz_content += "\n\n"
-            sfz_content += f"lfo{sfz_idx+3}_delay={m.pit_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx+3}_fade={m.pit_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx+3}_cutoff={m.pit_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx+3}_freq={m.pit_lfo_freq}\n"
-            sfz_content += f"lfo{sfz_idx+3}_wave={m.pit_lfo_wave}\n"
+            sfz_content += f"pan={m.pan_value}\n"
+            sfz_content += f"pan_keycenter={m.pan_keycenter}\n"
+            sfz_content += f"pan_keytrack={m.pan_keytrack}\n"
+            sfz_content += f"pan_veltrack={m.pan_veltrack}\n"
+            sfz_content += f"pan_random={m.pan_random}\n"
 
-          if m.pit_env:
-            eg_ver = m.pit_env_ver
-            match m.pit_env_ver:
-              case 0:
-                sfz_content += f"pitcheg_depth={m.pit_env_depth}\n"
-              case 1:
-                sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}\n"
+            if m.pan_lfo:
+              sfz_content += f"lfo{sfz_idx}_delay={m.pan_lfo_delay}\n"
+              sfz_content += f"lfo{sfz_idx}_fade={m.pan_lfo_fade}\n"
+              sfz_content += f"lfo{sfz_idx}_pan={m.pan_lfo_depth}\n"
+              sfz_content += f"lfo{sfz_idx}_freq={m.pan_lfo_freq}\n"
+              sfz_content += f"lfo{sfz_idx}_wave={m.pan_lfo_wave}\n"
 
-            #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
-            sfz_content += self.generate_eg(eg_ver, "pit", sfz_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+          # AMP
+          sfz_content += "\n\n"
+          sfz_content += f"amp_keycenter={m.amp_keycenter}\n"
+          sfz_content += f"amp_keytrack={m.amp_keytrack}\n"
+          sfz_content += f"amp_veltrack={m.amp_veltrack}\n"
+          sfz_content += f"amp_random={m.amp_random}\n"
 
-        sfz_content += "\n\n"
-        sfz_content += "// ADDITIONAL OPCODES\n"
-        sfz_content += f"{m.opcode_notepad}\n\n"
+          if m.amp_lfo:
+            sfz_content += "\n\n"
+            sfz_content += f"lfo{sfz_idx+1}_delay={m.amp_lfo_delay}\n"
+            sfz_content += f"lfo{sfz_idx+1}_fade={m.amp_lfo_fade}\n"
+            sfz_content += f"lfo{sfz_idx+1}_volume={m.amp_lfo_depth}\n"
+            sfz_content += f"lfo{sfz_idx+1}_freq={m.amp_lfo_freq}\n"
+            sfz_content += f"lfo{sfz_idx+1}_wave={m.amp_lfo_wave}\n"
+          if m.amp_velfloorbool:
+            sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
+          if m.amp_env_vel2attackbool:
+            sfz_content += f"ampeg_vel2attack={m.amp_env_vel2attack}\n"
 
-        sfz_content += "//MAPPING\n"
-        if m.type == "Wavetables":
-          sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-          if m.wave == "Sample":
-            sfz_content += f"oscillator=on\n"
-          sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
-          sfz_content += f"oscillator_detune={m.wave_detune} oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-          sfz_content += f"oscillator_mod_depth={m.wave_mod_depth} oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n\n"
-        else:
-          sfz_content += f"<control>\n"
-          sfz_content += f"note_offset={m.note_offset}\n"
-          sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+          if m.amp_env:
+            eg_ver = m.amp_env_ver
+            shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
+            sfz_content += generate_eg(eg_ver, "amp", sfz_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
+
+          # FILTER
+          if m.fil:
+            sfz_content += "\n\n"
+            sfz_content += f"fil_type={m.fil_type}\n"
+            sfz_content += f"cutoff={m.cutoff}\n"
+            sfz_content += f"resonance={m.resonance}\n\n"
+
+            sfz_content += f"fil_keycenter={m.fil_keycenter}\n"
+            sfz_content += f"fil_keytrack={m.fil_keytrack}\n"
+            sfz_content += f"fil_veltrack={m.fil_veltrack}\n"
+            sfz_content += f"fil_random={m.fil_random}\n"
+
+            if m.fil_lfo:
+              sfz_content += "\n\n"
+              sfz_content += f"lfo{sfz_idx+2}_delay={m.fil_lfo_delay}\n"
+              sfz_content += f"lfo{sfz_idx+2}_fade={m.fil_lfo_fade}\n"
+              sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n"
+              sfz_content += f"lfo{sfz_idx+2}_freq={m.fil_lfo_freq}\n"
+              sfz_content += f"lfo{sfz_idx+2}_wave={m.fil_lfo_wave}\n"
+
+            if m.fil_env:
+              eg_ver = m.fil_env_ver
+              match m.fil_env_ver:
+                case 0:
+                  sfz_content += f"fileg_depth={m.fil_env_depth}\n"
+                  sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
+                case 1:
+                  sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}\n" # TODO convert cents to hz
+                  sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}\n" # TODO convert cents to hz
+
+              shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
+              sfz_content += generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
+
+          if m.pitch:
+            sfz_content += "\n\n"
+            sfz_content += f"pitch_keytrack={m.pitch_keytrack}\n"
+            sfz_content += f"pitch_veltrack={m.pitch_veltrack}\n"
+            sfz_content += f"pitch_random={m.pitch_random}\n"
+
+            if m.pit_lfo:
+              sfz_content += "\n\n"
+              sfz_content += f"lfo{sfz_idx+3}_delay={m.pit_lfo_delay}\n"
+              sfz_content += f"lfo{sfz_idx+3}_fade={m.pit_lfo_fade}\n"
+              sfz_content += f"lfo{sfz_idx+3}_pitch={m.pit_lfo_depth}\n"
+              sfz_content += f"lfo{sfz_idx+3}_freq={m.pit_lfo_freq}\n"
+              sfz_content += f"lfo{sfz_idx+3}_wave={m.pit_lfo_wave}\n"
+
+            if m.pit_env:
+              eg_ver = m.pit_env_ver
+              match m.pit_env_ver:
+                case 0:
+                  sfz_content += f"pitcheg_depth={m.pit_env_depth}\n"
+                case 1:
+                  sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}\n"
+
+              #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
+              sfz_content += generate_eg(eg_ver, "pit", sfz_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+
+          sfz_content += "\n\n"
+          sfz_content += "// ADDITIONAL OPCODES\n"
+          sfz_content += f"{m.opcode_notepad}\n\n"
+
+          sfz_content += "//MAPPING\n"
+          if m.type == "Wavetables":
+            #sfz_content += f"default_path=\n"
+            sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+            if m.wave == "Sample":
+              sfz_content += f"oscillator=on\n"
+            sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
+            sfz_content += f"oscillator_detune={m.wave_detune}\n"
+            if m.wave_detune_ccbool:
+              sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+            if m.wave_mod_depth_ccbool:
+              sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+            sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+          else:
+            sfz_content += f"<control>\n"
+            sfz_content += f"note_offset={m.note_offset}\n"
+            sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
         sfz_idx += 1
 
       # write sfz
@@ -2191,10 +2062,47 @@ class MainWindow(QMainWindow):
 
       # write project
       proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
-      proj_file = f"{common_path}/Projects/{proj_path}/{self.ui.txtPreset.text()}.sfzproj"
-      print(proj_file)
+      proj = f"{common_path}/Projects/{proj_path}"
+      print(proj)
       #for i in range(len())
+      save_project(proj, f"{self.ui.txtPreset.text()}.sfzproj", self.global_header, self.map_objects)
       self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
 
-  def save_project(self, global_obj, map_objects):
-    None
+  def onSaveProject(self):
+    if len(self.map_objects) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects/{self.ui.txtPreset.text()}", filter="Project(*.sfzproj)")
+      if projectpath[0] != "":
+        print(projectpath[0])
+        save_project(os.path.dirname(projectpath[0]), os.path.basename(projectpath[0]), self.global_header, self.map_objects)
+
+  def onOpenProject(self):
+    projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
+    if projectpath[0] != "":
+      self.map_objects = self.open_project(projectpath[0])
+      # update
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(0)
+
+  def open_project(self, filepath):
+    with open(filepath, "r") as f:
+      proj_dict = json.load(f)
+    global_dict = proj_dict["global"]
+    mappings_dict = proj_dict["maps"]
+
+    for k, v in global_dict.items():
+      self.global_header.change_value(k, v)
+
+    mappings_list = []
+    for i in range(len(mappings_dict)):
+      sfzmap = Mapping(mappings_dict[i]["type"])
+      for k, v in mappings_dict[i].items():
+        if k == "map":
+          sfzmap.change_value(k, os.path.normpath(v))
+        else:
+          sfzmap.change_value(k, v)
+      mappings_list.append(sfzmap)
+    return mappings_list
+

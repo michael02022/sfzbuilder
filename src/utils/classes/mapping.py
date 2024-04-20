@@ -160,11 +160,11 @@ class Mapping:
     self.fil_env_hold = 0
     self.fil_env_decay = 0
     self.fil_env_decay_shapebool = False
-    self.fil_env_decay_shape = 0 # linear
+    self.fil_env_decay_shape = DECAY_CURVE_B
     self.fil_env_sustain = 100
     self.fil_env_release = 0
     self.fil_env_release_shapebool = False
-    self.fil_env_release_shape = 0 # linear
+    self.fil_env_release_shape = DECAY_CURVE_B
     # FILTER LFO
     self.fil_lfo = False
     self.fil_lfo_delay = 0
@@ -218,6 +218,18 @@ class Mapping:
         else:
           return f"W: {self.wave}"
 
+  def get_name_b(self):
+    match self.type:
+      case "MSamples":
+        return self.name
+      case "PSamples":
+        return self.name
+      case "Wavetables":
+        if self.wave == "Sample":
+          return self.name
+        else:
+          return self.wave
+
   def get_wave(self):
     match self.wave:
       case "Sine":
@@ -248,4 +260,7 @@ class Mapping:
       else:
         exec(f"self.{var} = '{val}'")
     else:
+      if "env_release" in var and not isinstance(val, bool):
+        if val == 0:
+          val = ZERO
       exec(f"self.{var} = {val}")

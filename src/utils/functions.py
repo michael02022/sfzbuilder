@@ -4,6 +4,51 @@ import pathlib
 import os
 import json
 import glob
+import math
+
+def cents_to_hz(hz, cents):
+  result = math.pow(2, cents/1200) * hz
+  return result
+
+def notepad_opcode_filter(txt, idx):
+  # please I need a better way to do this
+  # SFZ v2
+  r1 = txt.replace("egN_", f"eg{idx}")
+  r2 = r1.replace("egNA", f"eg{idx+1}")
+  r3 = r2.replace("egNF", f"eg{idx+2}")
+  r4 = r3.replace("egNP", f"eg{idx+3}")
+
+  r5 = r4.replace("lfoN_", f"lfo{idx}")
+  r6 = r5.replace("lfoNA", f"lfo{idx+1}")
+  r7 = r6.replace("lfoNF", f"lfo{idx+2}")
+  r8 = r7.replace("lfoNP", f"lfo{idx+3}")
+
+  # CC
+  r9 = r8.replace("ccMOD", "cc1")
+  r10 = r9.replace("ccBREATH", "cc2")
+  r11 = r10.replace("ccFOOT", "cc4")
+  r12 = r11.replace("ccGLIDE", "cc5")
+  r13 = r12.replace("ccVOL", "cc7")
+  r14 = r13.replace("ccPAN", "cc10")
+  r15 = r14.replace("ccEXP", "cc11")
+  r16 = r15.replace("ccHOLD", "cc64")
+  r17 = r16.replace("ccHOLD2", "cc69")
+  r18 = r17.replace("ccRES", "cc71")
+  r19 = r18.replace("ccRELEASE", "cc72")
+  r20 = r19.replace("ccATTACK", "cc73")
+  r21 = r20.replace("ccCUTOFF", "cc74")
+
+  # SFZ CC
+  r22 = r21.replace("ccPITCHBEND", "cc128")
+  r23 = r22.replace("ccVEL", "cc131")
+  r24 = r23.replace("ccVELOFF", "cc132")
+  r25 = r24.replace("ccKEY", "cc133")
+  r26 = r25.replace("ccKEYGATE", "cc134")
+  r27 = r26.replace("ccUNIRAND", "cc135")
+  r28 = r27.replace("ccBIRAND", "cc136")
+  r29 = r28.replace("ccALTER", "cc137")
+
+  return r29
 
 def generate_eg(type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
   output = ""
@@ -162,7 +207,15 @@ def clip(n, range):
     else:
         return n
 
-def float_to_int(_flt, decimals):
+def float_to_int(flt, decimals):
+  dec = 10 ** decimals
+  return int(flt * dec)
+
+def int_to_float(integer, decimals):
+  dec = 10 ** decimals
+  return float(integer / dec)
+
+def _float_to_int(_flt, decimals):
   negative = False
   flt = "{:.3f}".format(float(_flt))
   ls = str(flt).split(".")
@@ -178,7 +231,7 @@ def float_to_int(_flt, decimals):
     r = "-" + r
   return int(r)
 
-def int_to_float(integer, decimals):
+def _int_to_float(integer, decimals):
   decimals = 3
   negative = False
   ls = str(integer)

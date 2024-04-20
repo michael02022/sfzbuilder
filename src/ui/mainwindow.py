@@ -13,8 +13,10 @@ from utils.functions          import *
 from utils.classes.mapping    import Mapping
 from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
+from utils.constants          import *
 import os
 import copy
+import math
 
 class MainWindow(QMainWindow):
   def __init__(self, app, parent=None):
@@ -67,10 +69,10 @@ class MainWindow(QMainWindow):
 
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
-    self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
+    #self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
     if self.settings.value("mainfolderpath") is not None:
       self.ui.txtMainFolder.setText(self.settings.value("mainfolderpath"))
-      self.ui.lblPresetPrefix.setText(f"{self.settings.value('presetfolderpath')}/")
+      #self.ui.lblPresetPrefix.setText(f"{self.settings.value('presetfolderpath')}/")
       self.mappings_dict = get_mappings(self.settings.value("mainfolderpath"))
       self.enable_edit = True
       #print(self.mappings_dict)
@@ -91,6 +93,8 @@ class MainWindow(QMainWindow):
     self.ui.cbxMap.activated.connect(self.onMapChanged)
     self.ui.listMap.itemClicked.connect(self.onItemMap)
 
+    self.ui.btnAutoname.clicked.connect(self.onAutoname)
+
     # ENVELOPES
     #self.ui.knbPan.setMinimum(-100.0)
     #self.ui.knbPan.setMaximum(100.0)
@@ -105,15 +109,22 @@ class MainWindow(QMainWindow):
 
     # MENUS
     self.save_menu = QMenu(self)
-    save_sfz = self.save_menu.addAction("Save SFZ")
+    save_temp_sfz = self.save_menu.addAction("Save TEMP SFZ")
+    self.save_menu.addSeparator()
+    save_as_sfz = self.save_menu.addAction("Save as SFZ")
     save_project = self.save_menu.addAction("Save as Project") # 🟩
+    self.save_menu.addSeparator()
+    open_proj = self.save_menu.addAction("Open Project")
 
-    save_sfz.setIcon(QIcon.fromTheme("Save SFZ", QIcon(":/x-office-document")))
+    save_as_sfz.setIcon(QIcon.fromTheme("Save as SFZ", QIcon(":/x-office-document")))
     save_project.setIcon(QIcon.fromTheme("Save as Project", QIcon(":/document-save-as")))
+    open_proj.setIcon(QIcon.fromTheme("Open Project", QIcon(":/document-open")))
 
-    save_sfz.triggered.connect(self.onSaveSfz)
+    save_temp_sfz.triggered.connect(self.onSaveTempfz)
+    save_as_sfz.triggered.connect(self.onSaveAsSfz)
     save_project.triggered.connect(self.onSaveProject)
 
+    open_proj.triggered.connect(self.onOpenProject)
     self.ui.actOpen.triggered.connect(self.onOpenProject)
 
     # cc menu
@@ -365,8 +376,11 @@ class MainWindow(QMainWindow):
     self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
     self.ui.cbxMap.setCurrentIndex(self.map_ls.index(self.map_objects[idx].map)) # set map list
     #mappings_dict
-
     self.get_map_values()
+
+  def onAutoname(self):
+    idx = self.ui.listMap.currentRow()
+    self.ui.txtPreset.setText(self.map_objects[idx].get_name_b())
 
   def onAmpEnvAttackShapeEnabled(self):
     self.ui.pnlAmpEnvAttackShape.setEnabled(not self.ui.pnlAmpEnvAttackShape.isEnabled())
@@ -1817,15 +1831,15 @@ class MainWindow(QMainWindow):
         self.ui.dsbAmpEnvAttackShape.setValue(0.0)
         obj.change_value("amp_env_attack_shape", 0)
       case "pbnAmpEnvDecayShapeReset":
-        val = float_to_int(-7.16, 3)
+        val = float_to_int(DECAY_CURVE_B, 3)
         self.ui.dialAmpEnvDecayShape.setValue(val)
         self.ui.dsbAmpEnvDecayShape.setValue(-7.16)
         obj.change_value("amp_env_decay_shape", -7.16)
       case "pbnAmpEnvReleaseShapeReset":
-        val = float_to_int(-7.16, 3)
+        val = float_to_int(DECAY_CURVE_B, 3)
         self.ui.dialAmpEnvReleaseShape.setValue(val)
-        self.ui.dsbAmpEnvReleaseShape.setValue(-7.16)
-        obj.change_value("amp_env_release_shape", -7.16)
+        self.ui.dsbAmpEnvReleaseShape.setValue(DECAY_CURVE_B)
+        obj.change_value("amp_env_release_shape", DECAY_CURVE_B)
 
       case "pbnFilEnvAttackShapeReset":
         self.ui.dialFilEnvAttackShape.setValue(0)
@@ -1834,19 +1848,40 @@ class MainWindow(QMainWindow):
       case "pbnFilEnvDecayShapeReset":
         self.ui.dialFilEnvDecayShape.setValue(0)
         self.ui.dsbFilEnvDecayShape.setValue(0.0)
-        obj.change_value("fil_env_decay_shape", 0)
+        obj.change_value("fil_env_decay_shape", DECAY_CURVE_B)
       case "pbnFilEnvReleaseShapeReset":
         self.ui.dialFilEnvReleaseShape.setValue(0)
         self.ui.dsbFilEnvReleaseShape.setValue(0.0)
-        obj.change_value("fil_env_release_shape", 0)
+        obj.change_value("fil_env_release_shape", DECAY_CURVE_B)
 
       case _:
         None
 
+  def onSaveAsSfz(self):
+    if len(self.map_objects) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZ Preset", dir=f"{self.settings.value('mainfolderpath')}/Presets/{self.ui.txtPreset.text()}", filter="SFZ(*.sfz)")
+      if projectpath[0] != "":
+        print(projectpath[0])
+        self.save_sfz(os.path.dirname(projectpath[0]), os.path.splitext(os.path.basename(projectpath[0]))[0], self.global_header, self.map_objects)
+  '''
   def onSaveSfz(self):
-    self.save_sfz(self.global_header, self.map_objects)
+    if len(self.map_objects) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      self.save_sfz(self.global_header, self.map_objects)
+  '''
+  def onSaveTempfz(self):
+    if len(self.map_objects) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      self.save_sfz("", "", self.global_header, self.map_objects, True)
 
-  def save_sfz(self, global_obj, mappings):
+  def save_sfz(self, path, name, global_obj, mappings, temp=False):
     if len(mappings) == 0:
       self.msgbox_ok.setText("Please add a mapping.")
       self.msgbox_ok.exec()
@@ -1856,7 +1891,11 @@ class MainWindow(QMainWindow):
 
       # calculate the dots for relative path
       config_path = self.settings.value("mainfolderpath")
-      preset_path = self.settings.value("presetfolderpath")
+      if temp:
+        preset_path = f"{config_path}/Presets"
+      else:
+        preset_path = path
+        #preset_path = self.settings.value("presetfolderpath")
 
       common_path = os.path.commonprefix([config_path, preset_path])
       dots = (len(os.path.normpath(preset_path).split(os.sep)) - (len(os.path.normpath(common_path).split(os.sep)) - 1)) - 1
@@ -1864,7 +1903,10 @@ class MainWindow(QMainWindow):
       for i in range(dots):
           r += f"../"
       define_userpath = r[:-1]
-      pathstr = f"{preset_path}/{self.ui.txtPreset.text()}"
+      if temp:
+        pathstr = f"{preset_path}/!TEMP"
+      else:
+        pathstr = f"{preset_path}/{name}"
       print(define_userpath)
       #print(pathstr)
 
@@ -1899,7 +1941,7 @@ class MainWindow(QMainWindow):
           sfz_content += f"output={m.output}\n"
           sfz_content += f"trigger={m.trigger}\n"
           if m.rt_dead:
-            sfz_content += f"rt_dead={m.rt_dead}\n"
+            sfz_content += f"rt_dead=on\n"
           if m.rt_decaybool:
             sfz_content += f"rt_decay={m.rt_decay}\n"
           if m.keyswitchbool:
@@ -1978,7 +2020,7 @@ class MainWindow(QMainWindow):
           if m.fil:
             sfz_content += "\n\n"
             sfz_content += f"fil_type={m.fil_type}\n"
-            sfz_content += f"cutoff={m.cutoff}\n"
+            sfz_content += f"cutoff={m.cutoff}\n" # TODO Make the knob exponential for better GUI behavior
             sfz_content += f"resonance={m.resonance}\n\n"
 
             sfz_content += f"fil_keycenter={m.fil_keycenter}\n"
@@ -1990,7 +2032,7 @@ class MainWindow(QMainWindow):
               sfz_content += "\n\n"
               sfz_content += f"lfo{sfz_idx+2}_delay={m.fil_lfo_delay}\n"
               sfz_content += f"lfo{sfz_idx+2}_fade={m.fil_lfo_fade}\n"
-              sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n"
+              sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n" # Hz
               sfz_content += f"lfo{sfz_idx+2}_freq={m.fil_lfo_freq}\n"
               sfz_content += f"lfo{sfz_idx+2}_wave={m.fil_lfo_wave}\n"
 
@@ -2001,8 +2043,8 @@ class MainWindow(QMainWindow):
                   sfz_content += f"fileg_depth={m.fil_env_depth}\n"
                   sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
                 case 1:
-                  sfz_content += f"eg{sfz_idx+1}_cutoff={m.fil_env_depth}\n" # TODO convert cents to hz
-                  sfz_content += f"eg{sfz_idx+1}_cutoff_oncc131={m.fil_vel2depth}\n" # TODO convert cents to hz
+                  sfz_content += f"eg{sfz_idx+2}_cutoff={m.fil_env_depth}\n"
+                  sfz_content += f"eg{sfz_idx+2}_cutoff_oncc131={m.fil_vel2depth}\n"
 
               shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
               sfz_content += generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
@@ -2034,14 +2076,16 @@ class MainWindow(QMainWindow):
 
           sfz_content += "\n\n"
           sfz_content += "// ADDITIONAL OPCODES\n"
-          sfz_content += f"{m.opcode_notepad}\n\n"
+          sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, sfz_idx)}\n\n"
 
           sfz_content += "//MAPPING\n"
           if m.type == "Wavetables":
-            #sfz_content += f"default_path=\n"
-            sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
             if m.wave == "Sample":
+              sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
               sfz_content += f"oscillator=on\n"
+            else:
+              sfz_content += f"<region> sample={m.get_wave()}\n"
+
             sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
             sfz_content += f"oscillator_detune={m.wave_detune}\n"
             if m.wave_detune_ccbool:
@@ -2053,7 +2097,7 @@ class MainWindow(QMainWindow):
             sfz_content += f"<control>\n"
             sfz_content += f"note_offset={m.note_offset}\n"
             sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
-        sfz_idx += 1
+        sfz_idx += 4
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")
@@ -2061,12 +2105,16 @@ class MainWindow(QMainWindow):
       f_sfz.close()
 
       # write project
-      proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
-      proj = f"{common_path}/Projects/{proj_path}"
-      print(proj)
-      #for i in range(len())
-      save_project(proj, f"{self.ui.txtPreset.text()}.sfzproj", self.global_header, self.map_objects)
-      self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
+      if temp:
+        proj = f"{config_path}/Projects"
+        save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects)
+      else:
+        proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
+        proj = f"{common_path}/Projects/{proj_path}"
+        print(proj)
+        #for i in range(len())
+        save_project(proj, f"{name}.sfzproj", self.global_header, self.map_objects)
+        self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
 
   def onSaveProject(self):
     if len(self.map_objects) == 0:

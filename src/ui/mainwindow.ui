@@ -13,101 +13,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_5">
-    <item row="0" column="0">
-     <layout class="QHBoxLayout" name="layMainFolder">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbnMainFolder">
-        <property name="text">
-         <string>Main Folder</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtMainFolder">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <layout class="QHBoxLayout" name="layPreset">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pbnPresetFolder">
-        <property name="text">
-         <string>Preset Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblPresetPrefix">
-        <property name="text">
-         <string>NONE/</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="txtPreset">
-        <property name="text">
-         <string>MyPreset</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblSfzExt">
-        <property name="text">
-         <string>.sfz</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnAutoname">
-        <property name="text">
-         <string>Autoname</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="2" column="0">
      <widget class="QGroupBox" name="gbxGlobal">
       <property name="title">
@@ -225,6 +130,22 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="2">
+        <widget class="QRadioButton" name="chkWavetable">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Wavetable</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QRadioButton" name="chkMap">
          <property name="sizePolicy">
@@ -244,45 +165,101 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QRadioButton" name="chkWavetable">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Wavetable</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QComboBox" name="cbxPack">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="layMainFolder">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
       </property>
-     </widget>
+      <item>
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbnMainFolder">
+        <property name="text">
+         <string>Main Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtMainFolder">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item row="4" column="1">
-     <widget class="QLabel" name="lblPack">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="layPreset">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
       </property>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAutoname">
+        <property name="text">
+         <string>Autoname</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblpresetinfo">
+        <property name="text">
+         <string>Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPreset">
+        <property name="text">
+         <string>MyPreset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblSfzExt">
+        <property name="text">
+         <string>.sfz</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLabel" name="lblMap">
       <property name="text">
-       <string>PACK</string>
+       <string>MAP</string>
       </property>
      </widget>
     </item>
@@ -296,10 +273,26 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="lblMap">
+    <item row="4" column="2">
+     <widget class="QLabel" name="lblPack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
-       <string>MAP</string>
+       <string>PACK</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QComboBox" name="cbxPack">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
      </widget>
     </item>
@@ -332,7 +325,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="dsbVolume"/>
+       <widget class="QDoubleSpinBox" name="dsbVolume">
+        <property name="minimum">
+         <double>-99.000000000000000</double>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="Line" name="line_3">
@@ -515,7 +512,7 @@
       </item>
      </layout>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item row="7" column="0" colspan="3">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -4085,10 +4082,10 @@
                </sizepolicy>
               </property>
               <property name="minimum">
-               <number>-1200000</number>
+               <number>-20000000</number>
               </property>
               <property name="maximum">
-               <number>1200000</number>
+               <number>20000000</number>
               </property>
              </widget>
             </item>
@@ -4179,10 +4176,10 @@
                <number>3</number>
               </property>
               <property name="minimum">
-               <double>-1200.000000000000000</double>
+               <double>-20000.000000000000000</double>
               </property>
               <property name="maximum">
-               <double>1200.000000000000000</double>
+               <double>20000.000000000000000</double>
               </property>
               <property name="singleStep">
                <double>25.000000000000000</double>

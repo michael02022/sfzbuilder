@@ -3,7 +3,7 @@
 
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore           import QSettings, Qt, QEvent
-from PySide6.QtGui            import QIcon, QCursor, QAction
+from PySide6.QtGui            import QIcon, QCursor, QAction, QHoverEvent
 from PySide6.QtWidgets        import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup, QMenu
 from .ui_mainwindow           import Ui_MainWindow
 #from .tabpan                 import setupKnobs
@@ -195,24 +195,68 @@ class MainWindow(QMainWindow):
       self.prc_action = QAction(self, text=str(gm_list_perc[i]))
       self.drum_submenu_5.addAction(self.prc_action)
 
+    # Connect
+    self.drum_menu.triggered.connect(self.onPercMenu)
+
+    #self.cc_menu.triggered.connect(self.onCcMenu)
+
     # Event filter
-    self.ui.dialPan.installEventFilter(self)
+    self.ui.chkUseGlobalPitchKeycenter.installEventFilter(self)
+    #self.ui.lblCc.installEventFilter(self)
+    #self.ui.cbxWaveModDepthCc.installEventFilter(self)
+    #self.ui.cbxWaveDetuneCc.installEventFilter(self)
+
+    self.pitch_keycenter_hover = False
+    self.cc_hover = False
 
   def eventFilter(self, obj, event):
     #print(self.window)
     #print(obj)
+    #print(event)
     #print(event.type())
     #print(obj.className())
     #if event.type() == QEvent.MouseButtonRelease:
+    if event.type() == QHoverEvent.HoverEnter:
+      match obj.objectName():
+        case "chkUseGlobalPitchKeycenter":
+          self.pitch_keycenter_hover = True
+        case s if s in ("lblCc", "cbxWaveModDepthCc", "cbxWaveDetuneCc"):
+          self.cc_hover = True
+
+    elif event.type() == QHoverEvent.HoverLeave:
+      match obj.objectName():
+        case "chkUseGlobalPitchKeycenter":
+          self.pitch_keycenter_hover = False
+        case s if s in ("lblCc", "cbxWaveModDepthCc", "cbxWaveDetuneCc"):
+          self.cc_hover = False
+      #print(self.pitch_keycenter_hover
+
     if obj.objectName().find("dial") and event.type() == QEvent.MouseButtonRelease:
-      print("button released")
+      None
+      #print("button released")
     return super().eventFilter(obj, event)
 
   def mousePressEvent(self, QMouseEvent):
     if QMouseEvent.button() == Qt.RightButton:
-      self.save_menu.exec(QCursor.pos())
+      if self.pitch_keycenter_hover:
+        self.pitch_keycenter_hover = False
+        self.drum_menu.exec(QCursor.pos())
+      elif self.cc_hover:
+        self.cc_hover = False
+        self.cc_menu.exec(QCursor.pos())
+      else:
+        self.save_menu.exec(QCursor.pos())
       #self.cc_menu.exec(QCursor.pos())
       #self.drum_menu.exec(QCursor.pos())
+
+  def onPercMenu(self, action):
+    val = int(only_nums(action.text()[:3]))
+    self.ui.sbxUsePitchKeycenter4All.setValue(val)
+  '''
+  def onCcMenu(self, action, event):
+    val = int(only_nums(action.text()[:3]))
+    print(event)
+  '''
 
   def onMainFolder(self):
     main_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a SFZBuilder folder", options=QFileDialog.ShowDirsOnly)
@@ -468,6 +512,8 @@ class MainWindow(QMainWindow):
           self.ui.txtKeyswitchLabel.setText(map_dict.get(k))
         case "output":
           self.ui.sbxOutput.setValue(map_dict.get(k))
+        case "width":
+          self.ui.sbxWidth.setValue(map_dict.get(k))
         case "polybool":
           self.ui.chkPolyphony.setChecked(map_dict.get(k))
         case "poly":
@@ -571,6 +617,7 @@ class MainWindow(QMainWindow):
           self.ui.dialPanLfoFreq.setValue(dialval)
           self.ui.dsbPanLfoFreq.setValue(map_dict.get(k))
         case "pan_lfo_wave":
+          #print(map_dict.get(k))
           self.ui.cbxPanLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
 
         ## AMP
@@ -855,6 +902,7 @@ class MainWindow(QMainWindow):
     self.ui.sbxKeyswitchDefault.valueChanged.connect(self.onUiValueChanged)
 
     # Spinboxes
+    self.ui.dsbVolume.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxKeyLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxKeyHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxVelLo.valueChanged.connect(self.onUiValueChanged)
@@ -865,6 +913,7 @@ class MainWindow(QMainWindow):
     self.ui.dsbRandomLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbRandomHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxOutput.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxWidth.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxPolyphony.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxNotePolyphony.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxKeyswitchCount.valueChanged.connect(self.onUiValueChanged)
@@ -1122,6 +1171,8 @@ class MainWindow(QMainWindow):
       case "sbxKeyswitchDefault":
         self.global_header.change_value("sw_default", self.sender().value())
       # SPINBOXES
+      case "dsbVolume":
+        obj.change_value("volume", self.sender().value())
       case "sbxKeyLo":
         obj.change_value("map_key_range", [self.sender().value(), obj.map_key_range[1]])
       case "sbxKeyHi":
@@ -1144,6 +1195,8 @@ class MainWindow(QMainWindow):
         obj.change_value("random_range", [obj.random_range[0], self.sender().value()])
       case "sbxOutput":
         obj.change_value("output", self.sender().value())
+      case "sbxWidth":
+        obj.change_value("width", self.sender().value())
       case "sbxPolyphony":
         obj.change_value("poly", self.sender().value())
       case "sbxNotePolyphony":
@@ -1152,6 +1205,9 @@ class MainWindow(QMainWindow):
         obj.change_value("keyswitch", self.sender().value())
       case "sbxUsePitchKeycenter4All":
         obj.change_value("keycenter", self.sender().value())
+        idx = self.ui.listMap.currentRow()
+        self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+        self.ui.listMap.setCurrentRow(idx)
       case "dsbRtDecay":
         obj.change_value("rt_decay", self.sender().value())
       case "sbxTune":
@@ -1864,7 +1920,7 @@ class MainWindow(QMainWindow):
     else:
       projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZ Preset", dir=f"{self.settings.value('mainfolderpath')}/Presets/{self.ui.txtPreset.text()}", filter="SFZ(*.sfz)")
       if projectpath[0] != "":
-        print(projectpath[0])
+        #print(projectpath[0])
         self.save_sfz(os.path.dirname(projectpath[0]), os.path.splitext(os.path.basename(projectpath[0]))[0], self.global_header, self.map_objects)
   '''
   def onSaveSfz(self):
@@ -1907,7 +1963,7 @@ class MainWindow(QMainWindow):
         pathstr = f"{preset_path}/!TEMP"
       else:
         pathstr = f"{preset_path}/{name}"
-      print(define_userpath)
+      #print(define_userpath)
       #print(pathstr)
 
       # generating sfz
@@ -1939,6 +1995,7 @@ class MainWindow(QMainWindow):
             sfz_content += f"note_polyphony={m.note_poly}\n"
 
           sfz_content += f"output={m.output}\n"
+          sfz_content += f"width={m.width}\n"
           sfz_content += f"trigger={m.trigger}\n"
           if m.rt_dead:
             sfz_content += f"rt_dead=on\n"
@@ -2094,9 +2151,29 @@ class MainWindow(QMainWindow):
               sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
             sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
           else:
-            sfz_content += f"<control>\n"
-            sfz_content += f"note_offset={m.note_offset}\n"
-            sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+            if m.wave_unison == 1:
+              sfz_content += f"<group>\n"
+              sfz_content += f"<control>\n"
+              sfz_content += f"note_offset={m.note_offset}\n"
+              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+            else:
+              sfz_content += f"<group>\n"
+              if m.wave_mod_depth >= 1:
+                sfz_content += f"pan={clip(m.wave_mod_depth, (0, 100))}\n"
+              sfz_content += f"tune={m.wave_detune}\n"
+              sfz_content += f"<control>\n"
+              sfz_content += f"note_offset={m.note_offset}\n"
+              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+              sfz_content += f"<group>\n"
+              if m.wave_mod_depth >= 1:
+                sfz_content += f"pan={-abs(clip(m.wave_mod_depth, (0, 100)))}\n"
+              sfz_content += f"tune={-abs(m.wave_detune)}\n"
+              if m.wave_phase >= 1:
+                sfz_content += f"delay={m.wave_phase / 1000}\n"
+              sfz_content += f"<control>\n"
+              sfz_content += f"note_offset={m.note_offset}\n"
+              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
         sfz_idx += 4
 
       # write sfz
@@ -2108,10 +2185,11 @@ class MainWindow(QMainWindow):
       if temp:
         proj = f"{config_path}/Projects"
         save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects)
+        self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
       else:
         proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
         proj = f"{common_path}/Projects/{proj_path}"
-        print(proj)
+        #print(proj)
         #for i in range(len())
         save_project(proj, f"{name}.sfzproj", self.global_header, self.map_objects)
         self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
@@ -2123,8 +2201,9 @@ class MainWindow(QMainWindow):
     else:
       projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects/{self.ui.txtPreset.text()}", filter="Project(*.sfzproj)")
       if projectpath[0] != "":
-        print(projectpath[0])
+        #print(projectpath[0])
         save_project(os.path.dirname(projectpath[0]), os.path.basename(projectpath[0]), self.global_header, self.map_objects)
+        self.ui.lblLog.setText(f"""WRITTEN: {str(os.path.basename(projectpath[0]) + ".sfz")}""")
 
   def onOpenProject(self):
     projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
@@ -2150,7 +2229,10 @@ class MainWindow(QMainWindow):
         if k == "map":
           sfzmap.change_value(k, os.path.normpath(v))
         else:
-          sfzmap.change_value(k, v)
+          try:
+            sfzmap.change_value(k, v)
+          except:
+            pass
       mappings_list.append(sfzmap)
     return mappings_list
 

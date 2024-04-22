@@ -332,6 +332,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="cbxMapMute">
+        <property name="text">
+         <string>Mute Map</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="Line" name="line_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -496,7 +503,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="hspRandom">
+         <spacer name="horizontalSpacer_6">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -511,6 +518,13 @@
        </layout>
       </item>
      </layout>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="lblLog">
+      <property name="text">
+       <string>Log</string>
+      </property>
+     </widget>
     </item>
     <item row="7" column="0" colspan="3">
      <widget class="QSplitter" name="splitter">
@@ -1266,6 +1280,30 @@
             </widget>
            </item>
            <item>
+            <widget class="Line" name="line_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Stereo Width: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="sbxWidth">
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="singleStep">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="hspOutput">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -1279,13 +1317,6 @@
             </spacer>
            </item>
           </layout>
-         </item>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cbxMapMute">
-           <property name="text">
-            <string>Mute Map</string>
-           </property>
-          </widget>
          </item>
         </layout>
        </widget>
@@ -1411,6 +1442,23 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblLoopMode">
+              <property name="text">
+               <string>Loop Mode (override):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
             <item row="3" column="1">
              <widget class="QComboBox" name="cbxDirection">
               <item>
@@ -1425,16 +1473,6 @@
               </item>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="lblSampleQuality">
               <property name="text">
@@ -1442,17 +1480,17 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lblLoopMode">
-              <property name="text">
-               <string>Loop Mode (override):</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="lblSampleMapDelay">
               <property name="text">
                <string>Map Delay (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblDirection">
+              <property name="text">
+               <string>Direction (override):</string>
               </property>
              </widget>
             </item>
@@ -1466,13 +1504,6 @@
               </property>
               <property name="value">
                <number>2</number>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lblDirection">
-              <property name="text">
-               <string>Direction (override):</string>
               </property>
              </widget>
             </item>
@@ -2536,7 +2567,7 @@
                  <double>1.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.010000000000000</double>
+                 <double>0.001000000000000</double>
                 </property>
                </widget>
               </item>
@@ -6068,13 +6099,6 @@
         </layout>
        </widget>
       </widget>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="lblLog">
-      <property name="text">
-       <string>Log</string>
-      </property>
      </widget>
     </item>
    </layout>

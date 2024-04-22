@@ -45,6 +45,7 @@ class Mapping:
     self.sw_label = ""
 
     self.output = 0
+    self.width = 100
 
     self.polybool = False
     self.poly = 16
@@ -106,7 +107,7 @@ class Mapping:
     # AMP PROPERTIES
     self.amp_keycenter = 60
     self.amp_keytrack = 0
-    self.amp_veltrack = 90
+    self.amp_veltrack = 100
     self.amp_random = 0
     # (PERC RELATED)
     self.amp_velfloorbool = False

@@ -5,6 +5,11 @@ import os
 import json
 import glob
 import math
+import re
+
+def only_nums(str):
+    r = re.sub(r'[^\d]+', '', str)
+    return r
 
 def cents_to_hz(hz, cents):
   result = math.pow(2, cents/1200) * hz

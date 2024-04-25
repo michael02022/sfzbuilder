@@ -15,6 +15,17 @@ def cents_to_hz(hz, cents):
   result = math.pow(2, cents/1200) * hz
   return result
 
+def reformat_string_paths(ls):
+  n = []
+  for string in ls:
+    pth = pathlib.Path(string).parts
+    if pth[0] in ("MSamples", "PSamples"):
+       n_str = str(os.path.join(*pth[1:]))
+    else:
+      n_str = str(os.path.join(*pth))
+    n.append(n_str.replace("/", " » ").replace("\\", " » "))
+  return n
+
 def notepad_opcode_filter(txt, idx):
   # please I need a better way to do this
   # SFZ v2

@@ -281,7 +281,7 @@ class MainWindow(QMainWindow):
 
       self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
       self.map_ls = self.current_pack_dict[self.pack_ls[0]]
-      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
 
       # Mapping object creation
       self.sfz_map = Mapping(which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked()))
@@ -303,7 +303,7 @@ class MainWindow(QMainWindow):
 
       self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
       self.map_ls = self.current_pack_dict[self.pack_ls[0]]
-      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
 
       # update
       idx = self.ui.listMap.currentRow()
@@ -357,7 +357,7 @@ class MainWindow(QMainWindow):
   def onPackChanged(self):
     self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]]
-    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
 
     # update
     if self.ui.listMap.count() != 0:
@@ -417,7 +417,7 @@ class MainWindow(QMainWindow):
     self.ui.cbxPack.setCurrentIndex(self.pack_ls.index(self.map_objects[idx].pack)) # set the pack
 
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]] # add map list
-    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(self.map_ls)
+    self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
     self.ui.cbxMap.setCurrentIndex(self.map_ls.index(self.map_objects[idx].map)) # set map list
     #mappings_dict
     self.get_map_values()
@@ -2160,18 +2160,20 @@ class MainWindow(QMainWindow):
               sfz_content += f"<group>\n"
               if m.wave_mod_depth >= 1:
                 sfz_content += f"pan={clip(m.wave_mod_depth, (0, 100))}\n"
-              sfz_content += f"tune={m.wave_detune}\n"
+              sfz_content += f"pitch_oncc90={m.wave_detune}\n"
               sfz_content += f"<control>\n"
+              sfz_content += f"set_cc90=127\n"
               sfz_content += f"note_offset={m.note_offset}\n"
               sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
               sfz_content += f"<group>\n"
               if m.wave_mod_depth >= 1:
                 sfz_content += f"pan={-abs(clip(m.wave_mod_depth, (0, 100)))}\n"
-              sfz_content += f"tune={-abs(m.wave_detune)}\n"
+              sfz_content += f"pitch_oncc89={-abs(m.wave_detune)}\n"
               if m.wave_phase >= 1:
                 sfz_content += f"delay={m.wave_phase / 1000}\n"
               sfz_content += f"<control>\n"
+              sfz_content += f"set_cc89=127\n"
               sfz_content += f"note_offset={m.note_offset}\n"
               sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
         sfz_idx += 4

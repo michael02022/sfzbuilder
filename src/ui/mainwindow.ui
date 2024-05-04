@@ -711,9 +711,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1" colspan="2">
-             <widget class="QLineEdit" name="txtKeyswitchLabel"/>
-            </item>
             <item row="0" column="2">
              <spacer name="hspKeyswitchCount">
               <property name="orientation">
@@ -727,12 +724,8 @@
               </property>
              </spacer>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lblKeyswitchLabel">
-              <property name="text">
-               <string>Label:</string>
-              </property>
-             </widget>
+            <item row="1" column="1" colspan="2">
+             <widget class="QLineEdit" name="txtKeyswitchLabel"/>
             </item>
             <item row="0" column="0">
              <widget class="QCheckBox" name="chkKeyswitchCount">
@@ -741,266 +734,10 @@
               </property>
              </widget>
             </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QGroupBox" name="gbxWavetable">
-           <property name="title">
-            <string>Wavetable</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="2" column="1">
-             <widget class="QComboBox" name="cbxWave">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <item>
-               <property name="text">
-                <string>Sine</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Triangle</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Square</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Saw</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Noise</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Sample</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QSpinBox" name="sbxWaveModDepth">
-              <property name="maximum">
-               <number>999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLabel" name="lblWaveModDepth">
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblKeyswitchLabel">
               <property name="text">
-               <string>Mod Depth:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lblWaveform">
-              <property name="text">
-               <string>Waveform:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="8">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="5" column="1">
-             <widget class="QSpinBox" name="sbxWaveUnison">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>9</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QSpinBox" name="sbxWaveDetune">
-              <property name="maximum">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="7">
-             <widget class="QSpinBox" name="sbxWaveModDepthCcVal">
-              <property name="minimum">
-               <number>-999999</number>
-              </property>
-              <property name="maximum">
-               <number>999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLabel" name="lblWaveDetune">
-              <property name="text">
-               <string>Detune:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="lblWaveUnison">
-              <property name="text">
-               <string>Unison:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lblWaveMode">
-              <property name="text">
-               <string>Mode:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="6">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>=</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLabel" name="lblWaveQuality">
-              <property name="text">
-               <string>Quality:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QSpinBox" name="sbxWaveQuality">
-              <property name="maximum">
-               <number>3</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5">
-             <widget class="QSpinBox" name="sbxWavePhase">
-              <property name="minimum">
-               <number>-1</number>
-              </property>
-              <property name="maximum">
-               <number>360</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="4">
-             <widget class="QLabel" name="lblWavePhase">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Phase:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="cbxWaveMode">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <item>
-               <property name="text">
-                <string>Normal/RM</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>PM</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>FM</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="4" column="5">
-             <widget class="QSpinBox" name="sbxWaveModDepthCc">
-              <property name="maximum">
-               <number>127</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="5">
-             <widget class="QSpinBox" name="sbxWaveDetuneCc">
-              <property name="maximum">
-               <number>127</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="6">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>=</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="7">
-             <widget class="QSpinBox" name="sbxWaveDetuneCcVal">
-              <property name="minimum">
-               <number>-999999</number>
-              </property>
-              <property name="maximum">
-               <number>999999</number>
-              </property>
-              <property name="singleStep">
-               <number>1</number>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="4">
-             <widget class="QCheckBox" name="cbxWaveModDepthCc">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
-              </property>
-              <property name="text">
-               <string>&lt;- CC</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="4">
-             <widget class="QCheckBox" name="cbxWaveDetuneCc">
-              <property name="layoutDirection">
-               <enum>Qt::RightToLeft</enum>
-              </property>
-              <property name="text">
-               <string>&lt;- CC</string>
+               <string>Label:</string>
               </property>
              </widget>
             </item>
@@ -1304,7 +1041,7 @@
             </widget>
            </item>
            <item>
-            <spacer name="hspOutput">
+            <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -1316,7 +1053,396 @@
              </property>
             </spacer>
            </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Wavetable preview:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_12">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="DrawWaveform" name="glWaveform"/>
+           </item>
           </layout>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QGroupBox" name="gbxWavetable">
+           <property name="title">
+            <string>Wavetable</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="2" column="11">
+             <widget class="QSpinBox" name="sbxFxPan">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="singleStep">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="11">
+             <widget class="QSpinBox" name="sbxFxDetune">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="11">
+             <widget class="QDoubleSpinBox" name="dsbFxDelay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>99.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.001000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="10">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>DelayEffect:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="10">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Detune:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="10">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>PanEffect:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="15">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="cbxWaveMode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Normal/RM</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>PM</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>FM</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <widget class="QSpinBox" name="sbxWavePhase">
+              <property name="minimum">
+               <number>-1</number>
+              </property>
+              <property name="maximum">
+               <number>360</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QLabel" name="lblWavePhase">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Phase:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="5">
+             <widget class="QSpinBox" name="sbxWaveModDepthCc">
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QSpinBox" name="sbxWaveQuality">
+              <property name="maximum">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="cbxWave">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Sine</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Triangle</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Square</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Saw</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Noise</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Sample</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QSpinBox" name="sbxWaveModDepth">
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblWaveform">
+              <property name="text">
+               <string>Waveform:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLabel" name="lblWaveModDepth">
+              <property name="text">
+               <string>Mod Depth:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QSpinBox" name="sbxWaveUnison">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>9</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLabel" name="lblWaveDetune">
+              <property name="text">
+               <string>Detune:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QSpinBox" name="sbxWaveDetune">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="7">
+             <widget class="QSpinBox" name="sbxWaveModDepthCcVal">
+              <property name="minimum">
+               <number>-999999</number>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="lblWaveUnison">
+              <property name="text">
+               <string>Unison:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblWaveMode">
+              <property name="text">
+               <string>Mode:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="lblWaveQuality">
+              <property name="text">
+               <string>Quality:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="6">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>=</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="13">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Speed:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="14">
+             <widget class="QDoubleSpinBox" name="dsbFxSpeed">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>20.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.020000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="7">
+             <widget class="QSpinBox" name="sbxWaveDetuneCcVal">
+              <property name="minimum">
+               <number>-999999</number>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="singleStep">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QCheckBox" name="cbxWaveModDepthCc">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>&lt;- CC</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="6">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>=</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="5">
+             <widget class="QSpinBox" name="sbxWaveDetuneCc">
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="4">
+             <widget class="QCheckBox" name="cbxWaveDetuneCc">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>&lt;- CC</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="7">
+             <widget class="QSpinBox" name="sbxFxMode">
+              <property name="prefix">
+               <string>FX </string>
+              </property>
+              <property name="maximum">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="14">
+             <widget class="QSpinBox" name="sbxFxWave">
+              <property name="maximum">
+               <number>7</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="14">
+             <widget class="QSpinBox" name="sbxFxDepth">
+              <property name="maximum">
+               <number>1200</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="13">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Wave:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="13">
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>Depth:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1442,55 +1568,10 @@
             <property name="bottomMargin">
              <number>6</number>
             </property>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lblLoopMode">
-              <property name="text">
-               <string>Loop Mode (override):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="cbxDirection">
-              <item>
-               <property name="text">
-                <string>forward</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>reverse</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lblSampleQuality">
-              <property name="text">
-               <string>Quality (interpolation):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblSampleMapDelay">
-              <property name="text">
-               <string>Map Delay (sec):</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="0">
              <widget class="QLabel" name="lblDirection">
               <property name="text">
-               <string>Direction (override):</string>
+               <string>Direction:</string>
               </property>
              </widget>
             </item>
@@ -1534,6 +1615,51 @@
                 <string>loop_sustain</string>
                </property>
               </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblLoopMode">
+              <property name="text">
+               <string>Loop Mode:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QComboBox" name="cbxDirection">
+              <item>
+               <property name="text">
+                <string>forward</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>reverse</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSampleMapDelay">
+              <property name="text">
+               <string>Map Delay (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblSampleQuality">
+              <property name="text">
+               <string>Quality (interpolation):</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -6216,6 +6342,11 @@
    <class>KnobPy</class>
    <extends>QWidget</extends>
    <header>AyrePy</header>
+  </customwidget>
+  <customwidget>
+   <class>DrawWaveform</class>
+   <extends>QOpenGLWidget</extends>
+   <header>.DrawWaveform</header>
   </customwidget>
  </customwidgets>
  <resources>

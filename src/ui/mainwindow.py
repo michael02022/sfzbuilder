@@ -127,6 +127,8 @@ class MainWindow(QMainWindow):
     open_proj.triggered.connect(self.onOpenProject)
     self.ui.actOpen.triggered.connect(self.onOpenProject)
 
+    self.ui.actNew.triggered.connect(self.onNew)
+
     # cc menu
     self.cc_menu = QMenu(self)
     self.cc_submenu_1 = self.cc_menu.addMenu("0-19")
@@ -273,6 +275,17 @@ class MainWindow(QMainWindow):
     if preset_folder_path != "":
       self.settings.setValue("presetfolderpath", preset_folder_path)
 
+  def onNew(self):
+    self.msgbox_yesno = QMessageBox(self); self.msgbox_yesno.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+    self.msgbox_yesno.setText(f"Are you sure you want to make a new project?")
+    answer = self.msgbox_yesno.exec()
+    match answer:
+      case QMessageBox.Yes:
+        self.map_objects.clear()
+        self.ui.listMap.clear()
+      case QMessageBox.No:
+        None
+
   def onMapAdd(self):
     if self.enable_edit:
       self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
@@ -387,18 +400,25 @@ class MainWindow(QMainWindow):
 
   def onItemMap(self):
     idx = self.ui.listMap.currentRow()
-
     # check if the pack/map exist
     try:
-      packmapstr = f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}"
-      self.mappings_dict[self.map_objects[idx].type].index(os.path.normpath(packmapstr)) # [].get())
+      list(get_pack(self.mappings_dict[self.map_objects[idx].type])).index(self.map_objects[idx].pack) # check if pack exist
+      get_pack(self.mappings_dict[self.map_objects[idx].type])[self.map_objects[idx].pack].index(self.map_objects[idx].map) # check if map exist
     except ValueError:
-      self.msgbox_ok.setText(f"""The pack-map "{os.path.normpath(packmapstr)}" was not found.\nPlease check if the pack exists or the sfz mapping exists.""")
+      self.msgbox_ok.setText(f"""The pack-map "{self.map_objects[idx].pack}/{self.map_objects[idx].map}" was not found.\nPlease check if the pack exists or the sfz mapping exists.""")
       self.msgbox_ok.exec()
       pk_idx = 0
       mp_idx = 0
-      self.current_pack_dict =  get_pack(self.mappings_dict[self.map_objects[idx].type])
+
+      self.current_pack_dict = get_pack(self.mappings_dict[self.map_objects[idx].type])
+      self.pack_ls = list(self.current_pack_dict)
+      self.map_ls = self.current_pack_dict[self.pack_ls[pk_idx]]
+
+      self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
       self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx])
+      self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listMap.setCurrentRow(idx)
 
     # just update the pack/map comboboxes
     match self.map_objects[idx].type:
@@ -482,6 +502,22 @@ class MainWindow(QMainWindow):
         case "wave_detune_cc":
           self.ui.sbxWaveDetuneCc.setValue(map_dict.get(k)[0])
           self.ui.sbxWaveDetuneCcVal.setValue(map_dict.get(k)[1])
+
+        # FX
+        case "fx_mode":
+          self.ui.sbxFxMode.setValue(map_dict.get(k))
+        case "fx_pan":
+          self.ui.sbxFxPan.setValue(map_dict.get(k))
+        case "fx_detune":
+          self.ui.sbxFxDetune.setValue(map_dict.get(k))
+        case "fx_delay":
+          self.ui.dsbFxDelay.setValue(map_dict.get(k))
+        case "fx_speed":
+          self.ui.dsbFxSpeed.setValue(map_dict.get(k))
+        case "fx_depth":
+          self.ui.sbxFxDepth.setValue(map_dict.get(k))
+        case "fx_wave":
+          self.ui.sbxFxWave.setValue(map_dict.get(k))
         ## MAP
         case "mute":
           self.ui.cbxMapMute.setChecked(map_dict.get(k))
@@ -931,6 +967,14 @@ class MainWindow(QMainWindow):
     self.ui.sbxWaveDetuneCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxWaveDetuneCcVal.valueChanged.connect(self.onUiValueChanged)
 
+    self.ui.sbxFxMode.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxPan.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxDetune.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxSpeed.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxWave.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxDepth.valueChanged.connect(self.onUiValueChanged)
+
     self.ui.dsbSampleMapDelay.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxSampleQuality.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxSampleOffsetValue.valueChanged.connect(self.onUiValueChanged)
@@ -1231,6 +1275,23 @@ class MainWindow(QMainWindow):
         obj.change_value("wave_detune_cc", [self.sender().value(), obj.wave_detune_cc[1]])
       case "sbxWaveDetuneCcVal":
         obj.change_value("wave_detune_cc", [obj.wave_detune_cc[0], self.sender().value()])
+
+      # fx
+      case "sbxFxMode":
+        obj.change_value("fx_mode", self.sender().value())
+      case "sbxFxPan":
+        obj.change_value("fx_pan", self.sender().value())
+      case "sbxFxDetune":
+        obj.change_value("fx_detune", self.sender().value())
+      case "dsbFxDelay":
+        obj.change_value("fx_delay", self.sender().value())
+      case "dsbFxSpeed":
+        obj.change_value("fx_speed", self.sender().value())
+      case "sbxFxWave":
+        obj.change_value("fx_wave", self.sender().value())
+      case "sbxFxDepth":
+        obj.change_value("fx_depth", self.sender().value())
+
       # sample
       case "dsbSampleMapDelay":
         obj.change_value("delay", self.sender().value())
@@ -2010,7 +2071,7 @@ class MainWindow(QMainWindow):
             else:
               sfz_content += f"pitch_keycenter={m.keycenter}\n"
           if m.tunebool:
-            sfz_content += f"tune={m.tune}\n"
+            sfz_content += f"pitch_oncc119={m.tune}\n"
           # SAMPLE
           #if m.offsetbool:
           sfz_content += f"offset={m.offset}\n"
@@ -2136,46 +2197,171 @@ class MainWindow(QMainWindow):
           sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, sfz_idx)}\n\n"
 
           sfz_content += "//MAPPING\n"
+          sfz_content += f"<control>\n"
+          # tune
+          sfz_content += f"label_cc119=PleaseSetMe127\n"
+          sfz_content += f"set_cc119=127\n"
+          # ###
           if m.type == "Wavetables":
-            if m.wave == "Sample":
-              sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-              sfz_content += f"oscillator=on\n"
-            else:
-              sfz_content += f"<region> sample={m.get_wave()}\n"
+            match m.fx_mode:
+              case 0: # NO FX
+                sfz_content += f"<group>\n"
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
 
-            sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
-            sfz_content += f"oscillator_detune={m.wave_detune}\n"
-            if m.wave_detune_ccbool:
-              sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-            if m.wave_mod_depth_ccbool:
-              sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-            sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
-          else:
-            if m.wave_unison == 1:
-              sfz_content += f"<group>\n"
-              sfz_content += f"<control>\n"
-              sfz_content += f"note_offset={m.note_offset}\n"
-              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
-            else:
-              sfz_content += f"<group>\n"
-              if m.wave_mod_depth >= 1:
-                sfz_content += f"pan={clip(m.wave_mod_depth, (0, 100))}\n"
-              sfz_content += f"pitch_oncc90={m.wave_detune}\n"
-              sfz_content += f"<control>\n"
-              sfz_content += f"set_cc90=127\n"
-              sfz_content += f"note_offset={m.note_offset}\n"
-              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+              case 1: # UNISON
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc89=127\n"
+                sfz_content += f"set_cc90=127\n"
+                # OSC 1
+                sfz_content += f"<group>\n"
+                sfz_content += f"pitch_oncc90={m.fx_detune}\n"
+                if m.fx_pan > 0:
+                  sfz_content += f"pan={m.fx_pan}\n"
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
 
-              sfz_content += f"<group>\n"
-              if m.wave_mod_depth >= 1:
-                sfz_content += f"pan={-abs(clip(m.wave_mod_depth, (0, 100)))}\n"
-              sfz_content += f"pitch_oncc89={-abs(m.wave_detune)}\n"
-              if m.wave_phase >= 1:
-                sfz_content += f"delay={m.wave_phase / 1000}\n"
-              sfz_content += f"<control>\n"
-              sfz_content += f"set_cc89=127\n"
-              sfz_content += f"note_offset={m.note_offset}\n"
-              sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+                sfz_content += f"pitch_oncc90={-abs(m.fx_detune)}\n"
+                if m.fx_pan > 0:
+                  sfz_content += f"pan={-abs(m.fx_pan)}\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+              case 2: # MONO CHORUS
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc135=ChorusRandPhaseLevel\n"
+                sfz_content += f"set_cc135=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc135={m.fx_pan / 100}\n"
+
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+          else: # sample mapping
+            match m.fx_mode:
+              case 0: # NO FX
+                sfz_content += f"<group>\n"
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+              case 1: # UNISON
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc89=127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                sfz_content += f"pitch_oncc90={m.fx_detune}\n"
+                if m.fx_pan >= 0:
+                  sfz_content += f"pan={m.fx_pan}\n"
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+                sfz_content += f"pitch_oncc90={-abs(m.fx_detune)}\n"
+                if m.fx_pan >= 0:
+                  sfz_content += f"pan={-abs(m.fx_pan)}\n"
+                if m.fx_delay >= 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+              case 2: # MONO CHORUS
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc135=ChorusRandPhaseLevel\n"
+                sfz_content += f"set_cc135=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay >= 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc135={m.fx_pan / 100}\n"
+
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
         sfz_idx += 4
 
       # write sfz
@@ -2229,7 +2415,7 @@ class MainWindow(QMainWindow):
       sfzmap = Mapping(mappings_dict[i]["type"])
       for k, v in mappings_dict[i].items():
         if k == "map":
-          sfzmap.change_value(k, os.path.normpath(v))
+          sfzmap.change_value(k, v)
         else:
           try:
             sfzmap.change_value(k, v)

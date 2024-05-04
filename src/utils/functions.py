@@ -176,16 +176,16 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
 
 def get_mappings(config_path):
   mappings_dict = {}
-  mappings_dict["MSamples"] = [p for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
-  mappings_dict["PSamples"] = [p for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
-  mappings_dict["Wavetables"] = [p for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav")]
+  mappings_dict["MSamples"] = [p.replace('\\',"/") for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
+  mappings_dict["PSamples"] = [p.replace('\\',"/") for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
+  mappings_dict["Wavetables"] = [p.replace('\\',"/") for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav")]
   return mappings_dict
 
 def get_pack(ls):
   pack_dict = defaultdict(list)
   for p in ls:
       path_ls = pathlib.Path(p).parts # split path into list
-      pack_dict[path_ls[0]].append(os.path.join(*path_ls[1:]))
+      pack_dict[path_ls[0]].append(str(os.path.join(*path_ls[1:]).replace('\\',"/")))
   return pack_dict
 
 def which_pack(mappings_dict, pbool, wbool):

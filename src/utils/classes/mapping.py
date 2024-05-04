@@ -10,6 +10,16 @@ class Mapping:
     self.map = ""
     self.name = ""
 
+    self.fx_mode = 0
+    # UNISON
+    self.fx_detune = 0
+    self.fx_delay = 0
+    self.fx_pan = 0
+    # CHORUS
+    self.fx_depth = 0
+    self.fx_speed = 0
+    self.fx_wave = 0
+
     # WAVETABLE
     self.wave = "Sine"
     self.wave_mode = "Normal/RM"
@@ -248,7 +258,7 @@ class Mapping:
 
   def set_map(self, pack, map):
     self.pack = pack
-    self.map = map
+    self.map = map.replace('\\',"/")
     self.name = pathlib.Path(self.map).stem
 
   def change_type(self, type):

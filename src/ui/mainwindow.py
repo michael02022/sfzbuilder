@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Andrea Zanellato
+# Copyright (c) 2024 Andrea Zanellato, michael02022
 # SPDX-License-Identifier: BSD-3-Clause
 
 # This Python file uses the following encoding: utf-8

@@ -9,6 +9,8 @@ class Mapping:
     self.pack = ""
     self.map = ""
     self.name = ""
+    self.tuned = True
+    self.tuned_checkbox = False
 
     self.fx_mode = 0
     # UNISON
@@ -215,7 +217,13 @@ class Mapping:
     return f"{self.pack}/{os.path.dirname(self.map).replace(os.sep, '/')}"
 
   def get_include_path(self):
-    return f"{self.pack}/{self.map.replace(os.sep, '/')}"
+    pstr = f"{self.pack}/{self.map.replace(os.sep, '/')}"
+    path = str(pathlib.Path(pstr).parent).replace(os.sep, '/')
+    filename = pathlib.Path(pstr).stem
+    if self.tuned is True and self.tuned_checkbox is True:
+        return f"{path}/{filename} --TN.sfz"
+    else:
+      return f"{path}/{filename}.sfz"
 
   def get_name(self):
     match self.type:

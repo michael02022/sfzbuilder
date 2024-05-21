@@ -382,6 +382,13 @@ class MainWindow(QMainWindow):
 
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(idx)
+      # the most horrible line of code I have ever wrote, basically says if the tuned version of the map exists
+      if Path(f"""{self.settings.value("mainfolderpath")}/MappingPool/{str(pathlib.Path(f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}").parent).replace(os.sep, '/')}/{pathlib.Path(self.map_objects[idx].map).stem} --TN.sfz""").is_file():
+        self.map_objects[idx].change_value("tuned_checkbox", True)
+        self.ui.chkTunedVersion.setEnabled(True)
+      else:
+        self.map_objects[idx].change_value("tuned_checkbox", False)
+        self.ui.chkTunedVersion.setEnabled(False)
     else:
       None
 
@@ -395,6 +402,13 @@ class MainWindow(QMainWindow):
 
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(idx)
+      # the most horrible line of code I have ever wrote
+      if Path(f"""{self.settings.value("mainfolderpath")}/MappingPool/{str(pathlib.Path(f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}").parent).replace(os.sep, '/')}/{pathlib.Path(self.map_objects[idx].map).stem} --TN.sfz""").is_file():
+        self.map_objects[idx].change_value("tuned_checkbox", True)
+        self.ui.chkTunedVersion.setEnabled(True)
+      else:
+        self.map_objects[idx].change_value("tuned_checkbox", False)
+        self.ui.chkTunedVersion.setEnabled(False)
     else:
       None
 
@@ -441,6 +455,13 @@ class MainWindow(QMainWindow):
     self.ui.cbxMap.setCurrentIndex(self.map_ls.index(self.map_objects[idx].map)) # set map list
     #mappings_dict
     self.get_map_values()
+    # the most horrible line of code I have ever wrote
+    if Path(f"""{self.settings.value("mainfolderpath")}/MappingPool/{str(pathlib.Path(f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}").parent).replace(os.sep, '/')}/{pathlib.Path(self.map_objects[idx].map).stem} --TN.sfz""").is_file():
+      self.map_objects[idx].change_value("tuned_checkbox", True)
+      self.ui.chkTunedVersion.setEnabled(True)
+    else:
+      self.map_objects[idx].change_value("tuned_checkbox", False)
+      self.ui.chkTunedVersion.setEnabled(False)
 
   def onAutoname(self):
     idx = self.ui.listMap.currentRow()
@@ -521,6 +542,10 @@ class MainWindow(QMainWindow):
         ## MAP
         case "mute":
           self.ui.cbxMapMute.setChecked(map_dict.get(k))
+        case "tuned":
+          self.ui.chkTunedVersion.setChecked(map_dict.get(k))
+        case "tuned_checkbox":
+          self.ui.chkTunedVersion.setEnabled(map_dict.get(k))
         case "map_key_range":
           self.ui.sbxKeyLo.setValue(map_dict.get(k)[0])
           self.ui.sbxKeyHi.setValue(map_dict.get(k)[1])
@@ -996,6 +1021,7 @@ class MainWindow(QMainWindow):
 
     # Checkboxes
     self.ui.cbxMapMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkTunedVersion.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNoteOn.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkRandom.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkPolyphony.stateChanged.connect(self.onUiValueChanged)
@@ -1330,6 +1356,10 @@ class MainWindow(QMainWindow):
       # BOOLEANS
       case "cbxMapMute":
         obj.change_value("mute", self.sender().isChecked())
+      case "chkTunedVersion":
+        #print(f"checkbox {self.sender().isEnabled()} value {self.sender().isChecked()}")
+        obj.change_value("tuned_checkbox", self.sender().isEnabled())
+        obj.change_value("tuned", self.sender().isChecked())
       case "chkNoteOn":
         obj.change_value("on_cc_rangebool", self.sender().isChecked())
       case "chkRandom":
@@ -2005,6 +2035,7 @@ class MainWindow(QMainWindow):
     else:
       self.ui.lblLog.setText(f"Generating SFZ...")
       sfz_idx = 1
+      fx_idx = 99
 
       # calculate the dots for relative path
       config_path = self.settings.value("mainfolderpath")
@@ -2074,7 +2105,7 @@ class MainWindow(QMainWindow):
             sfz_content += f"pitch_oncc119={m.tune}\n"
           # SAMPLE
           #if m.offsetbool:
-          sfz_content += f"offset={m.offset}\n"
+          sfz_content += f"offset_cc118={m.offset}\n"
           sfz_content += f"offset_random={m.offset_random}\n"
           sfz_content += f"offset_cc131={m.vel2offset}\n\n"
           sfz_content += f"delay={m.delay}\n\n"
@@ -2201,6 +2232,10 @@ class MainWindow(QMainWindow):
           # tune
           sfz_content += f"label_cc119=PleaseSetMe127\n"
           sfz_content += f"set_cc119=127\n"
+          # offset
+          sfz_content += f"label_cc118=PleaseSetMe127\n"
+          sfz_content += f"set_cc118=127\n"
+
           # ###
           if m.type == "Wavetables":
             match m.fx_mode:
@@ -2275,7 +2310,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc135={m.fx_pan / 100}\n"
+                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc135={m.fx_pan / 100}\n"
 
                 if m.wave == "Sample":
                   sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
@@ -2363,6 +2398,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
         sfz_idx += 4
+        fx_idx = fx_idx - 1
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")

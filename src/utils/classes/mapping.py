@@ -123,7 +123,7 @@ class Mapping:
     self.amp_random = 0
     # (PERC RELATED)
     self.amp_velfloorbool = False
-    self.amp_velfloor = 0 # amp_velcurve_1
+    self.amp_velfloor = 0.000001 # amp_velcurve_1
     self.amp_env_vel2attackbool = False
     self.amp_env_vel2attack = 0 # ampeg_vel2attack
 

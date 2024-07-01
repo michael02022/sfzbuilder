@@ -768,21 +768,21 @@
              </widget>
             </item>
             <item row="5" column="10">
-             <widget class="QLabel" name="label_11">
+             <widget class="QLabel" name="lblFx3">
               <property name="text">
                <string>DelayEffect:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="10">
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="lblFx2">
               <property name="text">
                <string>Detune:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="10">
-             <widget class="QLabel" name="label_12">
+             <widget class="QLabel" name="lblFx1">
               <property name="text">
                <string>PanEffect:</string>
               </property>
@@ -993,7 +993,7 @@
              </widget>
             </item>
             <item row="2" column="13">
-             <widget class="QLabel" name="label_13">
+             <widget class="QLabel" name="lblFx4">
               <property name="text">
                <string>Speed:</string>
               </property>
@@ -1084,14 +1084,14 @@
              </widget>
             </item>
             <item row="5" column="13">
-             <widget class="QLabel" name="label_14">
+             <widget class="QLabel" name="lblFx6">
               <property name="text">
                <string>Wave:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="13">
-             <widget class="QLabel" name="label_15">
+             <widget class="QLabel" name="lblFx5">
               <property name="text">
                <string>Depth:</string>
               </property>
@@ -2343,13 +2343,16 @@
                  </size>
                 </property>
                 <property name="decimals">
-                 <number>3</number>
+                 <number>6</number>
+                </property>
+                <property name="minimum">
+                 <double>0.000001000000000</double>
                 </property>
                 <property name="maximum">
                  <double>1.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.001000000000000</double>
+                 <double>0.000010000000000</double>
                 </property>
                </widget>
               </item>
@@ -5883,13 +5886,6 @@
       </widget>
      </widget>
     </item>
-    <item row="5" column="3">
-     <widget class="QLabel" name="lblMap">
-      <property name="text">
-       <string>MAP</string>
-      </property>
-     </widget>
-    </item>
     <item row="5" column="0">
      <widget class="QComboBox" name="cbxMap">
       <property name="sizePolicy">
@@ -5907,6 +5903,13 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="3">
+     <widget class="QLabel" name="lblMap">
+      <property name="text">
+       <string>MAP</string>
       </property>
      </widget>
     </item>

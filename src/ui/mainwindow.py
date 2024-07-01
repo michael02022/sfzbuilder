@@ -527,6 +527,11 @@ class MainWindow(QMainWindow):
         # FX
         case "fx_mode":
           self.ui.sbxFxMode.setValue(map_dict.get(k))
+          match map_dict.get(k):
+            case 2:
+              self.ui.lblFx1.setText("WavePhase:")
+            case _:
+              self.ui.lblFx1.setText("PanEffect:")
         case "fx_pan":
           self.ui.sbxFxPan.setValue(map_dict.get(k))
         case "fx_detune":
@@ -1305,6 +1310,11 @@ class MainWindow(QMainWindow):
       # fx
       case "sbxFxMode":
         obj.change_value("fx_mode", self.sender().value())
+        match obj.fx_mode:
+          case 2:
+            self.ui.lblFx1.setText("WavePhase:")
+          case _:
+            self.ui.lblFx1.setText("PanEffect:")
       case "sbxFxPan":
         obj.change_value("fx_pan", self.sender().value())
       case "sbxFxDetune":

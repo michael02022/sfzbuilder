@@ -1065,7 +1065,7 @@
                <string>FX </string>
               </property>
               <property name="maximum">
-               <number>2</number>
+               <number>4</number>
               </property>
              </widget>
             </item>

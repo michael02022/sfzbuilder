@@ -1313,6 +1313,10 @@ class MainWindow(QMainWindow):
         match obj.fx_mode:
           case 2:
             self.ui.lblFx1.setText("WavePhase:")
+          case 3:
+            self.ui.lblFx1.setText("WavePhase:")
+          case 4:
+            self.ui.lblFx1.setText("WavePhase:")
           case _:
             self.ui.lblFx1.setText("PanEffect:")
       case "sbxFxPan":
@@ -2311,8 +2315,10 @@ class MainWindow(QMainWindow):
                 sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc135=ChorusRandPhaseLevel\n"
-                sfz_content += f"set_cc135=127\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
@@ -2320,7 +2326,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc135={m.fx_pan / 100}\n"
+                sfz_content += f"tune_oncc118={-abs(m.fx_detune)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100}\n"
 
                 if m.wave == "Sample":
                   sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
@@ -2351,6 +2357,121 @@ class MainWindow(QMainWindow):
                 if m.wave_mod_depth_ccbool:
                   sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                 sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+              case 3: # STEREO CHORUS (WET)
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+              case 4: # STEREO CHORUS (WET+DRY)
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
+                # OSC 3 (DRY)
+                sfz_content += f"<group>\n"
+                if m.wave == "Sample":
+                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                  sfz_content += f"oscillator=on\n"
+                else:
+                  sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                if m.wave_detune_ccbool:
+                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                if m.wave_mod_depth_ccbool:
+                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+
           else: # sample mapping
             match m.fx_mode:
               case 0: # NO FX
@@ -2386,8 +2507,10 @@ class MainWindow(QMainWindow):
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc135=ChorusRandPhaseLevel\n"
-                sfz_content += f"set_cc135=127\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
@@ -2395,13 +2518,78 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay >= 0:
                   sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc135={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc135={m.fx_pan / 100}\n"
+                sfz_content += f"tune_oncc118={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc117={m.fx_pan / 100}\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                 # OSC 2
+                sfz_content += f"<group>\n"
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+              case 3: # STEREO CHORUS (WET)
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+              case 4: # STEREO CHORUS (WET+DRY)
+                sfz_content += f"<control>\n"
+                sfz_content += f"label_cc118=PleaseSetMe127\n"
+                sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"set_cc90=127\n"
+
+                # OSC 1
+                sfz_content += f"<group>\n"
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                # OSC 2
+                sfz_content += f"<group>\n"
+
+                if m.fx_delay > 0:
+                  sfz_content += f"delay={m.fx_delay}\n"
+                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+
+                sfz_content += f"<control>\n"
+                sfz_content += f"note_offset={m.note_offset}\n"
+                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                # OSC 3 (DRY)
                 sfz_content += f"<group>\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"

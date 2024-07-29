@@ -26,18 +26,32 @@ def reformat_string_paths(ls):
     n.append(n_str.replace("/", " » ").replace("\\", " » "))
   return n
 
-def notepad_opcode_filter(txt, idx):
+def cc_sw(cc, value):
+  try:
+    match int(str(value).split('.')[1]):
+      case 1:
+        return 135 # unipolar random
+      case 2:
+        return 136 # bipolar random
+      case 3:
+        return 137 # alternate random
+      case _:
+        return cc
+  except:
+    return cc
+
+def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   # please I need a better way to do this
   # SFZ v2
-  r1 = txt.replace("egN_", f"eg{idx}")
-  r2 = r1.replace("egNA", f"eg{idx+1}")
-  r3 = r2.replace("egNF", f"eg{idx+2}")
-  r4 = r3.replace("egNP", f"eg{idx+3}")
+  r1 = txt.replace("egN_", f"eg{eg_idx}")
+  r2 = r1.replace("egNA", f"eg{eg_idx+1}")
+  r3 = r2.replace("egNF", f"eg{eg_idx+2}")
+  r4 = r3.replace("egNP", f"eg{eg_idx+3}")
 
-  r5 = r4.replace("lfoN_", f"lfo{idx}")
-  r6 = r5.replace("lfoNA", f"lfo{idx+1}")
-  r7 = r6.replace("lfoNF", f"lfo{idx+2}")
-  r8 = r7.replace("lfoNP", f"lfo{idx+3}")
+  r5 = r4.replace("lfoN_", f"lfo{lfo_idx}")
+  r6 = r5.replace("lfoNA", f"lfo{lfo_idx+1}")
+  r7 = r6.replace("lfoNF", f"lfo{lfo_idx+2}")
+  r8 = r7.replace("lfoNP", f"lfo{lfo_idx+3}")
 
   # CC
   r9 = r8.replace("ccMOD", "cc1")
@@ -64,7 +78,14 @@ def notepad_opcode_filter(txt, idx):
   r28 = r27.replace("ccBIRAND", "cc136")
   r29 = r28.replace("ccALTER", "cc137")
 
-  return r29
+  # FX
+  r30 = r29.replace("lfoFX", f"lfo{lfo_idx+4}")
+
+  # TABLEWARP
+  r31 = r30.replace("lfoTW1", f"lfo{lfo_idx+5}")
+  r32 = r31.replace("lfoTW2", f"lfo{lfo_idx+6}")
+
+  return r32
 
 def generate_eg(type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
   output = ""
@@ -172,6 +193,20 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
         output += f"eg{idx+3}_level5=0 eg{idx+3}_time5={release}\n"
         if shapes[2][0]:
             output += f"eg{idx+3}_shape5={shapes[2][1]}\n"
+  return output
+
+def generate_eg_tw(idx, start, delay, attack, attack_shape, hold, decay, decay_shape, sustain, release, release_shape):
+  output = ""
+  output += f"eg{idx}_sustain=4\n"
+  output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=0.0000001\n"
+  output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
+  output += f"eg{idx}_level2=1 eg{idx}_time2={attack}\n"
+  output += f"eg{idx}_shape2={attack_shape}\n"
+  output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
+  output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
+  output += f"eg{idx}_shape4={decay_shape}\n"
+  output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
+  output += f"eg{idx}_shape5={release_shape}\n"
   return output
 
 def get_mappings(config_path):

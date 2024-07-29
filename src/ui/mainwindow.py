@@ -67,6 +67,11 @@ class MainWindow(QMainWindow):
     self.ui.cbxFilterLfoWave.clear();self.ui.cbxFilterLfoWave.addItems(lfo_waves)
     self.ui.cbxPitchLfoWave.clear();self.ui.cbxPitchLfoWave.addItems(lfo_waves)
 
+    self.ui.cbxTwWave.clear();self.ui.cbxTwWave.addItems(tablewarp_wave)
+    self.ui.cbxTwWarp.clear();self.ui.cbxTwWarp.addItems(tablewarp_warp)
+    self.ui.cbxTwWaveLfoWave.clear();self.ui.cbxTwWaveLfoWave.addItems(lfo_waves)
+    self.ui.cbxTwWarpLfoWave.clear();self.ui.cbxTwWarpLfoWave.addItems(lfo_waves)
+
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
     #self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
@@ -106,6 +111,26 @@ class MainWindow(QMainWindow):
     self.ui.cbxFilEnvAttackShapeEnable.stateChanged.connect(self.onFilEnvAttackShapeEnabled)
     self.ui.cbxFilEnvDecayShapeEnable.stateChanged.connect(self.onFilEnvDecayShapeEnabled)
     self.ui.cbxFilEnvReleaseShapeEnable.stateChanged.connect(self.onFilEnvReleaseShapeEnabled)
+
+    # COLORS
+    sfizz_synth_color = "GoldenRod"
+    fx_color = "LightSkyBlue"
+    self.ui.lblWaveMode.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.lblWaveUnison.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.lblWaveQuality.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.lblWaveModDepth.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.lblWaveDetune.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.lblWavePhase.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.cbxWaveModDepthCc.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.cbxWaveDetuneCc.setStyleSheet(f"color : {sfizz_synth_color};")
+
+    self.ui.sbxFxMode.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx1.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx2.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx3.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx4.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx5.setStyleSheet(f"color : {fx_color};")
+    self.ui.lblFx6.setStyleSheet(f"color : {fx_color};")
 
     # MENUS
     self.save_menu = QMenu(self)
@@ -624,6 +649,8 @@ class MainWindow(QMainWindow):
           self.ui.sbxSampleTransposePitch.setValue(map_dict.get(k))
         case "quality":
           self.ui.sbxSampleQuality.setValue(map_dict.get(k))
+        case "qualitybool":
+          self.ui.chkSampleQuality.setChecked(map_dict.get(k))
         case "loop_mode":
           self.ui.cbxLoopMode.setCurrentIndex(loop_modes.index(map_dict.get(k)))
         case "direction":
@@ -956,9 +983,98 @@ class MainWindow(QMainWindow):
           self.ui.dialPitchEnvRelease.setValue(dialval)
           self.ui.dsbPitchEnvRelease.setValue(map_dict.get(k))
 
+        ## TABLEWARP
+        case "tw_waveform":
+          self.ui.cbxTwWave.setCurrentIndex(tablewarp_wave.index(map_dict.get(k)))
+        case "tw_waveform_offset":
+          self.ui.dsbTwWave.setValue(map_dict.get(k))
+        case "tw_warp":
+          self.ui.cbxTwWarp.setCurrentIndex(tablewarp_warp.index(map_dict.get(k)))
+        case "tw_warp_offset":
+          self.ui.dsbTwWarp.setValue(map_dict.get(k))
+
+        case "tw_waveform_eg":
+          self.ui.gbxTwEgWave.setChecked(map_dict.get(k))
+        case "tw_waveform_eg_depth":
+          self.ui.dsbTwEgWaveDepth.setValue(map_dict.get(k))
+          print(map_dict.get(k))
+        case "tw_waveform_eg_start":
+          self.ui.dsbTwEgWaveStart.setValue(map_dict.get(k))
+        case "tw_waveform_eg_delay":
+          self.ui.dsbTwEgWaveDelay.setValue(map_dict.get(k))
+        case "tw_waveform_eg_attack":
+          self.ui.dsbTwEgWaveAttack.setValue(map_dict.get(k))
+        case "tw_waveform_eg_attack_shape":
+          self.ui.dsbTwEgWaveAttackShape.setValue(map_dict.get(k))
+        case "tw_waveform_eg_hold":
+          self.ui.dsbTwEgWaveHold.setValue(map_dict.get(k))
+        case "tw_waveform_eg_decay":
+          self.ui.dsbTwEgWaveDecay.setValue(map_dict.get(k))
+        case "tw_waveform_eg_decay_shape":
+          self.ui.dsbTwEgWaveDecayShape.setValue(map_dict.get(k))
+        case "tw_waveform_eg_sustain":
+          self.ui.dsbTwEgWaveSustain.setValue(map_dict.get(k))
+        case "tw_waveform_eg_release":
+          self.ui.dsbTwEgWaveRelease.setValue(map_dict.get(k))
+        case "tw_waveform_eg_release_shape":
+          self.ui.dsbTwEgWaveReleaseShape.setValue(map_dict.get(k))
+
+        case "tw_waveform_lfo":
+          self.ui.gbxTwLfoWave.setChecked(map_dict.get(k))
+        case "tw_waveform_lfo_wave":
+          self.ui.cbxTwWaveLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+        case "tw_waveform_lfo_delay":
+          self.ui.dsbTwWaveLfoDelay.setValue(map_dict.get(k))
+        case "tw_waveform_lfo_fade":
+          self.ui.dsbTwWaveLfoFade.setValue(map_dict.get(k))
+        case "tw_waveform_lfo_depth":
+          self.ui.dsbTwWaveLfoDepth.setValue(map_dict.get(k))
+        case "tw_waveform_lfo_freq":
+          self.ui.dsbTwWaveLfoFreq.setValue(map_dict.get(k))
+
+        case "tw_warp_eg":
+          self.ui.gbxTwEgWarp.setChecked(map_dict.get(k))
+        case "tw_warp_eg_depth":
+          self.ui.dsbTwEgWarpDepth.setValue(map_dict.get(k))
+        case "tw_warp_eg_start":
+          self.ui.dsbTwEgWarpStart.setValue(map_dict.get(k))
+        case "tw_warp_eg_delay":
+          self.ui.dsbTwEgWarpDelay.setValue(map_dict.get(k))
+        case "tw_warp_eg_attack":
+          self.ui.dsbTwEgWarpAttack.setValue(map_dict.get(k))
+        case "tw_warp_eg_attack_shape":
+          self.ui.dsbTwEgWarpAttackShape.setValue(map_dict.get(k))
+        case "tw_warp_eg_hold":
+          self.ui.dsbTwEgWarpHold.setValue(map_dict.get(k))
+        case "tw_warp_eg_decay":
+          self.ui.dsbTwEgWarpDecay.setValue(map_dict.get(k))
+        case "tw_warp_eg_decay_shape":
+          self.ui.dsbTwEgWarpDecayShape.setValue(map_dict.get(k))
+        case "tw_warp_eg_sustain":
+          self.ui.dsbTwEgWarpSustain.setValue(map_dict.get(k))
+        case "tw_warp_eg_release":
+          self.ui.dsbTwEgWarpRelease.setValue(map_dict.get(k))
+        case "tw_warp_eg_release_shape":
+          self.ui.dsbTwEgWarpReleaseShape.setValue(map_dict.get(k))
+
+        case "tw_warp_lfo":
+          self.ui.gbxTwLfoWarp.setChecked(map_dict.get(k))
+        case "tw_warp_lfo_wave":
+          self.ui.cbxTwWarpLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+        case "tw_warp_lfo_delay":
+          self.ui.dsbTwWarpLfoDelay.setValue(map_dict.get(k))
+        case "tw_warp_lfo_fade":
+          self.ui.dsbTwWarpLfoFade.setValue(map_dict.get(k))
+        case "tw_warp_lfo_depth":
+          self.ui.dsbTwWarpLfoDepth.setValue(map_dict.get(k))
+        case "tw_warp_lfo_freq":
+          self.ui.dsbTwWarpLfoFreq.setValue(map_dict.get(k))
+
         ## OPCODES
         case "opcode_notepad":
           self.ui.txtOpcodes.setPlainText(map_dict.get(k))
+        case "comment":
+          self.ui.txtComment.setText(map_dict.get(k))
 
     # /// WIDGET MONITORING
     # global header
@@ -1024,6 +1140,43 @@ class MainWindow(QMainWindow):
 
     self.ui.sbxFilterKeycenter.valueChanged.connect(self.onUiValueChanged)
 
+    self.ui.dsbTwWave.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWarp.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.dsbTwEgWaveDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveStart.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveAttackShape.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveHold.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveDecay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveDecayShape.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveSustain.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWaveReleaseShape.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.dsbTwWaveLfoDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWaveLfoFade.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWaveLfoDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWaveLfoFreq.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.dsbTwEgWarpDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpStart.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpAttackShape.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpHold.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpDecay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpDecayShape.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpSustain.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwEgWarpReleaseShape.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.dsbTwWarpLfoDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWarpLfoFade.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWarpLfoDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbTwWarpLfoFreq.valueChanged.connect(self.onUiValueChanged)
+
     # Checkboxes
     self.ui.cbxMapMute.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkTunedVersion.stateChanged.connect(self.onUiValueChanged)
@@ -1042,6 +1195,7 @@ class MainWindow(QMainWindow):
     self.ui.cbxWaveModDepthCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveDetuneCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxTune.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkSampleQuality.stateChanged.connect(self.onUiValueChanged)
 
     self.ui.gbxPan.toggled.connect(self.onUiValueChanged)
     self.ui.gbxPanLfo.toggled.connect(self.onUiValueChanged)
@@ -1058,6 +1212,11 @@ class MainWindow(QMainWindow):
     self.ui.gbxPitch.toggled.connect(self.onUiValueChanged)
     self.ui.gbxPitchLfo.toggled.connect(self.onUiValueChanged)
     self.ui.gbxPitchEnv.toggled.connect(self.onUiValueChanged)
+
+    self.ui.gbxTwEgWave.toggled.connect(self.onUiValueChanged)
+    self.ui.gbxTwLfoWave.toggled.connect(self.onUiValueChanged)
+    self.ui.gbxTwEgWarp.toggled.connect(self.onUiValueChanged)
+    self.ui.gbxTwLfoWarp.toggled.connect(self.onUiValueChanged)
 
     # ComboBoxes
     self.ui.cbxWave.currentIndexChanged.connect(self.onUiValueChanged)
@@ -1080,9 +1239,15 @@ class MainWindow(QMainWindow):
     self.ui.cbxFilterLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.cbxPitchLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
 
+    self.ui.cbxTwWave.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxTwWarp.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxTwWaveLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxTwWarpLfoWave.currentIndexChanged.connect(self.onUiValueChanged)
+
     # Text
     self.ui.txtKeyswitchLabel.textEdited.connect(self.onUiValueChanged)
     self.ui.txtOpcodes.textChanged.connect(self.onUiValueChanged)
+    self.ui.txtComment.textChanged.connect(self.onUiValueChanged)
 
     # KNOBS / DIALS
     self.ui.dialPan.valueChanged.connect(self.onUiValueChanged)
@@ -1367,6 +1532,77 @@ class MainWindow(QMainWindow):
       case "sbxFilterKeycenter":
         obj.change_value("fil_keycenter", self.sender().value())
 
+      # tablewarp
+      case "dsbTwWave":
+        obj.change_value("tw_waveform_offset", self.sender().value())
+      case "dsbTwWarp":
+        obj.change_value("tw_warp_offset", self.sender().value())
+
+      case "dsbTwEgWaveDepth":
+        obj.change_value("tw_waveform_eg_depth", self.sender().value())
+      case "dsbTwEgWaveStart":
+        obj.change_value("tw_waveform_eg_start", self.sender().value())
+      case "dsbTwEgWaveDelay":
+        obj.change_value("tw_waveform_eg_delay", self.sender().value())
+      case "dsbTwEgWaveAttack":
+        obj.change_value("tw_waveform_eg_attack", self.sender().value())
+      case "dsbTwEgWaveAttackShape":
+        obj.change_value("tw_waveform_eg_attack_shape", self.sender().value())
+      case "dsbTwEgWaveHold":
+        obj.change_value("tw_waveform_eg_hold", self.sender().value())
+      case "dsbTwEgWaveDecay":
+        obj.change_value("tw_waveform_eg_decay", self.sender().value())
+      case "dsbTwEgWaveDecayShape":
+        obj.change_value("tw_waveform_eg_decay_shape", self.sender().value())
+      case "dsbTwEgWaveSustain":
+        obj.change_value("tw_waveform_eg_sustain", self.sender().value())
+      case "dsbTwEgWaveRelease":
+        obj.change_value("tw_waveform_eg_release", self.sender().value())
+      case "dsbTwEgWaveReleaseShape":
+        obj.change_value("tw_waveform_eg_release_shape", self.sender().value())
+
+      case "dsbTwWaveLfoDelay":
+        obj.change_value("tw_waveform_lfo_delay", self.sender().value())
+      case "dsbTwWaveLfoFade":
+        obj.change_value("tw_waveform_lfo_fade", self.sender().value())
+      case "dsbTwWaveLfoDepth":
+        obj.change_value("tw_waveform_lfo_depth", self.sender().value())
+      case "dsbTwWaveLfoFreq":
+        obj.change_value("tw_waveform_lfo_freq", self.sender().value())
+
+      case "dsbTwEgWarpDepth":
+        obj.change_value("tw_warp_eg_depth", self.sender().value())
+        #print(self.sender().value())
+      case "dsbTwEgWarpStart":
+        obj.change_value("tw_warp_eg_start", self.sender().value())
+      case "dsbTwEgWarpDelay":
+        obj.change_value("tw_warp_eg_delay", self.sender().value())
+      case "dsbTwEgWarpAttack":
+        obj.change_value("tw_warp_eg_attack", self.sender().value())
+      case "dsbTwEgWarpAttackShape":
+        obj.change_value("tw_warp_eg_attack_shape", self.sender().value())
+      case "dsbTwEgWarpHold":
+        obj.change_value("tw_warp_eg_hold", self.sender().value())
+      case "dsbTwEgWarpDecay":
+        obj.change_value("tw_warp_eg_decay", self.sender().value())
+      case "dsbTwEgWarpDecayShape":
+        obj.change_value("tw_warp_eg_decay_shape", self.sender().value())
+      case "dsbTwEgWarpSustain":
+        obj.change_value("tw_warp_eg_sustain", self.sender().value())
+      case "dsbTwEgWarpRelease":
+        obj.change_value("tw_warp_eg_release", self.sender().value())
+      case "dsbTwEgWarpReleaseShape":
+        obj.change_value("tw_warp_eg_release_shape", self.sender().value())
+
+      case "dsbTwWarpLfoDelay":
+        obj.change_value("tw_warp_lfo_delay", self.sender().value())
+      case "dsbTwWarpLfoFade":
+        obj.change_value("tw_warp_lfo_fade", self.sender().value())
+      case "dsbTwWarpLfoDepth":
+        obj.change_value("tw_warp_lfo_depth", self.sender().value())
+      case "dsbTwWarpLfoFreq":
+        obj.change_value("tw_warp_lfo_freq", self.sender().value())
+
       # BOOLEANS
       case "cbxMapMute":
         obj.change_value("mute", self.sender().isChecked())
@@ -1396,6 +1632,8 @@ class MainWindow(QMainWindow):
         obj.change_value("key_opcode", self.sender().isChecked())
       case "cbxTune":
         obj.change_value("tunebool", self.sender().isChecked())
+      case "chkSampleQuality":
+        obj.change_value("qualitybool", self.sender().isChecked())
       case "cbxWaveModDepthCc":
         obj.change_value("wave_mod_depth_ccbool", self.sender().isChecked())
       case "cbxWaveDetuneCc":
@@ -1443,6 +1681,15 @@ class MainWindow(QMainWindow):
       case "cbxFilEnvReleaseShapeEnable":
         obj.change_value("fil_env_release_shapebool", self.sender().isChecked())
 
+      case "gbxTwEgWave":
+        obj.change_value("tw_waveform_eg", self.sender().isChecked())
+      case "gbxTwLfoWave":
+        obj.change_value("tw_waveform_lfo", self.sender().isChecked())
+      case "gbxTwEgWarp":
+        obj.change_value("tw_warp_eg", self.sender().isChecked())
+      case "gbxTwLfoWarp":
+        obj.change_value("tw_warp_lfo", self.sender().isChecked())
+
       # COMBO BOXES
       case "cbxWave":
         obj.change_value("wave", wavetables[self.sender().currentIndex()])
@@ -1475,11 +1722,23 @@ class MainWindow(QMainWindow):
       case "cbxPitchLfoWave":
         obj.change_value("pit_lfo_wave", self.sender().currentIndex())
 
+      case "cbxTwWave":
+        obj.change_value("tw_waveform", tablewarp_wave[self.sender().currentIndex()])
+      case "cbxTwWarp":
+        obj.change_value("tw_warp", tablewarp_warp[self.sender().currentIndex()])
+
+      case "cbxTwWaveLfoWave":
+        obj.change_value("tw_waveform_lfo_wave", lfo_waves[self.sender().currentIndex()])
+      case "cbxTwWarpLfoWave":
+        obj.change_value("tw_warp_lfo_wave", lfo_waves[self.sender().currentIndex()])
+
       # TEXT
       case "txtKeyswitchLabel":
         obj.change_value("sw_label", self.sender().text())
       case "txtOpcodes":
         obj.change_value("opcode_notepad", self.sender().toPlainText())
+      case "txtComment":
+        obj.change_value("comment", self.sender().text())
 
       # KNOBS / DIALS
       # PAN
@@ -2048,8 +2307,8 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.exec()
     else:
       self.ui.lblLog.setText(f"Generating SFZ...")
-      sfz_idx = 1
-      fx_idx = 99
+      lfo_idx = 1
+      eg_idx = 1
 
       # calculate the dots for relative path
       config_path = self.settings.value("mainfolderpath")
@@ -2085,7 +2344,8 @@ class MainWindow(QMainWindow):
           None
         else:
           sfz_content += f"<master>\n"
-          sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n\n"
+          sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n"
+          sfz_content += f"bend_down={m.pitch_bend_range[0]} bend_up={m.pitch_bend_range[1]}\n\n"
           sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
           sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
           if m.on_cc_rangebool:
@@ -2124,7 +2384,8 @@ class MainWindow(QMainWindow):
           sfz_content += f"offset_cc131={m.vel2offset}\n\n"
           sfz_content += f"delay={m.delay}\n\n"
           sfz_content += f"transpose={m.pitch_transpose}\n"
-          sfz_content += f"sample_quality={m.quality}\n"
+          if m.qualitybool:
+            sfz_content += f"sample_quality={m.quality}\n"
           if m.loop_mode != "None":
             sfz_content += f"loop_mode={m.loop_mode}\n"
           else:
@@ -2149,11 +2410,11 @@ class MainWindow(QMainWindow):
             sfz_content += f"pan_random={m.pan_random}\n"
 
             if m.pan_lfo:
-              sfz_content += f"lfo{sfz_idx}_delay={m.pan_lfo_delay}\n"
-              sfz_content += f"lfo{sfz_idx}_fade={m.pan_lfo_fade}\n"
-              sfz_content += f"lfo{sfz_idx}_pan={m.pan_lfo_depth}\n"
-              sfz_content += f"lfo{sfz_idx}_freq={m.pan_lfo_freq}\n"
-              sfz_content += f"lfo{sfz_idx}_wave={m.pan_lfo_wave}\n"
+              sfz_content += f"lfo{lfo_idx}_delay={m.pan_lfo_delay}\n"
+              sfz_content += f"lfo{lfo_idx}_fade={m.pan_lfo_fade}\n"
+              sfz_content += f"lfo{lfo_idx}_pan={m.pan_lfo_depth}\n"
+              sfz_content += f"lfo{lfo_idx}_freq={m.pan_lfo_freq}\n"
+              sfz_content += f"lfo{lfo_idx}_wave={m.pan_lfo_wave}\n"
 
           # AMP
           sfz_content += "\n\n"
@@ -2164,11 +2425,11 @@ class MainWindow(QMainWindow):
 
           if m.amp_lfo:
             sfz_content += "\n\n"
-            sfz_content += f"lfo{sfz_idx+1}_delay={m.amp_lfo_delay}\n"
-            sfz_content += f"lfo{sfz_idx+1}_fade={m.amp_lfo_fade}\n"
-            sfz_content += f"lfo{sfz_idx+1}_volume={m.amp_lfo_depth}\n"
-            sfz_content += f"lfo{sfz_idx+1}_freq={m.amp_lfo_freq}\n"
-            sfz_content += f"lfo{sfz_idx+1}_wave={m.amp_lfo_wave}\n"
+            sfz_content += f"lfo{lfo_idx+1}_delay={m.amp_lfo_delay}\n"
+            sfz_content += f"lfo{lfo_idx+1}_fade={m.amp_lfo_fade}\n"
+            sfz_content += f"lfo{lfo_idx+1}_volume={m.amp_lfo_depth}\n"
+            sfz_content += f"lfo{lfo_idx+1}_freq={m.amp_lfo_freq}\n"
+            sfz_content += f"lfo{lfo_idx+1}_wave={m.amp_lfo_wave}\n"
           if m.amp_velfloorbool:
             sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
           if m.amp_env_vel2attackbool:
@@ -2177,7 +2438,7 @@ class MainWindow(QMainWindow):
           if m.amp_env:
             eg_ver = m.amp_env_ver
             shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
-            sfz_content += generate_eg(eg_ver, "amp", sfz_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
+            sfz_content += generate_eg(eg_ver, "amp", eg_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
 
           # FILTER
           if m.fil:
@@ -2193,11 +2454,11 @@ class MainWindow(QMainWindow):
 
             if m.fil_lfo:
               sfz_content += "\n\n"
-              sfz_content += f"lfo{sfz_idx+2}_delay={m.fil_lfo_delay}\n"
-              sfz_content += f"lfo{sfz_idx+2}_fade={m.fil_lfo_fade}\n"
-              sfz_content += f"lfo{sfz_idx+2}_cutoff={m.fil_lfo_depth}\n" # Hz
-              sfz_content += f"lfo{sfz_idx+2}_freq={m.fil_lfo_freq}\n"
-              sfz_content += f"lfo{sfz_idx+2}_wave={m.fil_lfo_wave}\n"
+              sfz_content += f"lfo{lfo_idx+2}_delay={m.fil_lfo_delay}\n"
+              sfz_content += f"lfo{lfo_idx+2}_fade={m.fil_lfo_fade}\n"
+              sfz_content += f"lfo{lfo_idx+2}_cutoff={m.fil_lfo_depth}\n" # Hz
+              sfz_content += f"lfo{lfo_idx+2}_freq={m.fil_lfo_freq}\n"
+              sfz_content += f"lfo{lfo_idx+2}_wave={m.fil_lfo_wave}\n"
 
             if m.fil_env:
               eg_ver = m.fil_env_ver
@@ -2206,11 +2467,11 @@ class MainWindow(QMainWindow):
                   sfz_content += f"fileg_depth={m.fil_env_depth}\n"
                   sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
                 case 1:
-                  sfz_content += f"eg{sfz_idx+2}_cutoff={m.fil_env_depth}\n"
-                  sfz_content += f"eg{sfz_idx+2}_cutoff_oncc131={m.fil_vel2depth}\n"
+                  sfz_content += f"eg{eg_idx+2}_cutoff={m.fil_env_depth}\n"
+                  sfz_content += f"eg{eg_idx+2}_cutoff_oncc131={m.fil_vel2depth}\n"
 
               shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
-              sfz_content += generate_eg(eg_ver, "fil", sfz_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
+              sfz_content += generate_eg(eg_ver, "fil", eg_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
 
           if m.pitch:
             sfz_content += "\n\n"
@@ -2220,11 +2481,11 @@ class MainWindow(QMainWindow):
 
             if m.pit_lfo:
               sfz_content += "\n\n"
-              sfz_content += f"lfo{sfz_idx+3}_delay={m.pit_lfo_delay}\n"
-              sfz_content += f"lfo{sfz_idx+3}_fade={m.pit_lfo_fade}\n"
-              sfz_content += f"lfo{sfz_idx+3}_pitch={m.pit_lfo_depth}\n"
-              sfz_content += f"lfo{sfz_idx+3}_freq={m.pit_lfo_freq}\n"
-              sfz_content += f"lfo{sfz_idx+3}_wave={m.pit_lfo_wave}\n"
+              sfz_content += f"lfo{lfo_idx+3}_delay={m.pit_lfo_delay}\n"
+              sfz_content += f"lfo{lfo_idx+3}_fade={m.pit_lfo_fade}\n"
+              sfz_content += f"lfo{lfo_idx+3}_pitch={m.pit_lfo_depth}\n"
+              sfz_content += f"lfo{lfo_idx+3}_freq={m.pit_lfo_freq}\n"
+              sfz_content += f"lfo{lfo_idx+3}_wave={m.pit_lfo_wave}\n"
 
             if m.pit_env:
               eg_ver = m.pit_env_ver
@@ -2232,14 +2493,14 @@ class MainWindow(QMainWindow):
                 case 0:
                   sfz_content += f"pitcheg_depth={m.pit_env_depth}\n"
                 case 1:
-                  sfz_content += f"eg{sfz_idx+1}_pitch={m.pit_env_depth}\n"
+                  sfz_content += f"eg{eg_idx+3}_pitch={m.pit_env_depth}\n"
 
               #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
-              sfz_content += generate_eg(eg_ver, "pit", sfz_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+              sfz_content += generate_eg(eg_ver, "pit", eg_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
 
           sfz_content += "\n\n"
           sfz_content += "// ADDITIONAL OPCODES\n"
-          sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, sfz_idx)}\n\n"
+          sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, lfo_idx, eg_idx)}\n\n"
 
           sfz_content += "//MAPPING\n"
           sfz_content += f"<control>\n"
@@ -2255,222 +2516,543 @@ class MainWindow(QMainWindow):
             match m.fx_mode:
               case 0: # NO FX
                 sfz_content += f"<group>\n"
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 1: # UNISON
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc89=PleaseSetMe127\n"
-                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # # FX delay
+                sfz_content += f"label_cc90=PleaseSetMe127\n" # # FX tune
                 sfz_content += f"set_cc89=127\n"
                 sfz_content += f"set_cc90=127\n"
                 # OSC 1
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={m.fx_detune}\n"
+                sfz_content += f"pitch_oncc90={int(m.fx_detune)}\n"
                 if m.fx_pan > 0:
-                  sfz_content += f"pan={m.fx_pan}\n"
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                  sfz_content += f"pan={int(m.fx_pan)}\n"
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={-abs(m.fx_detune)}\n"
+                sfz_content += f"pitch_oncc90={-abs(int(m.fx_detune))}\n"
                 if m.fx_pan > 0:
-                  sfz_content += f"pan={-abs(m.fx_pan)}\n"
+                  sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc118=PleaseSetMe127\n"
-                sfz_content += f"set_cc118=127\n"
-                sfz_content += f"label_cc117=PleaseSetMe127\n"
+                #sfz_content += f"label_cc118=PleaseSetMe127\n" # lfo FX tune
+                #sfz_content += f"set_cc118=127\n"
+                sfz_content += f"label_cc117=PleaseSetMe127\n" # lfo FX phase
                 sfz_content += f"set_cc117=127\n"
-                sfz_content += f"label_cc90=PleaseSetMe127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
+                sfz_content += f"label_cc90=PleaseSetMe127\n" # lfo FX tune
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(m.fx_detune)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100}\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 3: # STEREO CHORUS (WET)
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc118=PleaseSetMe127\n"
-                sfz_content += f"set_cc118=127\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
                 sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
-
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 4: # STEREO CHORUS (WET+DRY)
                 sfz_content += f"<control>\n"
-                sfz_content += f"label_cc118=PleaseSetMe127\n"
-                sfz_content += f"set_cc118=127\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
                 sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase=0\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 3 (DRY)
                 sfz_content += f"<group>\n"
-                if m.wave == "Sample":
-                  sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                  sfz_content += f"oscillator=on\n"
-                else:
+                if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
-                sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                if m.wave_detune_ccbool:
-                  sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                if m.wave_mod_depth_ccbool:
-                  sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.tw_waveform_eg:
+                    #print(eg_idx)
+                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                  if m.tw_waveform_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
+
+                  if m.tw_warp_eg:
+                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                  if m.tw_warp_lfo:
+                    sfz_content += "\n\n"
+                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                  sfz_content += "\n"
+                else:
+                  if m.wave == "Sample":
+                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                    sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
+                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                  if m.wave_detune_ccbool:
+                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                  if m.wave_mod_depth_ccbool:
+                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
           else: # sample mapping
             match m.fx_mode:
@@ -2488,20 +3070,20 @@ class MainWindow(QMainWindow):
 
                 # OSC 1
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={m.fx_detune}\n"
+                sfz_content += f"pitch_oncc90={int(m.fx_detune)}\n"
                 if m.fx_pan >= 0:
-                  sfz_content += f"pan={m.fx_pan}\n"
+                  sfz_content += f"pan={int(m.fx_pan)}\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={-abs(m.fx_detune)}\n"
+                sfz_content += f"pitch_oncc90={-abs(int(m.fx_detune))}\n"
                 if m.fx_pan >= 0:
-                  sfz_content += f"pan={-abs(m.fx_pan)}\n"
+                  sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
@@ -2511,14 +3093,16 @@ class MainWindow(QMainWindow):
                 sfz_content += f"set_cc118=127\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
                 sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(m.fx_detune)} lfo99_pitch={m.fx_depth} lfo99_freq={m.fx_speed} lfo99_wave={m.fx_wave} lfo99_phase_oncc117={m.fx_pan / 100}\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -2535,14 +3119,16 @@ class MainWindow(QMainWindow):
                 sfz_content += f"set_cc118=127\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
                 sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -2552,8 +3138,8 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -2565,14 +3151,16 @@ class MainWindow(QMainWindow):
                 sfz_content += f"set_cc118=127\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
                 sfz_content += f"set_cc117=127\n"
+                sfz_content += f"label_cc89=PleaseSetMe127\n" # FX delay
+                sfz_content += f"set_cc89=127\n"
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={int(m.fx_depth) * 2} lfo{fx_idx}_pitch={-abs(m.fx_depth)} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -2582,8 +3170,8 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay={m.fx_delay}\n"
-                sfz_content += f"tune_oncc118={-abs(int(m.fx_depth) * 2)} lfo{fx_idx}_pitch={m.fx_depth} lfo{fx_idx}_freq={m.fx_speed} lfo{fx_idx}_wave={m.fx_wave} lfo{fx_idx}_phase_oncc117={m.fx_pan / 100} pan=100\n"
+                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -2595,8 +3183,8 @@ class MainWindow(QMainWindow):
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-        sfz_idx += 4
-        fx_idx = fx_idx - 1
+        lfo_idx += 7
+        eg_idx += 6
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")

@@ -11,6 +11,7 @@ class Mapping:
     self.name = ""
     self.tuned = True
     self.tuned_checkbox = False
+    self.comment = ""
 
     self.fx_mode = 0
     # UNISON
@@ -35,6 +36,52 @@ class Mapping:
     self.wave_detune_ccbool = False
     self.wave_detune_cc = [1, 0]
 
+    # TABLEWARP
+    self.tw_waveform = "Sine-tri-saw"
+    self.tw_waveform_offset = 0.0
+    self.tw_warp = "Saw bend"
+    self.tw_warp_offset = 0.0
+
+    self.tw_waveform_eg = False
+    self.tw_waveform_eg_depth = 0.0
+    self.tw_waveform_eg_start = 0.0
+    self.tw_waveform_eg_delay = 0.0
+    self.tw_waveform_eg_attack = 0.0
+    self.tw_waveform_eg_attack_shape = 0.0
+    self.tw_waveform_eg_hold = 0.0
+    self.tw_waveform_eg_decay = 0.0
+    self.tw_waveform_eg_decay_shape = 0.0
+    self.tw_waveform_eg_sustain = 0.0
+    self.tw_waveform_eg_release = 0.0
+    self.tw_waveform_eg_release_shape = 0.0
+
+    self.tw_waveform_lfo = False
+    self.tw_waveform_lfo_wave = "Triangle"
+    self.tw_waveform_lfo_delay = 0.0
+    self.tw_waveform_lfo_fade = 0.0
+    self.tw_waveform_lfo_depth = 0.0
+    self.tw_waveform_lfo_freq = 0.0
+
+    self.tw_warp_eg = False
+    self.tw_warp_eg_depth = 0.0
+    self.tw_warp_eg_start = 0.0
+    self.tw_warp_eg_delay = 0.0
+    self.tw_warp_eg_attack = 0.0
+    self.tw_warp_eg_attack_shape = 0.0
+    self.tw_warp_eg_hold = 0.0
+    self.tw_warp_eg_decay = 0.0
+    self.tw_warp_eg_decay_shape = 0.0
+    self.tw_warp_eg_sustain = 0.0
+    self.tw_warp_eg_release = 0.0
+    self.tw_warp_eg_release_shape = 0.0
+
+    self.tw_warp_lfo = False
+    self.tw_warp_lfo_wave = "Triangle"
+    self.tw_warp_lfo_delay = 0.0
+    self.tw_warp_lfo_fade = 0.0
+    self.tw_warp_lfo_depth = 0.0
+    self.tw_warp_lfo_freq = 0.0
+
     # MAP PROPERTIES
     self.mute = False
     self.map_key_range = [0, 127]
@@ -49,6 +96,7 @@ class Mapping:
     #self.polyaft_range = [0, 127]
 
     self.bend_range = [-98304, 98304] # two octaves
+    self.pitch_bend_range = [-2400, 2400] # two octaves
 
     self.volume = 0
 
@@ -86,6 +134,7 @@ class Mapping:
     self.note_offset = 0
     self.pitch_transpose = 0
 
+    self.qualitybool = False
     self.quality = 2
 
     self.loop_mode = loop_modes[0]
@@ -234,6 +283,8 @@ class Mapping:
       case "Wavetables":
         if self.wave == "Sample":
           return f"W: {self.name}"
+        elif self.wave == "TableWarp2":
+          return f"W: TableWarp"
         else:
           return f"W: {self.wave}"
 
@@ -263,6 +314,8 @@ class Mapping:
         return "*noise"
       case "Sample":
         return self.map
+      case "TableWarp2":
+        return "*com.Madbrain.TableWarp2"
 
   def set_map(self, pack, map):
     self.pack = pack

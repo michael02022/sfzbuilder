@@ -1,3 +1,4 @@
+'''
 from PySide6.QtCore    import Property, QPointF, QRectF, QSize, Qt, Signal, QTimer
 from PySide6.QtGui     import QPainter, QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QWidget
@@ -43,4 +44,4 @@ class DrawWaveform(QOpenGLWidget):
 
     def resizeGL(self, w, h):
         glViewport(0, 0, w, h)
-
+'''

@@ -27,13 +27,49 @@ filter_type = ("lpf_1p",
                "hsh",
                "peq")
 
+tablewarp_wave = ("Sine-tri-saw",
+                  "Sine-tri-sqr",
+                  "Overdrive saw",
+                  "Overdrive sqr",
+                  "Resonant saw",
+                  "Resonant sqr",
+                  "Dist reso saw",
+                  "Dist reso sqr",
+                  "Plucked str",
+                  "Abs sine pwm",
+                  "Soft pwm",
+                  "Hard pwm",
+                  "Hard sync",
+                  "Xor wave",
+                  "Dark noise",
+                  "Bright noise")
+
+tablewarp_warp = ("Saw bend",
+                  "Pwm bend",
+                  "Square bend",
+                  "Square bend 2",
+                  "Pulse bend",
+                  "Pulse bend 2",
+                  "Impulse bend",
+                  "Impulse bend 2",
+                  "FM sine",
+                  "FM half-sine",
+                  "FM 1:5",
+                  "FM 1:7",
+                  "Pseudo filter",
+                  "Soft sync",
+                  "Pwm-like fx",
+                  "Pixelate")
+
+tablewarp_switch = (0, 7, 14, 19, 26, 32, 38, 45, 51, 58, 64, 70, 78, 82, 89, 95)
+
 off_modes = ("fast", "normal")
 loop_modes = ("None", "no_loop", "one_shot", "loop_continuous", "loop_sustain")
 loop_directions = ("forward", "reverse")
 loop_types = ("forward", "backward", "alternate")
 trigger_modes = ("attack", "release", "first", "legato", "release_key")
 lfo_waves = ("Triangle", "Sine", "75% Pulse", "Square", "25% Pulse", "12.5% Pulse", "Saw going up", "Saw going down")
-wavetables = ("Sine", "Triangle", "Square", "Saw", "Noise", "Sample")
+wavetables = ("Sine", "Triangle", "Square", "Saw", "Noise", "Sample", "TableWarp2")
 wave_modes = ("Normal/RM", "PM", "FM")
 eg_types = ("Normal", "Flex")
 # drums

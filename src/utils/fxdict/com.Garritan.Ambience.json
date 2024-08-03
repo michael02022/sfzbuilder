@@ -1,0 +1,25 @@
+{
+  "sfz_name": "com.Garritan.Ambience",
+  "mute": false,
+
+  "decay": 60,
+  "diffusion": 64,
+  "size": 44,
+  "predelay": 13,
+  "width": 119,
+  "quality": 64,
+  "variation": 0,
+  "wet": 0,
+
+  "damp_lo_freq": 30,
+  "damp_lo_amount": 38,
+  "damp_hi_freq": 90,
+  "damp_hi_amount": 21,
+
+  "eq_lo_freq": 12,
+  "eq_lo_gain": 100,
+  "eq_hi_freq": 114,
+  "eq_hi_gain": 0,
+
+  "level": 90
+}

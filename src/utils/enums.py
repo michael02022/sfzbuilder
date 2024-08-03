@@ -63,6 +63,7 @@ tablewarp_warp = ("Saw bend",
 
 tablewarp_switch = (0, 7, 14, 19, 26, 32, 38, 45, 51, 58, 64, 70, 78, 82, 89, 95)
 
+oversamplings = ("x1", "x2", "x3")
 off_modes = ("fast", "normal")
 loop_modes = ("None", "no_loop", "one_shot", "loop_continuous", "loop_sustain")
 loop_directions = ("forward", "reverse")
@@ -72,6 +73,29 @@ lfo_waves = ("Triangle", "Sine", "75% Pulse", "Square", "25% Pulse", "12.5% Puls
 wavetables = ("Sine", "Triangle", "Square", "Saw", "Noise", "Sample", "TableWarp2")
 wave_modes = ("Normal/RM", "PM", "FM")
 eg_types = ("Normal", "Flex")
+
+fx_types = ("com.Garritan.Ambience",
+            "com.mda.Detune",
+            "com.mda.Ambience",
+            "com.mda.Bandisto",
+            "com.mda.Combo",
+            "com.mda.Degrade",
+            "com.mda.Delay",
+            "com.mda.Detune",
+            "com.mda.Dither",
+            "com.mda.DubDelay",
+            "com.mda.Leslie",
+            "com.mda.Limiter",
+            "com.mda.Overdrive",
+            "com.mda.RezFilter",
+            "com.mda.Ringmod",
+            "com.mda.SubSynth",
+            "comp",
+            "lofi",
+            "eq",
+            "gate",
+            "fverb")
+
 # drums
 xg_list_1 =   ("13 Surdo Mute",
                "14 Surdo Open",

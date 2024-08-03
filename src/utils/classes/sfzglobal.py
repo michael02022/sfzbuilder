@@ -3,6 +3,7 @@ class SfzGlobal:
     self.keysw = False
     self.keysw_range = [24, 36]
     self.sw_default = 24
+    self.oversampling = "x1"
 
   def change_value(self, var, val):
     if isinstance(val, str):

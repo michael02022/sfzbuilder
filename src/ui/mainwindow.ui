@@ -38,7 +38,7 @@
       <property name="title">
        <string>Global</string>
       </property>
-      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0,0,0">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
        </property>
@@ -104,11 +104,21 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="cbxSforzandoMode">
-         <property name="text">
-          <string>Sforzando mode</string>
+        <widget class="Line" name="line_15">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Oversampling</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbxOversampling"/>
        </item>
        <item>
         <spacer name="hspKeyswitch">
@@ -7091,16 +7101,6 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tabFX">
-        <attribute name="title">
-         <string>FX</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_13">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_11"/>
-         </item>
-        </layout>
-       </widget>
        <widget class="QWidget" name="tabOpcodes">
         <attribute name="title">
          <string>Opcodes</string>
@@ -7132,6 +7132,431 @@
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QWidget" name="tabFX">
+        <attribute name="title">
+         <string>FX</string>
+        </attribute>
+        <widget class="QPushButton" name="btnFxUp">
+         <property name="geometry">
+          <rect>
+           <x>84</x>
+           <y>348</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>^</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnFxDown">
+         <property name="geometry">
+          <rect>
+           <x>84</x>
+           <y>372</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>v</string>
+         </property>
+        </widget>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="geometry">
+          <rect>
+           <x>180</x>
+           <y>12</y>
+           <width>565</width>
+           <height>385</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>FX Settings</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="3">
+           <widget class="QPushButton" name="btnImportFx">
+            <property name="text">
+             <string>Import FX Preset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QPushButton" name="btnSaveFx">
+            <property name="text">
+             <string>Save FX Preset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="cbxFxType">
+            <property name="focusPolicy">
+             <enum>Qt::WheelFocus</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="chkFxType">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Lock</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="4">
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <widget class="QWidget" name="pageFxNone">
+             <widget class="QLabel" name="label_11">
+              <property name="geometry">
+               <rect>
+                <x>240</x>
+                <y>144</y>
+                <width>73</width>
+                <height>24</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>No FX selected</string>
+              </property>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="pageFxAriaAmbiance">
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDecay">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>12</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Decay </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceSize">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>60</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Size </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDiffusion">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>36</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Diffusion </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbiancePredelay">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>84</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Predelay </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceWidth">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>108</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Width </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceQuality">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>132</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Quality </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceVariation">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>156</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Variation </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampLoFreq">
+              <property name="geometry">
+               <rect>
+                <x>120</x>
+                <y>12</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Damp LoFreq </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampLoAmount">
+              <property name="geometry">
+               <rect>
+                <x>120</x>
+                <y>36</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Damp LoAmount </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampHiFreq">
+              <property name="geometry">
+               <rect>
+                <x>120</x>
+                <y>60</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Damp HiFreq </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampHiAmount">
+              <property name="geometry">
+               <rect>
+                <x>120</x>
+                <y>84</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Damp HiAmount </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqLoFreq">
+              <property name="geometry">
+               <rect>
+                <x>264</x>
+                <y>12</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>EQ LoFreq </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqLoGain">
+              <property name="geometry">
+               <rect>
+                <x>264</x>
+                <y>36</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>EQ LoGain </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqHiFreq">
+              <property name="geometry">
+               <rect>
+                <x>264</x>
+                <y>60</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>EQ HiFreq </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqHiGain">
+              <property name="geometry">
+               <rect>
+                <x>264</x>
+                <y>84</y>
+                <width>133</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>EQ HiGain </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QCheckBox" name="chkFxAriaAmbiance">
+              <property name="geometry">
+               <rect>
+                <x>468</x>
+                <y>300</y>
+                <width>70</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Mute FX</string>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceLevel">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>288</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Level </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="sbxFxAriaAmbianceWet">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>180</y>
+                <width>97</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Wet Level </string>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QListWidget" name="listFx">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>157</width>
+           <height>325</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnFxAdd">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>348</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnFxDel">
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>372</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Delete</string>
+         </property>
+        </widget>
        </widget>
       </widget>
      </widget>

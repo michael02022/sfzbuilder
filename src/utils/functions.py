@@ -303,9 +303,10 @@ def _int_to_float(integer, decimals):
 
   return float(r)
 
-def save_project(projpath, name, global_obj, map_objects):
+def save_project(projpath, name, global_obj, map_objects, fx):
   proj_dict = {}
   proj_dict["global"] = vars(global_obj)
+  proj_dict["effects"] = json.loads(json.dumps(fx))
   proj_dict["maps"] = []
   for obj in map_objects:
       proj_dict["maps"].append(vars(obj))

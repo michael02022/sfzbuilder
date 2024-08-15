@@ -1,25 +1,28 @@
 {
   "sfz_name": "com.Garritan.Ambience",
   "mute": false,
+  "names": false,
 
-  "decay": 60,
-  "diffusion": 64,
-  "size": 44,
-  "predelay": 13,
-  "width": 119,
-  "quality": 64,
-  "variation": 0,
-  "wet": 0,
+  "decay": 0.382941,
+  "diffusion": 0.500000,
+  "size": 0.350000,
+  "predelay": 0.109545,
+  "width": 0.940000,
+  "quality": 0.500000,
+  "variation": 0.500000,
+  "note_amp": 0.000000,
 
-  "damp_lo_freq": 30,
-  "damp_lo_amount": 38,
-  "damp_hi_freq": 90,
-  "damp_hi_amount": 21,
+  "damp_lo_freq": 0.241807,
+  "damp_lo_amount": 0.297817,
+  "damp_hi_freq": 0.713002,
+  "damp_hi_amount": 0.173997,
 
-  "eq_lo_freq": 12,
-  "eq_lo_gain": 100,
-  "eq_hi_freq": 114,
-  "eq_hi_gain": 0,
+  "eq_lo_freq": 0.103147,
+  "eq_lo_gain": 0.791667,
+  "eq_hi_freq": 0.897995,
+  "eq_hi_gain": 0.791667,
 
-  "level": 90
+  "level": 0.500000,
+
+  "ids": [0, 17, 5, 7, 6, 21, 12, 14, 1, 2, 3, 4, 8, 9, 10, 11, 20]
 }

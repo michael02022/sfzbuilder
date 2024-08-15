@@ -1,0 +1,12 @@
+{
+    "sfz_name": "com.mda.Detune",
+    "mute": false,
+    "names": false,
+
+    "detune": 0.500000,
+    "delay": 0.100000,
+    "volume": 0.500000,
+    "mix": 0.500000,
+
+    "ids": [0, 3, 2, 1]
+}

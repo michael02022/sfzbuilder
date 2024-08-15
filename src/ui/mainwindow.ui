@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1038</width>
-    <height>728</height>
+    <width>1096</width>
+    <height>776</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -7176,27 +7176,6 @@
           <string>FX Settings</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_11">
-          <item row="0" column="3">
-           <widget class="QPushButton" name="btnImportFx">
-            <property name="text">
-             <string>Import FX Preset</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="btnSaveFx">
-            <property name="text">
-             <string>Save FX Preset</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="cbxFxType">
-            <property name="focusPolicy">
-             <enum>Qt::WheelFocus</enum>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="chkFxType">
             <property name="sizePolicy">
@@ -7210,207 +7189,297 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="3">
+           <widget class="QPushButton" name="btnImportFx">
+            <property name="text">
+             <string>Import FX Preset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="cbxFxType">
+            <property name="focusPolicy">
+             <enum>Qt::WheelFocus</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QPushButton" name="btnSaveFx">
+            <property name="text">
+             <string>Save FX Preset</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1" colspan="4">
            <widget class="QStackedWidget" name="stackedWidget">
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="pageFxNone">
              <widget class="QLabel" name="label_11">
               <property name="geometry">
                <rect>
-                <x>240</x>
+                <x>264</x>
                 <y>144</y>
-                <width>73</width>
+                <width>49</width>
                 <height>24</height>
                </rect>
               </property>
               <property name="text">
-               <string>No FX selected</string>
+               <string>No FX</string>
               </property>
              </widget>
             </widget>
             <widget class="QWidget" name="pageFxAriaAmbiance">
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDecay">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDecay">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>12</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Decay </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceSize">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceSize">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>60</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Size </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDiffusion">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDiffusion">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>36</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Diffusion </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbiancePredelay">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbiancePredelay">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>84</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
-               <string>Predelay </string>
+               <string>PreDelay </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
               </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceWidth">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceWidth">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>108</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Width </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceQuality">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceQuality">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>132</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Quality </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceVariation">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceVariation">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>156</y>
-                <width>97</width>
+                <width>121</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Variation </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampLoFreq">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDampLoFreq">
               <property name="geometry">
                <rect>
-                <x>120</x>
+                <x>144</x>
                 <y>12</y>
-                <width>133</width>
+                <width>169</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Damp LoFreq </string>
               </property>
+              <property name="suffix">
+               <string/>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampLoAmount">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDampLoAmount">
               <property name="geometry">
                <rect>
-                <x>120</x>
+                <x>144</x>
                 <y>36</y>
-                <width>133</width>
+                <width>169</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
-               <string>Damp LoAmount </string>
+               <string>Damp LoAmount  </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
               </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampHiFreq">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDampHiFreq">
               <property name="geometry">
                <rect>
-                <x>120</x>
+                <x>144</x>
                 <y>60</y>
-                <width>133</width>
+                <width>169</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Damp HiFreq </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceDampHiAmount">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceDampHiAmount">
               <property name="geometry">
                <rect>
-                <x>120</x>
+                <x>144</x>
                 <y>84</y>
-                <width>133</width>
+                <width>169</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
                <string>Damp HiAmount </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqLoFreq">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceEqLoFreq">
               <property name="geometry">
                <rect>
-                <x>264</x>
+                <x>324</x>
                 <y>12</y>
                 <width>133</width>
                 <height>22</height>
@@ -7419,14 +7488,20 @@
               <property name="prefix">
                <string>EQ LoFreq </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqLoGain">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceEqLoGain">
               <property name="geometry">
                <rect>
-                <x>264</x>
+                <x>324</x>
                 <y>36</y>
                 <width>133</width>
                 <height>22</height>
@@ -7435,14 +7510,23 @@
               <property name="prefix">
                <string>EQ LoGain </string>
               </property>
+              <property name="suffix">
+               <string/>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqHiFreq">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceEqHiFreq">
               <property name="geometry">
                <rect>
-                <x>264</x>
+                <x>324</x>
                 <y>60</y>
                 <width>133</width>
                 <height>22</height>
@@ -7451,14 +7535,20 @@
               <property name="prefix">
                <string>EQ HiFreq </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceEqHiGain">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceEqHiGain">
               <property name="geometry">
                <rect>
-                <x>264</x>
+                <x>324</x>
                 <y>84</y>
                 <width>133</width>
                 <height>22</height>
@@ -7467,24 +7557,30 @@
               <property name="prefix">
                <string>EQ HiGain </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
              <widget class="QCheckBox" name="chkFxAriaAmbiance">
               <property name="geometry">
                <rect>
-                <x>468</x>
-                <y>300</y>
+                <x>456</x>
+                <y>288</y>
                 <width>70</width>
-                <height>17</height>
+                <height>24</height>
                </rect>
               </property>
               <property name="text">
                <string>Mute FX</string>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceLevel">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceLevel">
               <property name="geometry">
                <rect>
                 <x>12</x>
@@ -7496,24 +7592,168 @@
               <property name="prefix">
                <string>Level </string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
               </property>
              </widget>
-             <widget class="QSpinBox" name="sbxFxAriaAmbianceWet">
+             <widget class="QDoubleSpinBox" name="dsbFxAriaAmbianceNote">
               <property name="geometry">
                <rect>
                 <x>12</x>
                 <y>180</y>
+                <width>121</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>NoteAmp </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
+              </property>
+             </widget>
+             <widget class="QCheckBox" name="chkFxAriaAmbianceNames">
+              <property name="geometry">
+               <rect>
+                <x>348</x>
+                <y>288</y>
+                <width>97</width>
+                <height>24</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>View names</string>
+              </property>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="pageFxMdaDetune">
+             <widget class="QDoubleSpinBox" name="dsbFxMdaDetuneAmount">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>12</y>
+                <width>109</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Detune </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
+              </property>
+             </widget>
+             <widget class="QDoubleSpinBox" name="dsbFxMdaDetuneDelay">
+              <property name="geometry">
+               <rect>
+                <x>132</x>
+                <y>12</y>
+                <width>109</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Delay </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
+              </property>
+             </widget>
+             <widget class="QDoubleSpinBox" name="dsbFxMdaDetuneMix">
+              <property name="geometry">
+               <rect>
+                <x>12</x>
+                <y>288</y>
                 <width>97</width>
                 <height>22</height>
                </rect>
               </property>
               <property name="prefix">
-               <string>Wet Level </string>
+               <string>Mix </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
               </property>
               <property name="maximum">
-               <number>127</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
+              </property>
+             </widget>
+             <widget class="QDoubleSpinBox" name="dsbFxMdaDetuneVolume">
+              <property name="geometry">
+               <rect>
+                <x>252</x>
+                <y>12</y>
+                <width>109</width>
+                <height>22</height>
+               </rect>
+              </property>
+              <property name="prefix">
+               <string>Volume </string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="minimum">
+               <double>0.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.000500000000000</double>
+              </property>
+             </widget>
+             <widget class="QCheckBox" name="chkFxMdaDetuneMute">
+              <property name="geometry">
+               <rect>
+                <x>456</x>
+                <y>288</y>
+                <width>83</width>
+                <height>24</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Mute FX</string>
+              </property>
+             </widget>
+             <widget class="QCheckBox" name="chkFxMdaDetuneNames">
+              <property name="geometry">
+               <rect>
+                <x>348</x>
+                <y>288</y>
+                <width>97</width>
+                <height>24</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>View names</string>
               </property>
              </widget>
             </widget>
@@ -7568,8 +7808,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1038</width>
-     <height>21</height>
+     <width>1096</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

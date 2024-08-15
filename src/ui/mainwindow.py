@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
     self.current_map_ls = []
     self.current_pack_dict = {}
     self.map_objects = []
+    self.fx_ls = []
 
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
     self.enable_edit = False
@@ -73,6 +74,8 @@ class MainWindow(QMainWindow):
     self.ui.cbxTwWaveLfoWave.clear();self.ui.cbxTwWaveLfoWave.addItems(lfo_waves)
     self.ui.cbxTwWarpLfoWave.clear();self.ui.cbxTwWarpLfoWave.addItems(lfo_waves)
 
+    self.ui.cbxFxType.clear();self.ui.cbxFxType.addItems(fx_types)
+
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
     #self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
@@ -100,6 +103,19 @@ class MainWindow(QMainWindow):
     self.ui.listMap.itemClicked.connect(self.onItemMap)
 
     self.ui.btnAutoname.clicked.connect(self.onAutoname)
+
+    # FX
+    self.ui.btnFxAdd.clicked.connect(self.onFxAdd)
+    self.ui.btnFxDel.clicked.connect(self.onFxDelete)
+    self.ui.btnFxUp.clicked.connect(self.onFxUp)
+    self.ui.btnFxDown.clicked.connect(self.onFxDown)
+
+    self.ui.btnImportFx.clicked.connect(self.onFxImport)
+    self.ui.btnSaveFx.clicked.connect(self.onFxSave)
+
+    self.ui.listFx.itemClicked.connect(self.onItemFx)
+    self.ui.chkFxType.stateChanged.connect(self.onLockFxOptions)
+    self.ui.cbxFxType.activated.connect(self.onFxChanged)
 
     # ENVELOPES
     #self.ui.knbPan.setMinimum(-100.0)
@@ -236,6 +252,60 @@ class MainWindow(QMainWindow):
 
     self.pitch_keycenter_hover = False
     self.cc_hover = False
+  
+  def get_fx_names(self, ls):
+    r = []
+    for i in ls:
+      r.append(i["sfz_name"])
+    return r
+
+  def onFxAdd(self):
+    #print(__file__)
+    if self.enable_edit and self.ui.listMap.count() != 0:
+      p_fx = pathlib.Path(__file__).parts[:-2]
+      p_fx_json = pathlib.Path(os.path.join(*p_fx)).joinpath(f"utils/fxdict/{self.ui.cbxFxType.currentText()}.json")
+      self.fx_ls.append(json.load(open(p_fx_json))) # getting the json default file for the selected fx
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls)) # update list
+
+  def onFxDelete(self):
+    if self.ui.listFx.count() != 0:
+      idx = self.ui.listFx.currentRow()
+
+      del self.fx_ls[idx]
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls))
+      if self.ui.listFx.count() != 0: # if it has objects to select
+        if self.ui.listFx.count() <= idx:
+          self.ui.listFx.setCurrentRow(self.ui.listFx.count() - 1) # set index to the last object
+        else:
+          self.ui.listFx.setCurrentRow(idx)
+    if self.ui.listFx.count() == 0:
+      self.ui.stackedWidget.setCurrentIndex(0)
+
+  def onFxUp(self):
+    None
+  def onFxDown(self):
+    None
+  def onFxSave(self):
+    None
+  def onFxImport(self):
+    None
+  def onItemFx(self):
+    idx = self.ui.listFx.currentRow()
+    self.ui.cbxFxType.setCurrentIndex(fx_types.index(self.fx_ls[idx]["sfz_name"]))
+    self.ui.stackedWidget.setCurrentIndex(fx_types.index(self.ui.cbxFxType.currentText()) + 1) # set fx section based on index list
+    self.get_fx_values()
+
+  def onLockFxOptions(self):
+    self.ui.cbxFxType.setEnabled(not self.ui.cbxFxType.isEnabled())
+  def onFxChanged(self):
+    idx = self.ui.listFx.currentRow()
+    p_fx = pathlib.Path(__file__).parts[:-2]
+    p_fx_json = pathlib.Path(os.path.join(*p_fx)).joinpath(f"utils/fxdict/{self.ui.cbxFxType.currentText()}.json")
+    self.fx_ls[idx] = json.load(open(p_fx_json))
+    self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls)) # update list
+    self.ui.stackedWidget.setCurrentIndex(fx_types.index(self.ui.cbxFxType.currentText()) + 1) # update fx gui
+    self.ui.listFx.setCurrentRow(idx)
+    self.get_fx_values()
 
   def eventFilter(self, obj, event):
     #print(self.window)
@@ -520,6 +590,44 @@ class MainWindow(QMainWindow):
           self.ui.sbxKeyswitchDefault.setValue(global_dict.get(k))
         case "oversampling":
           self.ui.cbxOversampling.setCurrentIndex(oversamplings.index(global_dict.get(k)))
+  
+  def get_fx_values(self):
+    idx = self.ui.listFx.currentRow()
+    fx_widget = self.ui.stackedWidget.currentWidget()
+    #print(self.fx_ls[idx]["sfz_name"])
+    match self.fx_ls[idx]["sfz_name"]:
+      case "com.Garritan.Ambience":
+        self.ui.chkFxAriaAmbiance.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxAriaAmbianceNames.setChecked(self.fx_ls[idx]["names"])
+
+        self.ui.dsbFxAriaAmbianceDecay.setValue(self.fx_ls[idx]["decay"])
+        self.ui.dsbFxAriaAmbianceDiffusion.setValue(self.fx_ls[idx]["diffusion"])
+        self.ui.dsbFxAriaAmbianceSize.setValue(self.fx_ls[idx]["size"])
+        self.ui.dsbFxAriaAmbiancePredelay.setValue(self.fx_ls[idx]["predelay"])
+        self.ui.dsbFxAriaAmbianceWidth.setValue(self.fx_ls[idx]["width"])
+        self.ui.dsbFxAriaAmbianceQuality.setValue(self.fx_ls[idx]["quality"])
+        self.ui.dsbFxAriaAmbianceVariation.setValue(self.fx_ls[idx]["variation"])
+        self.ui.dsbFxAriaAmbianceNote.setValue(self.fx_ls[idx]["note_amp"])
+
+        self.ui.dsbFxAriaAmbianceDampLoFreq.setValue(self.fx_ls[idx]["damp_lo_freq"])
+        self.ui.dsbFxAriaAmbianceDampLoAmount.setValue(self.fx_ls[idx]["damp_lo_amount"])
+        self.ui.dsbFxAriaAmbianceDampHiFreq.setValue(self.fx_ls[idx]["damp_hi_freq"])
+        self.ui.dsbFxAriaAmbianceDampHiAmount.setValue(self.fx_ls[idx]["damp_hi_amount"])
+
+        self.ui.dsbFxAriaAmbianceEqLoFreq.setValue(self.fx_ls[idx]["eq_lo_freq"])
+        self.ui.dsbFxAriaAmbianceEqLoGain.setValue(self.fx_ls[idx]["eq_lo_gain"])
+        self.ui.dsbFxAriaAmbianceEqHiFreq.setValue(self.fx_ls[idx]["eq_hi_freq"])
+        self.ui.dsbFxAriaAmbianceEqHiGain.setValue(self.fx_ls[idx]["eq_hi_gain"])
+
+        self.ui.dsbFxAriaAmbianceLevel.setValue(self.fx_ls[idx]["level"])
+      
+      case "com.mda.Detune":
+        self.ui.chkFxMdaDetuneMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaDetuneNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaDetuneAmount.setValue(self.fx_ls[idx]["detune"])
+        self.ui.dsbFxMdaDetuneDelay.setValue(self.fx_ls[idx]["delay"])
+        self.ui.dsbFxMdaDetuneVolume.setValue(self.fx_ls[idx]["volume"])
+        self.ui.dsbFxMdaDetuneMix.setValue(self.fx_ls[idx]["mix"])
 
   def get_map_values(self):
     idx = self.ui.listMap.currentRow()
@@ -1401,6 +1509,34 @@ class MainWindow(QMainWindow):
     self.ui.pbnFilEnvDecayShapeReset.clicked.connect(self.onUiValueChanged)
     self.ui.pbnFilEnvReleaseShapeReset.clicked.connect(self.onUiValueChanged)
 
+    # FX DSP OPCODES
+    self.ui.chkFxAriaAmbiance.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxAriaAmbianceNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDecay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDiffusion.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceSize.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbiancePredelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceWidth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceQuality.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceVariation.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceNote.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDampLoFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDampLoAmount.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDampHiFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceDampHiAmount.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceEqLoFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceEqLoGain.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceEqHiFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceEqHiGain.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxAriaAmbianceLevel.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaDetuneMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaDetuneNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDetuneAmount.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDetuneDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDetuneVolume.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDetuneMix.valueChanged.connect(self.onUiValueChanged)
+
   # UPDATE WIDGET -> OBJECT
   def onUiValueChanged(self):
     obj = self.map_objects[self.ui.listMap.currentRow()]
@@ -2280,6 +2416,59 @@ class MainWindow(QMainWindow):
         self.ui.dsbFilEnvReleaseShape.setValue(0.0)
         obj.change_value("fil_env_release_shape", DECAY_CURVE_B)
 
+      # FX OPCODES
+      case "chkFxAriaAmbiance":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxAriaAmbianceNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxAriaAmbianceDecay":
+        self.fx_ls[self.ui.listFx.currentRow()]["decay"] = self.sender().value()
+      case "dsbFxAriaAmbianceDiffusion":
+        self.fx_ls[self.ui.listFx.currentRow()]["diffusion"] = self.sender().value()
+      case "dsbFxAriaAmbianceSize":
+        self.fx_ls[self.ui.listFx.currentRow()]["size"] = self.sender().value()
+      case "dsbFxAriaAmbiancePredelay":
+        self.fx_ls[self.ui.listFx.currentRow()]["predelay"] = self.sender().value()
+      case "dsbFxAriaAmbianceWidth":
+        self.fx_ls[self.ui.listFx.currentRow()]["width"] = self.sender().value()
+      case "dsbFxAriaAmbianceQuality":
+        self.fx_ls[self.ui.listFx.currentRow()]["quality"] = self.sender().value()
+      case "dsbFxAriaAmbianceVariation":
+        self.fx_ls[self.ui.listFx.currentRow()]["variation"] = self.sender().value()
+      case "dsbFxAriaAmbianceNote":
+        self.fx_ls[self.ui.listFx.currentRow()]["note_amp"] = self.sender().value()
+      case "dsbFxAriaAmbianceDampLoFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["damp_lo_freq"] = self.sender().value()
+      case "dsbFxAriaAmbianceDampLoAmount":
+        self.fx_ls[self.ui.listFx.currentRow()]["damp_lo_amount"] = self.sender().value()
+      case "dsbFxAriaAmbianceDampHiFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["damp_hi_freq"] = self.sender().value()
+      case "dsbFxAriaAmbianceDampHiAmount":
+        self.fx_ls[self.ui.listFx.currentRow()]["damp_hi_amount"] = self.sender().value()
+      case "dsbFxAriaAmbianceEqLoFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_lo_freq"] = self.sender().value()
+      case "dsbFxAriaAmbianceEqLoGain":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_lo_gain"] = self.sender().value()
+      case "dsbFxAriaAmbianceEqHiFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_hi_freq"] = self.sender().value()
+      case "dsbFxAriaAmbianceEqHiGain":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_hi_gain"] = self.sender().value()
+      case "dsbFxAriaAmbianceLevel":
+        self.fx_ls[self.ui.listFx.currentRow()]["level"] = self.sender().value()
+      
+      case "chkFxMdaDetuneMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaDetuneNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaDetuneAmount":
+        self.fx_ls[self.ui.listFx.currentRow()]["detune"] = self.sender().value()
+      case "dsbFxMdaDetuneDelay":
+        self.fx_ls[self.ui.listFx.currentRow()]["delay"] = self.sender().value()
+      case "dsbFxMdaDetuneVolume":
+        self.fx_ls[self.ui.listFx.currentRow()]["volume"] = self.sender().value()
+      case "dsbFxMdaDetuneVolume":
+        self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
+
       case _:
         None
 
@@ -2315,6 +2504,7 @@ class MainWindow(QMainWindow):
       self.ui.lblLog.setText(f"Generating SFZ...")
       lfo_idx = 1
       eg_idx = 1
+      fx_idx = 300
 
       # calculate the dots for relative path
       config_path = self.settings.value("mainfolderpath")
@@ -2345,8 +2535,33 @@ class MainWindow(QMainWindow):
       sfz_content += "\n"
 
       if global_obj.keysw:
-        sfz_global = f"<global>\nsw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n-"
+        sfz_global = f"<global>\nsw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
         sfz_content += sfz_global
+      
+      if len(self.fx_ls) != 0:
+        for fx_slot in self.fx_ls:
+          sfz_content += f"<effect> "
+          if fx_slot["mute"] is True:
+            None
+          else:
+            if fx_slot["sfz_name"] not in non_aria_fx:
+              sfz_content += f"param_offset={fx_idx} type={fx_slot["sfz_name"]}\n<control>\n"
+              i = 0
+              for k, value in fx_slot.items():
+                match k:
+                  case "sfz_name" | "mute" | "ids" | "names":
+                    None
+                  case _:
+                    sfz_content += f"set_hdcc{fx_idx + fx_slot["ids"][i]}={value}\n"
+                    if k in ["level", "mix"]:
+                      sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)} LEVEL\n" # to let the user adjust the different FX slots
+                    elif fx_slot["names"] is True:
+                      sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)}-{k}\n"
+                    i += 1
+            else:
+              None
+          sfz_content += f"\n"
+          fx_idx += 100
 
       for m in mappings:
         if m.mute:
@@ -3203,14 +3418,14 @@ class MainWindow(QMainWindow):
       # write project
       if temp:
         proj = f"{config_path}/Projects"
-        save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects)
+        save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
       else:
         proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
         proj = f"{common_path}/Projects/{proj_path}"
         #print(proj)
         #for i in range(len())
-        save_project(proj, f"{name}.sfzproj", self.global_header, self.map_objects)
+        save_project(proj, f"{name}.sfzproj", self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: {os.path.normpath(str(pathstr) + ".sfz")}""")
 
   def onSaveProject(self):
@@ -3221,7 +3436,7 @@ class MainWindow(QMainWindow):
       projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects/{self.ui.txtPreset.text()}", filter="Project(*.sfzproj)")
       if projectpath[0] != "":
         #print(projectpath[0])
-        save_project(os.path.dirname(projectpath[0]), os.path.basename(projectpath[0]), self.global_header, self.map_objects)
+        save_project(os.path.dirname(projectpath[0]), os.path.basename(projectpath[0]), self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: {str(os.path.basename(projectpath[0]) + ".sfz")}""")
 
   def onOpenProject(self):

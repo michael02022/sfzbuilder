@@ -6,3 +6,4 @@ __pycache__/
 src/ui/rc_resources.py
 resources/rc_resources.py
 src/ui/ui_mainwindow.py
+.venv

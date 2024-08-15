@@ -96,6 +96,8 @@ fx_types = ("com.Garritan.Ambience",
             "gate",
             "fverb")
 
+non_aria_fx = ("comp", "lofi", "eq", "gate", "fverb")
+
 # drums
 xg_list_1 =   ("13 Surdo Mute",
                "14 Surdo Open",

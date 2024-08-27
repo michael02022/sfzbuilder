@@ -1,0 +1,10 @@
+{
+    "sfz_name": "com.mda.RingMod",
+    "mute": false,
+    "names": false,
+
+    "freq": 0.200000,
+    "fine": 0.000000,
+
+    "ids": [0, 1]
+}

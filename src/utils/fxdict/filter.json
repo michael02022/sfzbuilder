@@ -1,0 +1,8 @@
+{
+    "sfz_name": "filter",
+    "mute": false,
+
+    "filter_type": "lpf_2p",
+    "filter_cutoff": 3000,
+    "filter_resonance": 1.0
+}

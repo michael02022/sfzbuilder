@@ -1,0 +1,14 @@
+{
+    "sfz_name": "com.mda.Delay",
+    "mute": false,
+    "names": false,
+
+    "L": 0.400000,
+    "R": 0.400000,
+    "feedback": 0.500000,
+    "tone": 0.900000,
+    "mix": 0.450000,
+    "output": 0.500000,
+
+    "ids": [0, 1, 2, 3, 4, 5]
+}

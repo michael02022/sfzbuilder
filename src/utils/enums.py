@@ -81,22 +81,35 @@ fx_types = ("com.Garritan.Ambience",
             "com.mda.Combo",
             "com.mda.Degrade",
             "com.mda.Delay",
-            "com.mda.Detune",
-            "com.mda.Dither",
             "com.mda.DubDelay",
             "com.mda.Leslie",
             "com.mda.Limiter",
             "com.mda.Overdrive",
             "com.mda.RezFilter",
-            "com.mda.Ringmod",
+            "com.mda.RingMod",
             "com.mda.SubSynth",
+            "fverb",
             "comp",
-            "lofi",
-            "eq",
             "gate",
-            "fverb")
+            "lofi",
+            "filter",
+            "eq")
 
-non_aria_fx = ("comp", "lofi", "eq", "gate", "fverb")
+sw_onoff = ("on", "off")
+
+non_aria_fx = ("fverb", "comp", "gate", "lofi", "filter", "eq")
+
+fverb_types = ("chamber", 
+               "large_hall",
+               "large_room",
+               "mid_hall",
+               "mid_room",
+               "small_hall",
+               "small_room")
+
+eq_types = ("peak",
+            "lshelf",
+            "hshelf")
 
 # drums
 xg_list_1 =   ("13 Surdo Mute",

@@ -1,0 +1,13 @@
+{
+    "sfz_name": "com.mda.Combo",
+    "mute": false,
+    "names": false,
+
+    "model": 0.000000,
+    "drive": 0.500000,
+    "bias": 0.500000,
+    "output": 0.500000,
+    "stereo": 0.000000,
+
+    "ids": [0, 1, 2, 3, 4]
+}

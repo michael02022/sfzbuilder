@@ -1,0 +1,14 @@
+{
+    "sfz_name": "com.mda.Degrade",
+    "mute": false,
+    "names": false,
+
+    "headroom": 1.000000,
+    "quant": 0.400000,
+    "rate": 0.400000,
+    "filter": 1.000000,
+    "nonlinear": 0.500000,
+    "output": 0.500000,
+
+    "ids": [0, 1, 2, 3, 4, 5]
+}

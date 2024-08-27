@@ -1,0 +1,9 @@
+{
+    "sfz_name": "gate",
+    "mute": false,
+
+    "gate_threshold": -25,
+    "gate_attack": 0.0001,
+    "gate_release": 0.004,
+    "gate_stlink": "on"
+}

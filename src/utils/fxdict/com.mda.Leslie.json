@@ -1,0 +1,15 @@
+{
+    "sfz_name": "com.mda.Leslie",
+    "mute": false,
+    "names": false,
+
+    "speed": 0.600000,
+    "lo_width": 0.500000,
+    "lo_throb": 0.600000,
+
+    "hi_width": 0.700000,
+    "hi_depth": 0.600000,
+    "hi_throb": 0.700000,
+
+    "ids": [0, 1, 2, 3, 4, 5]
+}

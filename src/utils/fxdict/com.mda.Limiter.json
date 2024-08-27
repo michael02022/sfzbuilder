@@ -1,0 +1,13 @@
+{
+    "sfz_name": "com.mda.Limiter",
+    "mute": false,
+    "names": false,
+
+    "thresh": 0.600000,
+    "knee": 0.400000,
+    "attack": 0.500000,
+    "release": 0.150000,
+    "output": 0.600000,
+
+    "ids": [0, 4, 3, 2, 1]
+}

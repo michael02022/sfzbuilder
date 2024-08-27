@@ -37,9 +37,9 @@ class Mapping:
     self.wave_detune_cc = [1, 0]
 
     # TABLEWARP
-    self.tw_waveform = "Sine-tri-saw"
+    self.tw_waveform = 0 #"Sine-tri-saw"
     self.tw_waveform_offset = 0.0
-    self.tw_warp = "Saw bend"
+    self.tw_warp = 0 #"Saw bend"
     self.tw_warp_offset = 0.0
 
     self.tw_waveform_eg = False
@@ -56,7 +56,7 @@ class Mapping:
     self.tw_waveform_eg_release_shape = 0.0
 
     self.tw_waveform_lfo = False
-    self.tw_waveform_lfo_wave = "Triangle"
+    self.tw_waveform_lfo_wave = 0 #"Triangle"
     self.tw_waveform_lfo_delay = 0.0
     self.tw_waveform_lfo_fade = 0.0
     self.tw_waveform_lfo_depth = 0.0
@@ -76,7 +76,7 @@ class Mapping:
     self.tw_warp_eg_release_shape = 0.0
 
     self.tw_warp_lfo = False
-    self.tw_warp_lfo_wave = "Triangle"
+    self.tw_warp_lfo_wave = 0 #"Triangle"
     self.tw_warp_lfo_delay = 0.0
     self.tw_warp_lfo_fade = 0.0
     self.tw_warp_lfo_depth = 0.0
@@ -163,7 +163,7 @@ class Mapping:
     self.pan_lfo_fade = 0
     self.pan_lfo_depth = 0
     self.pan_lfo_freq = 15
-    self.pan_lfo_wave = lfo_waves[0]
+    self.pan_lfo_wave = 0 #lfo_waves[0]
 
     # AMP PROPERTIES
     self.amp_keycenter = 60
@@ -198,7 +198,7 @@ class Mapping:
     self.amp_lfo_fade = 0
     self.amp_lfo_depth = 0
     self.amp_lfo_freq = 15
-    self.amp_lfo_wave = lfo_waves[0]
+    self.amp_lfo_wave = 0 #lfo_waves[0]
 
     # FILTER PROPERTIES
     self.fil = False
@@ -233,7 +233,7 @@ class Mapping:
     self.fil_lfo_fade = 0
     self.fil_lfo_depth = 0
     self.fil_lfo_freq = 15
-    self.fil_lfo_wave = lfo_waves[0]
+    self.fil_lfo_wave = 0 #lfo_waves[0]
 
     # PITCH PROPERTIES
     self.pitch = False
@@ -257,7 +257,7 @@ class Mapping:
     self.pit_lfo_fade = 0
     self.pit_lfo_depth = 0
     self.pit_lfo_freq = 15
-    self.pit_lfo_wave = lfo_waves[0]
+    self.pit_lfo_wave = 0 #lfo_waves[0]
 
     # MISC
     self.opcode_notepad = ""

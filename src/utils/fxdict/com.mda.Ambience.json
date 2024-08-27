@@ -1,0 +1,11 @@
+{
+    "sfz_name": "com.mda.Ambience",
+    "mute": false,
+    "names": false,
+
+    "size": 0.700000,
+    "damp": 0.700000,
+    "mix": 0.900000,
+
+    "ids": [0, 1, 2]
+}

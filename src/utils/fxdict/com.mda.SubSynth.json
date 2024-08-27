@@ -1,0 +1,15 @@
+{
+    "sfz_name": "com.mda.SubSynth",
+    "mute": false,
+    "names": false,
+
+    "type": 0.000000,
+    "level": 0.500000,
+    "tune": 0.800000,
+    "thresh": 0.300000,
+    "release": 0.200000,
+
+    "mix": 0.500000,
+
+    "ids": [0, 1, 2, 4, 5, 3]
+}

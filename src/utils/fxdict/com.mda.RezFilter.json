@@ -1,0 +1,15 @@
+{
+    "sfz_name": "com.mda.RezFilter",
+    "mute": false,
+    "names": false,
+
+    "freq": 0.500000,
+    "res": 0.200000,
+    "env_filter": 0.500000,
+    "attack": 0.100000,
+    "release": 0.100000,
+
+    "output": 0.500000,
+
+    "ids": [0, 1, 3, 4, 5, 2]
+}

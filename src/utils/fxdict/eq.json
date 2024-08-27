@@ -1,0 +1,9 @@
+{
+    "sfz_name": "eq",
+    "mute": false,
+
+    "eq_type": "peak",
+    "eq_freq": 3000,
+    "eq_gain": 2.0,
+    "eq_bw": 0.2
+}

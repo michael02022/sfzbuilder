@@ -1,0 +1,16 @@
+{
+    "sfz_name": "com.mda.Bandisto",
+    "mute": false,
+    "names": false,
+
+    "L-dist": 0.500000,
+    "M-dist": 0.500000,
+    "H-dist": 0.500000,
+
+    "L-M": 0.400000,
+    "M-H": 0.500000,
+
+    "output": 1.000000,
+
+    "ids": [3, 4, 5, 1, 2, 0]
+}

@@ -1,0 +1,14 @@
+{
+    "sfz_name": "com.mda.DubDelay",
+    "mute": false,
+    "names": false,
+
+    "delay": 0.150000,
+    "feedback": 0.700000,
+    "tone": 0.400000,
+    "lfo_depth": 0.400000,
+    "lfo_rate": 0.500000,
+    "mix": 0.440000,
+
+    "ids": [0, 1, 2, 3, 4, 5]
+}

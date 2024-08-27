@@ -1,0 +1,11 @@
+{
+    "sfz_name": "com.mda.Overdrive",
+    "mute": false,
+    "names": false,
+
+    "drive": 0.100000,
+    "muffle": 0.000000,
+    "output": 0.500000,
+
+    "ids": [0, 1, 2]
+}

@@ -1,0 +1,15 @@
+{
+    "sfz_name": "fverb",
+    "mute": false,
+
+    "reverb_type": "chamber",
+
+    "reverb_input": 100.0,
+    "reverb_predelay": 50.0,
+    "reverb_size": 50.0,
+    "reverb_tone": 50.0,
+    "reverb_damp": 50.0,
+
+    "reverb_dry": 100.0,
+    "reverb_wet": 100.0
+}

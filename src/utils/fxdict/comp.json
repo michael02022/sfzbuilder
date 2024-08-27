@@ -1,0 +1,12 @@
+{
+    "sfz_name": "comp",
+    "mute": false,
+
+    "comp_ratio": 1.6,
+    "comp_threshold": -40,
+    "comp_attack": 0.05,
+    "comp_release": 0.02,
+
+    "comp_stlink": "on",
+    "comp_gain": 0
+}

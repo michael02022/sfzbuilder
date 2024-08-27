@@ -14,9 +14,11 @@ from utils.classes.mapping    import Mapping
 from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
 from utils.constants          import *
+import time
 import os
 import copy
 import math
+
 
 class MainWindow(QMainWindow):
   def __init__(self, app, parent=None):
@@ -75,6 +77,9 @@ class MainWindow(QMainWindow):
     self.ui.cbxTwWarpLfoWave.clear();self.ui.cbxTwWarpLfoWave.addItems(lfo_waves)
 
     self.ui.cbxFxType.clear();self.ui.cbxFxType.addItems(fx_types)
+    self.ui.cbxFxFverbType.clear();self.ui.cbxFxFverbType.addItems(fverb_types)
+    self.ui.cbxFxFilterType.clear();self.ui.cbxFxFilterType.addItems(filter_type)
+    self.ui.cbxFxEqType.clear();self.ui.cbxFxEqType.addItems(eq_types)
 
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
@@ -258,7 +263,8 @@ class MainWindow(QMainWindow):
     for i in ls:
       r.append(i["sfz_name"])
     return r
-
+  
+  # FX tab
   def onFxAdd(self):
     #print(__file__)
     if self.enable_edit and self.ui.listMap.count() != 0:
@@ -282,9 +288,17 @@ class MainWindow(QMainWindow):
       self.ui.stackedWidget.setCurrentIndex(0)
 
   def onFxUp(self):
-    None
+    if self.ui.listFx.count() != 0:
+      idx = clip(self.ui.listFx.currentRow(), (0, len(self.fx_ls)))
+      self.fx_ls.insert(clip(idx - 1, (0, len(self.fx_ls))), self.fx_ls.pop(idx))
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls))
+      self.ui.listFx.setCurrentRow(clip(idx - 1, (0, len(self.fx_ls))))
   def onFxDown(self):
-    None
+    if self.ui.listFx.count() != 0:
+      idx = clip(self.ui.listFx.currentRow(), (0, len(self.fx_ls)))
+      self.fx_ls.insert(clip(idx + 1, (0, len(self.fx_ls))), self.fx_ls.pop(idx))
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls))
+      self.ui.listFx.setCurrentRow(clip(idx + 1, (0, len(self.fx_ls) - 1)))
   def onFxSave(self):
     None
   def onFxImport(self):
@@ -620,7 +634,7 @@ class MainWindow(QMainWindow):
         self.ui.dsbFxAriaAmbianceEqHiGain.setValue(self.fx_ls[idx]["eq_hi_gain"])
 
         self.ui.dsbFxAriaAmbianceLevel.setValue(self.fx_ls[idx]["level"])
-      
+
       case "com.mda.Detune":
         self.ui.chkFxMdaDetuneMute.setChecked(self.fx_ls[idx]["mute"])
         self.ui.chkFxMdaDetuneNames.setChecked(self.fx_ls[idx]["names"])
@@ -628,6 +642,158 @@ class MainWindow(QMainWindow):
         self.ui.dsbFxMdaDetuneDelay.setValue(self.fx_ls[idx]["delay"])
         self.ui.dsbFxMdaDetuneVolume.setValue(self.fx_ls[idx]["volume"])
         self.ui.dsbFxMdaDetuneMix.setValue(self.fx_ls[idx]["mix"])
+
+      case "com.mda.Ambience":
+        self.ui.chkFxMdaAmbienceMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaAmbienceNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaAmbienceSize.setValue(self.fx_ls[idx]["size"])
+        self.ui.dsbFxMdaAmbienceDamp.setValue(self.fx_ls[idx]["damp"])
+        self.ui.dsbFxMdaAmbienceMix.setValue(self.fx_ls[idx]["mix"])
+
+      case "com.mda.Bandisto":
+        self.ui.chkFxMdaBandistoMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaBandistoNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaBandistoLDist.setValue(self.fx_ls[idx]["L-dist"])
+        self.ui.dsbFxMdaBandistoMDist.setValue(self.fx_ls[idx]["M-dist"])
+        self.ui.dsbFxMdaBandistoHDist.setValue(self.fx_ls[idx]["H-dist"])
+
+        self.ui.dsbFxMdaBandistoLM.setValue(self.fx_ls[idx]["L-M"])
+        self.ui.dsbFxMdaBandistoMH.setValue(self.fx_ls[idx]["M-H"])
+
+        self.ui.dsbFxMdaBandistoOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.Combo":
+        self.ui.chkFxMdaComboMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaComboNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaComboModel.setValue(self.fx_ls[idx]["model"])
+        self.ui.dsbFxMdaComboDrive.setValue(self.fx_ls[idx]["drive"])
+        self.ui.dsbFxMdaComboBias.setValue(self.fx_ls[idx]["bias"])
+        self.ui.dsbFxMdaComboOutput.setValue(self.fx_ls[idx]["output"])
+        self.ui.dsbFxMdaComboStereo.setValue(self.fx_ls[idx]["stereo"])
+
+      case "com.mda.Degrade":
+        self.ui.chkFxMdaDegradeMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaDegradeNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaDegradeHeadroom.setValue(self.fx_ls[idx]["headroom"])
+        self.ui.dsbFxMdaDegradeQuant.setValue(self.fx_ls[idx]["quant"])
+        self.ui.dsbFxMdaDegradeRate.setValue(self.fx_ls[idx]["rate"])
+        self.ui.dsbFxMdaDegradeFilter.setValue(self.fx_ls[idx]["filter"])
+        self.ui.dsbFxMdaDegradeNonlinear.setValue(self.fx_ls[idx]["nonlinear"])
+        self.ui.dsbFxMdaDegradeOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.Delay":
+        self.ui.chkFxMdaDelayMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaDelayNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaDelayR.setValue(self.fx_ls[idx]["R"])
+        self.ui.dsbFxMdaDelayL.setValue(self.fx_ls[idx]["L"])
+        self.ui.dsbFxMdaDelayFeedback.setValue(self.fx_ls[idx]["feedback"])
+        self.ui.dsbFxMdaDelayTone.setValue(self.fx_ls[idx]["tone"])
+        self.ui.dsbFxMdaDelayMix.setValue(self.fx_ls[idx]["mix"])
+        self.ui.dsbFxMdaDelayOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.DubDelay":
+        self.ui.chkFxMdaDubdelayMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaDubdelayNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaDubdelayDelay.setValue(self.fx_ls[idx]["delay"])
+        self.ui.dsbFxMdaDubdelayFeedback.setValue(self.fx_ls[idx]["feedback"])
+        self.ui.dsbFxMdaDubdelayTone.setValue(self.fx_ls[idx]["tone"])
+        self.ui.dsbFxMdaDubdelayLfoDepth.setValue(self.fx_ls[idx]["lfo_depth"])
+        self.ui.dsbFxMdaDubdelayLfoRate.setValue(self.fx_ls[idx]["lfo_rate"])
+        self.ui.dsbFxMdaDubdelayMix.setValue(self.fx_ls[idx]["mix"])
+      
+      case "com.mda.Leslie":
+        self.ui.chkFxMdaLeslieMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaLeslieNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaLeslieSpeed.setValue(self.fx_ls[idx]["speed"])
+        self.ui.dsbFxMdaLeslieLoWidth.setValue(self.fx_ls[idx]["lo_width"])
+        self.ui.dsbFxMdaLeslieLoThrob.setValue(self.fx_ls[idx]["lo_throb"])
+        self.ui.dsbFxMdaLeslieHiWidth.setValue(self.fx_ls[idx]["hi_width"])
+        self.ui.dsbFxMdaLeslieHiDepth.setValue(self.fx_ls[idx]["hi_depth"])
+        self.ui.dsbFxMdaLeslieHiThrob.setValue(self.fx_ls[idx]["hi_throb"])
+
+      case "com.mda.Limiter":
+        self.ui.chkFxMdaLimiterMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaLimiterNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaLimiterThresh.setValue(self.fx_ls[idx]["thresh"])
+        self.ui.dsbFxMdaLimiterKnee.setValue(self.fx_ls[idx]["knee"])
+        self.ui.dsbFxMdaLimiterAttack.setValue(self.fx_ls[idx]["attack"])
+        self.ui.dsbFxMdaLimiterRelease.setValue(self.fx_ls[idx]["release"])
+        self.ui.dsbFxMdaLimiterOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.Overdrive":
+        self.ui.chkFxMdaOverdriveMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaOverdriveNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaOverdriveDrive.setValue(self.fx_ls[idx]["drive"])
+        self.ui.dsbFxMdaOverdriveMuffle.setValue(self.fx_ls[idx]["muffle"])
+        self.ui.dsbFxMdaOverdriveOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.RezFilter":
+        self.ui.chkFxMdaRezfilterMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaRezfilterNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaRezfilterFreq.setValue(self.fx_ls[idx]["freq"])
+        self.ui.dsbFxMdaRezfilterRes.setValue(self.fx_ls[idx]["res"])
+        self.ui.dsbFxMdaRezfilterEnvFilter.setValue(self.fx_ls[idx]["env_filter"])
+        self.ui.dsbFxMdaRezfilterAttack.setValue(self.fx_ls[idx]["attack"])
+        self.ui.dsbFxMdaRezfilterRelease.setValue(self.fx_ls[idx]["release"])
+        self.ui.dsbFxMdaRezfilterOutput.setValue(self.fx_ls[idx]["output"])
+
+      case "com.mda.RingMod":
+        self.ui.chkFxMdaRingmodMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaRingmodNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaRingmodFreq.setValue(self.fx_ls[idx]["freq"])
+        self.ui.dsbFxMdaRingmodFreq.setValue(self.fx_ls[idx]["fine"])
+
+      case "com.mda.SubSynth":
+        self.ui.chkFxMdaSubsynthMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxMdaSubsynthNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxMdaSubsynthType.setValue(self.fx_ls[idx]["type"])
+        self.ui.dsbFxMdaSubsynthLevel.setValue(self.fx_ls[idx]["level"])
+        self.ui.dsbFxMdaSubsynthTune.setValue(self.fx_ls[idx]["tune"])
+        self.ui.dsbFxMdaSubsynthThresh.setValue(self.fx_ls[idx]["thresh"])
+        self.ui.dsbFxMdaSubsynthRelease.setValue(self.fx_ls[idx]["release"])
+        self.ui.dsbFxMdaSubsynthMix.setValue(self.fx_ls[idx]["release"])
+      
+      case "fverb":
+        self.ui.chkFxFverbMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.cbxFxFverbType.setCurrentIndex(fverb_types.index(self.fx_ls[idx]["reverb_type"]))
+        self.ui.dsbFxFverbInput.setValue(self.fx_ls[idx]["reverb_input"])
+        self.ui.dsbFxFverbPredelay.setValue(self.fx_ls[idx]["reverb_predelay"])
+        self.ui.dsbFxFverbSize.setValue(self.fx_ls[idx]["reverb_size"])
+        self.ui.dsbFxFverbTone.setValue(self.fx_ls[idx]["reverb_tone"])
+        self.ui.dsbFxFverbDamp.setValue(self.fx_ls[idx]["reverb_damp"])
+        self.ui.dsbFxFverbDry.setValue(self.fx_ls[idx]["reverb_dry"])
+        self.ui.dsbFxFverbWet.setValue(self.fx_ls[idx]["reverb_wet"])
+
+      case "comp":
+        self.ui.chkFxCompMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.dsbFxCompRatio.setValue(self.fx_ls[idx]["comp_ratio"])
+        self.ui.dsbFxCompThreshold.setValue(self.fx_ls[idx]["comp_threshold"])
+        self.ui.dsbFxCompAttack.setValue(self.fx_ls[idx]["comp_attack"])
+        self.ui.dsbFxCompRelease.setValue(self.fx_ls[idx]["comp_release"])
+        self.ui.cbxFxCompStlink.setCurrentIndex(sw_onoff.index(self.fx_ls[idx]["comp_stlink"]))
+        self.ui.dsbFxCompGain.setValue(self.fx_ls[idx]["comp_gain"])
+      case "gate":
+        self.ui.chkFxGateMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.dsbFxGateThreshold.setValue(self.fx_ls[idx]["gate_threshold"])
+        self.ui.dsbFxGateAttack.setValue(self.fx_ls[idx]["gate_attack"])
+        self.ui.dsbFxGateRelease.setValue(self.fx_ls[idx]["gate_release"])
+        self.ui.cbxFxGateStlink.setCurrentIndex(sw_onoff.index(self.fx_ls[idx]["gate_stlink"]))
+      case "lofi":
+        self.ui.chkFxLofiMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.dsbFxLofiBitred.setValue(self.fx_ls[idx]["bitred"])
+        self.ui.dsbFxLofiDecim.setValue(self.fx_ls[idx]["decim"])
+      case "filter":
+        self.ui.chkFxFilterMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.cbxFxFilterType.setCurrentIndex(filter_type.index(self.fx_ls[idx]["filter_type"]))
+        self.ui.sbxFxFilterCutoff.setValue(self.fx_ls[idx]["filter_cutoff"])
+        self.ui.dsbFxFilterResonance.setValue(self.fx_ls[idx]["filter_resonance"])
+      case "eq":
+        self.ui.chkFxEqMute.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.cbxFxEqType.setCurrentIndex(eq_types.index(self.fx_ls[idx]["eq_type"]))
+        self.ui.sbxFxEqFreq.setValue(self.fx_ls[idx]["eq_freq"])
+        self.ui.dsbFxEqGain.setValue(self.fx_ls[idx]["eq_gain"])
+        self.ui.dsbFxEqBw.setValue(self.fx_ls[idx]["eq_bw"])
+
 
   def get_map_values(self):
     idx = self.ui.listMap.currentRow()
@@ -821,8 +987,7 @@ class MainWindow(QMainWindow):
           self.ui.dialPanLfoFreq.setValue(dialval)
           self.ui.dsbPanLfoFreq.setValue(map_dict.get(k))
         case "pan_lfo_wave":
-          #print(map_dict.get(k))
-          self.ui.cbxPanLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          self.ui.cbxPanLfoWave.setCurrentIndex(map_dict.get(k))
 
         ## AMP
         case "amp_keycenter":
@@ -868,7 +1033,7 @@ class MainWindow(QMainWindow):
           self.ui.dialAmpLfoFreq.setValue(dialval)
           self.ui.dsbAmpLfoFreq.setValue(map_dict.get(k))
         case "amp_lfo_wave":
-          self.ui.cbxAmpLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          self.ui.cbxAmpLfoWave.setCurrentIndex(map_dict.get(k))
 
         ## AMP ENV
         case "amp_env":
@@ -964,7 +1129,7 @@ class MainWindow(QMainWindow):
           self.ui.dialFilterLfoFreq.setValue(dialval)
           self.ui.dsbFilterLfoFreq.setValue(map_dict.get(k))
         case "fil_lfo_wave":
-          self.ui.cbxFilterLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          self.ui.cbxFilterLfoWave.setCurrentIndex(map_dict.get(k))
 
         ## FILTER ENV
         case "fil_env":
@@ -1057,7 +1222,7 @@ class MainWindow(QMainWindow):
           self.ui.dialPitchLfoFreq.setValue(dialval)
           self.ui.dsbPitchLfoFreq.setValue(map_dict.get(k))
         case "pit_lfo_wave":
-          self.ui.cbxPitchLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          self.ui.cbxPitchLfoWave.setCurrentIndex(map_dict.get(k))
 
         ## PITCH ENV
         case "pit_env":
@@ -1096,11 +1261,11 @@ class MainWindow(QMainWindow):
 
         ## TABLEWARP
         case "tw_waveform":
-          self.ui.cbxTwWave.setCurrentIndex(tablewarp_wave.index(map_dict.get(k)))
+          self.ui.cbxTwWave.setCurrentIndex(map_dict.get(k))
         case "tw_waveform_offset":
           self.ui.dsbTwWave.setValue(map_dict.get(k))
         case "tw_warp":
-          self.ui.cbxTwWarp.setCurrentIndex(tablewarp_warp.index(map_dict.get(k)))
+          self.ui.cbxTwWarp.setCurrentIndex(map_dict.get(k))
         case "tw_warp_offset":
           self.ui.dsbTwWarp.setValue(map_dict.get(k))
 
@@ -1133,7 +1298,8 @@ class MainWindow(QMainWindow):
         case "tw_waveform_lfo":
           self.ui.gbxTwLfoWave.setChecked(map_dict.get(k))
         case "tw_waveform_lfo_wave":
-          self.ui.cbxTwWaveLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          #print(map_dict.get(k))
+          self.ui.cbxTwWaveLfoWave.setCurrentIndex(map_dict.get(k))
         case "tw_waveform_lfo_delay":
           self.ui.dsbTwWaveLfoDelay.setValue(map_dict.get(k))
         case "tw_waveform_lfo_fade":
@@ -1171,7 +1337,7 @@ class MainWindow(QMainWindow):
         case "tw_warp_lfo":
           self.ui.gbxTwLfoWarp.setChecked(map_dict.get(k))
         case "tw_warp_lfo_wave":
-          self.ui.cbxTwWarpLfoWave.setCurrentIndex(lfo_waves.index(map_dict.get(k)))
+          self.ui.cbxTwWarpLfoWave.setCurrentIndex(map_dict.get(k))
         case "tw_warp_lfo_delay":
           self.ui.dsbTwWarpLfoDelay.setValue(map_dict.get(k))
         case "tw_warp_lfo_fade":
@@ -1537,6 +1703,141 @@ class MainWindow(QMainWindow):
     self.ui.dsbFxMdaDetuneVolume.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbFxMdaDetuneMix.valueChanged.connect(self.onUiValueChanged)
 
+    self.ui.chkFxMdaAmbienceMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaAmbienceNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaAmbienceSize.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaAmbienceDamp.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaAmbienceMix.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaBandistoMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaBandistoNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoLDist.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoMDist.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoHDist.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoLM.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoMH.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaBandistoOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaComboMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaComboNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaComboModel.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaComboDrive.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaComboBias.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaComboOutput.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaComboStereo.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaDegradeMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaDegradeNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeHeadroom.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeQuant.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeRate.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeFilter.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeNonlinear.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDegradeOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaDelayMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaDelayNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayR.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayL.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayFeedback.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayTone.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayMix.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDelayOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaDubdelayMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaDubdelayNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayDelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayFeedback.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayTone.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayLfoDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayLfoRate.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaDubdelayMix.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaLeslieMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaLeslieNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieSpeed.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieLoWidth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieLoThrob.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieHiWidth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieHiDepth.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLeslieHiThrob.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaLimiterMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaLimiterNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLimiterThresh.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLimiterKnee.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLimiterAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLimiterRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaLimiterOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaOverdriveMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaOverdriveNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaOverdriveDrive.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaOverdriveMuffle.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaOverdriveOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaRezfilterMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaRezfilterNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterRes.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterEnvFilter.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRezfilterOutput.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaRingmodMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaRingmodNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRingmodFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaRingmodFine.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxMdaSubsynthMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxMdaSubsynthNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthType.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthLevel.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthTune.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthThresh.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxMdaSubsynthMix.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxFverbMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxFverbType.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbInput.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbPredelay.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbSize.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbTone.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbDamp.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbDry.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFverbWet.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxCompMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxCompRatio.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxCompThreshold.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxCompAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxCompRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxCompStlink.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxCompGain.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxGateMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxGateThreshold.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxGateAttack.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxGateRelease.valueChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxGateStlink.currentIndexChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxLofiMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxLofiBitred.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxLofiDecim.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxFilterMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxFilterType.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxFilterCutoff.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxFilterResonance.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxEqMute.stateChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxEqType.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.sbxFxEqFreq.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxEqGain.valueChanged.connect(self.onUiValueChanged) 
+    self.ui.dsbFxEqBw.valueChanged.connect(self.onUiValueChanged) 
+
   # UPDATE WIDGET -> OBJECT
   def onUiValueChanged(self):
     obj = self.map_objects[self.ui.listMap.currentRow()]
@@ -1865,14 +2166,14 @@ class MainWindow(QMainWindow):
         obj.change_value("pit_lfo_wave", self.sender().currentIndex())
 
       case "cbxTwWave":
-        obj.change_value("tw_waveform", tablewarp_wave[self.sender().currentIndex()])
+        obj.change_value("tw_waveform", self.sender().currentIndex())
       case "cbxTwWarp":
-        obj.change_value("tw_warp", tablewarp_warp[self.sender().currentIndex()])
+        obj.change_value("tw_warp", self.sender().currentIndex())
 
       case "cbxTwWaveLfoWave":
-        obj.change_value("tw_waveform_lfo_wave", lfo_waves[self.sender().currentIndex()])
+        obj.change_value("tw_waveform_lfo_wave", self.sender().currentIndex())
       case "cbxTwWarpLfoWave":
-        obj.change_value("tw_warp_lfo_wave", lfo_waves[self.sender().currentIndex()])
+        obj.change_value("tw_warp_lfo_wave", self.sender().currentIndex())
 
       # TEXT
       case "txtKeyswitchLabel":
@@ -2469,6 +2770,262 @@ class MainWindow(QMainWindow):
       case "dsbFxMdaDetuneVolume":
         self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
 
+      case "chkFxMdaAmbienceMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaAmbienceNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaAmbienceSize":
+        self.fx_ls[self.ui.listFx.currentRow()]["size"] = self.sender().value()
+      case "dsbFxMdaAmbienceDamp":
+        self.fx_ls[self.ui.listFx.currentRow()]["damp"] = self.sender().value()
+      case "dsbFxMdaAmbienceMix":
+        self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
+      
+      case "chkFxMdaBandistoMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaBandistoNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaBandistoLDist":
+        self.fx_ls[self.ui.listFx.currentRow()]["L-dist"] = self.sender().value()
+      case "dsbFxMdaBandistoMDist":
+        self.fx_ls[self.ui.listFx.currentRow()]["M-dist"] = self.sender().value()
+      case "dsbFxMdaBandistoHDist":
+        self.fx_ls[self.ui.listFx.currentRow()]["H-dist"] = self.sender().value()
+      case "dsbFxMdaBandistoLM":
+        self.fx_ls[self.ui.listFx.currentRow()]["L-M"] = self.sender().value()
+      case "dsbFxMdaBandistoMH":
+        self.fx_ls[self.ui.listFx.currentRow()]["M-H"] = self.sender().value()
+      case "dsbFxMdaBandistoOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaComboMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaComboNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaComboModel":
+        self.fx_ls[self.ui.listFx.currentRow()]["model"] = self.sender().value()
+      case "dsbFxMdaComboDrive":
+        self.fx_ls[self.ui.listFx.currentRow()]["drive"] = self.sender().value()
+      case "dsbFxMdaComboBias":
+        self.fx_ls[self.ui.listFx.currentRow()]["bias"] = self.sender().value()
+      case "dsbFxMdaComboOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+      case "dsbFxMdaComboStereo":
+        self.fx_ls[self.ui.listFx.currentRow()]["stereo"] = self.sender().value()
+
+      case "chkFxMdaDegradeMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaDegradeNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaDegradeHeadroom":
+        self.fx_ls[self.ui.listFx.currentRow()]["headroom"] = self.sender().value()
+      case "dsbFxMdaDegradeQuant":
+        self.fx_ls[self.ui.listFx.currentRow()]["quant"] = self.sender().value()
+      case "dsbFxMdaDegradeRate":
+        self.fx_ls[self.ui.listFx.currentRow()]["rate"] = self.sender().value()
+      case "dsbFxMdaDegradeFilter":
+        self.fx_ls[self.ui.listFx.currentRow()]["filter"] = self.sender().value()
+      case "dsbFxMdaDegradeNonlinear":
+        self.fx_ls[self.ui.listFx.currentRow()]["nonlinear"] = self.sender().value()
+      case "dsbFxMdaDegradeOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaDelayMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaDelayNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaDelayR":
+        self.fx_ls[self.ui.listFx.currentRow()]["R"] = self.sender().value()
+      case "dsbFxMdaDelayL":
+        self.fx_ls[self.ui.listFx.currentRow()]["L"] = self.sender().value()
+      case "dsbFxMdaDelayFeedback":
+        self.fx_ls[self.ui.listFx.currentRow()]["feedback"] = self.sender().value()
+      case "dsbFxMdaDelayTone":
+        self.fx_ls[self.ui.listFx.currentRow()]["tone"] = self.sender().value()
+      case "dsbFxMdaDelayMix":
+        self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
+      case "dsbFxMdaDelayOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaDubdelayMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaDubdelayNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaDubdelayDelay":
+        self.fx_ls[self.ui.listFx.currentRow()]["delay"] = self.sender().value()
+      case "dsbFxMdaDubdelayFeedback":
+        self.fx_ls[self.ui.listFx.currentRow()]["feedback"] = self.sender().value()
+      case "dsbFxMdaDubdelayTone":
+        self.fx_ls[self.ui.listFx.currentRow()]["tone"] = self.sender().value()
+      case "dsbFxMdaDubdelayLfoDepth":
+        self.fx_ls[self.ui.listFx.currentRow()]["lfo_depth"] = self.sender().value()
+      case "dsbFxMdaDubdelayLfoRate":
+        self.fx_ls[self.ui.listFx.currentRow()]["lfo_rate"] = self.sender().value()
+      case "dsbFxMdaDubdelayMix":
+        self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
+
+      case "chkFxMdaLeslieMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaLeslieNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaLeslieSpeed":
+        self.fx_ls[self.ui.listFx.currentRow()]["speed"] = self.sender().value()
+      case "dsbFxMdaLeslieLoWidth":
+        self.fx_ls[self.ui.listFx.currentRow()]["lo_width"] = self.sender().value()
+      case "dsbFxMdaLeslieLoThrob":
+        self.fx_ls[self.ui.listFx.currentRow()]["lo_throb"] = self.sender().value()
+      case "dsbFxMdaLeslieHiWidth":
+        self.fx_ls[self.ui.listFx.currentRow()]["hi_width"] = self.sender().value()
+      case "dsbFxMdaLeslieHiDepth":
+        self.fx_ls[self.ui.listFx.currentRow()]["hi_depth"] = self.sender().value()
+      case "dsbFxMdaLeslieHiThrob":
+        self.fx_ls[self.ui.listFx.currentRow()]["hi_throb"] = self.sender().value()
+
+      case "chkFxMdaLimiterMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaLimiterNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaLimiterThresh":
+        self.fx_ls[self.ui.listFx.currentRow()]["thresh"] = self.sender().value()
+      case "dsbFxMdaLimiterKnee":
+        self.fx_ls[self.ui.listFx.currentRow()]["knee"] = self.sender().value()
+      case "dsbFxMdaLimiterAttack":
+        self.fx_ls[self.ui.listFx.currentRow()]["attack"] = self.sender().value()
+      case "dsbFxMdaLimiterRelease":
+        self.fx_ls[self.ui.listFx.currentRow()]["release"] = self.sender().value()
+      case "dsbFxMdaLimiterOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaOverdriveMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaOverdriveNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaOverdriveDrive":
+        self.fx_ls[self.ui.listFx.currentRow()]["drive"] = self.sender().value()
+      case "dsbFxMdaOverdriveMuffle":
+        self.fx_ls[self.ui.listFx.currentRow()]["muffle"] = self.sender().value()
+      case "dsbFxMdaOverdriveOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaRezfilterMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaRezfilterNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaRezfilterFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["freq"] = self.sender().value()
+      case "dsbFxMdaRezfilterRes":
+        self.fx_ls[self.ui.listFx.currentRow()]["res"] = self.sender().value()
+      case "dsbFxMdaRezfilterEnvFilter":
+        self.fx_ls[self.ui.listFx.currentRow()]["env_filter"] = self.sender().value()
+      case "dsbFxMdaRezfilterAttack":
+        self.fx_ls[self.ui.listFx.currentRow()]["attack"] = self.sender().value()
+      case "dsbFxMdaRezfilterRelease":
+        self.fx_ls[self.ui.listFx.currentRow()]["release"] = self.sender().value()
+      case "dsbFxMdaRezfilterOutput":
+        self.fx_ls[self.ui.listFx.currentRow()]["output"] = self.sender().value()
+
+      case "chkFxMdaRingmodMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaRingmodNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaRingmodFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["freq"] = self.sender().value()
+      case "dsbFxMdaRingmodFine":
+        self.fx_ls[self.ui.listFx.currentRow()]["fine"] = self.sender().value()
+
+      case "chkFxMdaSubsynthMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxMdaSubsynthNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxMdaSubsynthType":
+        self.fx_ls[self.ui.listFx.currentRow()]["type"] = self.sender().value()
+      case "dsbFxMdaSubsynthLevel":
+        self.fx_ls[self.ui.listFx.currentRow()]["level"] = self.sender().value()
+      case "dsbFxMdaSubsynthTune":
+        self.fx_ls[self.ui.listFx.currentRow()]["tune"] = self.sender().value()
+      case "dsbFxMdaSubsynthThresh":
+        self.fx_ls[self.ui.listFx.currentRow()]["thresh"] = self.sender().value()
+      case "dsbFxMdaSubsynthRelease":
+        self.fx_ls[self.ui.listFx.currentRow()]["release"] = self.sender().value()
+      case "dsbFxMdaSubsynthMix":
+        self.fx_ls[self.ui.listFx.currentRow()]["mix"] = self.sender().value()
+
+      case "chkFxFverbMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "cbxFxFverbType":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_type"] = fverb_types[self.sender().currentIndex()]
+      case "dsbFxFverbInput":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_input"] = self.sender().value()
+      case "dsbFxFverbPredelay":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_predelay"] = self.sender().value()
+      case "dsbFxFverbSize":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_size"] = self.sender().value()
+      case "dsbFxFverbTone":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_tone"] = self.sender().value()
+      case "dsbFxFverbDamp":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_damp"] = self.sender().value()
+      case "dsbFxFverbDry":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_dry"] = self.sender().value()
+      case "dsbFxFverbWet":
+        self.fx_ls[self.ui.listFx.currentRow()]["reverb_wet"] = self.sender().value()
+      
+      # comp
+      case "chkFxCompMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "dsbFxCompRatio":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_ratio"] = self.sender().value()
+      case "dsbFxCompThreshold":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_threshold"] = self.sender().value()
+      case "dsbFxCompAttack":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_attack"] = self.sender().value()
+      case "dsbFxCompRelease":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_release"] = self.sender().value()
+      case "cbxFxCompStlink":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_stlink"] = self.sender().currentText()
+      case "dsbFxCompGain":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_gain"] = self.sender().value()
+
+      # gate
+      case "chkFxGateMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "dsbFxGateThreshold":
+        self.fx_ls[self.ui.listFx.currentRow()]["gate_threshold"] = self.sender().value()
+      case "dsbFxGateAttack":
+        self.fx_ls[self.ui.listFx.currentRow()]["gate_attack"] = self.sender().value()
+      case "dsbFxGateRelease":
+        self.fx_ls[self.ui.listFx.currentRow()]["gate_release"] = self.sender().value()
+      case "cbxFxGateStlink":
+        self.fx_ls[self.ui.listFx.currentRow()]["gate_stlink"] = self.sender().currentText()
+      case "dsbFxGateGain":
+        self.fx_ls[self.ui.listFx.currentRow()]["comp_gain"] = self.sender().value()
+
+      case "chkFxLofiMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "dsbFxLofiBitred":
+        self.fx_ls[self.ui.listFx.currentRow()]["bitred"] = self.sender().value()
+      case "dsbFxLofiDecim":
+        self.fx_ls[self.ui.listFx.currentRow()]["decim"] = self.sender().value()
+
+      case "chkFxFilterMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "cbxFxFilterType":
+        self.fx_ls[self.ui.listFx.currentRow()]["filter_type"] = self.sender().currentText()
+      case "sbxFxFilterCutoff":
+        self.fx_ls[self.ui.listFx.currentRow()]["filter_cutoff"] = self.sender().value()
+      case "dsbFxFilterResonance":
+        self.fx_ls[self.ui.listFx.currentRow()]["filter_resonance"] = self.sender().value()
+
+      case "chkFxEqMute":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "cbxFxEqType":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_type"] = self.sender().currentText()
+      case "sbxFxEqFreq":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_freq"] = self.sender().value()
+      case "dsbFxEqGain":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_gain"] = self.sender().value()
+      case "dsbFxEqBw":
+        self.fx_ls[self.ui.listFx.currentRow()]["eq_bw"] = self.sender().value()
+
       case _:
         None
 
@@ -2494,9 +3051,15 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.setText("Please add a mapping.")
       self.msgbox_ok.exec()
     else:
-      self.save_sfz("", "", self.global_header, self.map_objects, True)
+      fx_switch = False
+      if self.ui.tabGroup.currentIndex() == 11:
+        fx_switch = True
+      self.save_sfz("", "", self.global_header, self.map_objects, True, fx_switch)
 
-  def save_sfz(self, path, name, global_obj, mappings, temp=False):
+  def callme(foo):
+      print(f"{foo}, I have been called")
+
+  def save_sfz(self, path, name, global_obj, mappings, temp=False, fx_mode_save=False):
     if len(mappings) == 0:
       self.msgbox_ok.setText("Please add a mapping.")
       self.msgbox_ok.exec()
@@ -2538,30 +3101,39 @@ class MainWindow(QMainWindow):
         sfz_global = f"<global>\nsw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
         sfz_content += sfz_global
       
-      if len(self.fx_ls) != 0:
-        for fx_slot in self.fx_ls:
-          sfz_content += f"<effect> "
-          if fx_slot["mute"] is True:
-            None
-          else:
-            if fx_slot["sfz_name"] not in non_aria_fx:
-              sfz_content += f"param_offset={fx_idx} type={fx_slot["sfz_name"]}\n<control>\n"
-              i = 0
-              for k, value in fx_slot.items():
-                match k:
-                  case "sfz_name" | "mute" | "ids" | "names":
-                    None
-                  case _:
-                    sfz_content += f"set_hdcc{fx_idx + fx_slot["ids"][i]}={value}\n"
-                    if k in ["level", "mix"]:
-                      sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)} LEVEL\n" # to let the user adjust the different FX slots
-                    elif fx_slot["names"] is True:
-                      sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)}-{k}\n"
-                    i += 1
-            else:
+      if fx_mode_save is True:
+        None
+      else:
+        if len(self.fx_ls) != 0:
+          for fx_slot in self.fx_ls:
+            sfz_content += f"<effect> "
+            if fx_slot["mute"] is True:
               None
-          sfz_content += f"\n"
-          fx_idx += 100
+            else:
+              if fx_slot["sfz_name"] not in non_aria_fx:
+                sfz_content += f"param_offset={fx_idx} type={fx_slot["sfz_name"]}\n<control>\n"
+                i = 0
+                for k, value in fx_slot.items():
+                  match k:
+                    case "sfz_name" | "mute" | "ids" | "names":
+                      None
+                    case _:
+                      sfz_content += f"set_hdcc{fx_idx + fx_slot["ids"][i]}={value}\n"
+                      if k in ["level", "mix"]:
+                        sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)} LEVEL\n" # to let the user adjust the different FX slots
+                      elif fx_slot["names"] is True:
+                        sfz_content += f"label_cc{fx_idx + fx_slot["ids"][i]}=FX{(int(fx_idx / 100) - 2)}-{k}\n"
+                      i += 1
+              else:
+                sfz_content += f"type={fx_slot["sfz_name"]}\n"
+                for k, value in fx_slot.items():
+                  match k:
+                    case "sfz_name" | "mute" | "ids" | "names":
+                      None
+                    case _:
+                      sfz_content += f"{k}={value}\n"
+            sfz_content += f"\n"
+            fx_idx += 100
 
       for m in mappings:
         if m.mute:
@@ -2742,7 +3314,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -2757,7 +3329,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -2798,7 +3370,7 @@ class MainWindow(QMainWindow):
                   sfz_content += f"pan={int(m.fx_pan)}\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -2813,7 +3385,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -2851,7 +3423,7 @@ class MainWindow(QMainWindow):
                   sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -2866,7 +3438,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -2913,7 +3485,7 @@ class MainWindow(QMainWindow):
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -2928,7 +3500,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -2961,7 +3533,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -2976,7 +3548,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3020,7 +3592,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -3035,7 +3607,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3073,7 +3645,7 @@ class MainWindow(QMainWindow):
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -3088,7 +3660,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3133,7 +3705,7 @@ class MainWindow(QMainWindow):
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -3148,7 +3720,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3186,7 +3758,7 @@ class MainWindow(QMainWindow):
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -3201,7 +3773,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3234,7 +3806,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
-                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[tablewarp_wave.index(m.tw_waveform)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param01={m.tw_waveform_offset}\n"
 
                   if m.tw_waveform_eg:
@@ -3249,7 +3821,7 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
                     sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
 
-                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[tablewarp_warp.index(m.tw_warp)] * 15.875) / 100}\n"
+                  sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
@@ -3420,6 +3992,13 @@ class MainWindow(QMainWindow):
         proj = f"{config_path}/Projects"
         save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
+
+        if fx_mode_save is True:
+          #print("Second save")
+          self.ui.lblLog.setText(f"""UPDATING FX...""")
+          time.sleep(1)
+          self.save_sfz("", "", self.global_header, self.map_objects, True, False) # first save = no fx, second save = triggered again by the boolean fx_mode but this time as False 
+          self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
       else:
         proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
         proj = f"{common_path}/Projects/{proj_path}"

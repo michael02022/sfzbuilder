@@ -300,9 +300,21 @@ class MainWindow(QMainWindow):
       self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls))
       self.ui.listFx.setCurrentRow(clip(idx + 1, (0, len(self.fx_ls) - 1)))
   def onFxSave(self):
-    None
+    if self.ui.listFx.count() != 0:
+      idx = self.ui.listFx.currentRow()
+      fx_preset = self.fx_ls[idx]
+      fxpath = QFileDialog.getSaveFileName(parent=self, caption="Save FX Preset", dir=f"{self.settings.value('mainfolderpath')}", filter="JSON(*.json)")
+      if fxpath[0] != "":
+        with open(f"{fxpath[0]}.json", "w") as outfile: 
+          json.dump(fx_preset, outfile)
+        self.ui.lblLog.setText(f"""WRITTEN: {fxpath[0]}.json""")
+        
   def onFxImport(self):
-    None
+    fxpath = QFileDialog.getOpenFileName(parent=self, caption="Open FX preset", dir=f"{self.settings.value('mainfolderpath')}", filter="JSON(*.json)")
+    if fxpath[0] != 0:
+      self.fx_ls.append(json.load(open(pathlib.Path(fxpath[0]))))
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls)) # update list
+    
   def onItemFx(self):
     idx = self.ui.listFx.currentRow()
     self.ui.cbxFxType.setCurrentIndex(fx_types.index(self.fx_ls[idx]["sfz_name"]))

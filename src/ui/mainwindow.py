@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
     # COLORS
     sfizz_synth_color = "GoldenRod"
     fx_color = "LightSkyBlue"
-    self.ui.lblWaveMode.setStyleSheet(f"color : {sfizz_synth_color};")
+    self.ui.chkWaveMode.setStyleSheet(f"color : {sfizz_synth_color};")
     self.ui.lblWaveUnison.setStyleSheet(f"color : {sfizz_synth_color};")
     self.ui.lblWaveQuality.setStyleSheet(f"color : {sfizz_synth_color};")
     self.ui.lblWaveModDepth.setStyleSheet(f"color : {sfizz_synth_color};")
@@ -1485,7 +1485,7 @@ class MainWindow(QMainWindow):
     self.ui.chkRtDecay.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkUseGlobalPitchKeycenter.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkUseKey.stateChanged.connect(self.onUiValueChanged)
-    self.ui.chkSampleOffsetValue.stateChanged.connect(self.onUiValueChanged)
+    #self.ui.chkSampleOffsetValue.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkRegionExclusiveClass.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveModDepthCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveDetuneCc.stateChanged.connect(self.onUiValueChanged)

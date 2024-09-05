@@ -63,7 +63,7 @@ def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   r15 = r14.replace("ccEXP", "cc11")
   r16 = r15.replace("ccHOLD", "cc64")
   r17 = r16.replace("ccHOLD2", "cc69")
-  r18 = r17.replace("ccRES", "cc71")
+  r18 = r17.replace("ccRESO", "cc71")
   r19 = r18.replace("ccRELEASE", "cc72")
   r20 = r19.replace("ccATTACK", "cc73")
   r21 = r20.replace("ccCUTOFF", "cc74")

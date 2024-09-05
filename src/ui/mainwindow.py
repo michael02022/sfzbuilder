@@ -404,7 +404,9 @@ class MainWindow(QMainWindow):
     match answer:
       case QMessageBox.Yes:
         self.map_objects.clear()
+        self.fx_ls.clear()
         self.ui.listMap.clear()
+        self.ui.listFx.clear()
       case QMessageBox.No:
         None
 
@@ -815,6 +817,8 @@ class MainWindow(QMainWindow):
         ## WAVETABLE
         case "wave":
           self.ui.cbxWave.setCurrentIndex(wavetables.index(map_dict.get(k)))
+        case "wave_modebool":
+          self.ui.chkWaveMode.setChecked(map_dict.get(k))
         case "wave_mode":
           self.ui.cbxWaveMode.setCurrentIndex(wave_modes.index(map_dict.get(k)))
         case "wave_unison":
@@ -924,8 +928,8 @@ class MainWindow(QMainWindow):
           self.ui.sbxTune.setValue(map_dict.get(k))
 
         ## SAMPLE
-        case "offsetbool":
-          self.ui.chkSampleOffsetValue.setChecked(map_dict.get(k))
+        #case "offsetbool":
+        #  self.ui.chkSampleOffsetValue.setChecked(map_dict.get(k))
         case "offset":
           self.ui.sbxSampleOffsetValue.setValue(map_dict.get(k))
         case "offset_random":
@@ -1468,6 +1472,7 @@ class MainWindow(QMainWindow):
     self.ui.dsbTwWarpLfoFreq.valueChanged.connect(self.onUiValueChanged)
 
     # Checkboxes
+    self.ui.chkWaveMode.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxMapMute.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkTunedVersion.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNoteOn.stateChanged.connect(self.onUiValueChanged)
@@ -2059,6 +2064,8 @@ class MainWindow(QMainWindow):
         obj.change_value("tw_warp_lfo_freq", self.sender().value())
 
       # BOOLEANS
+      case "chkWaveMode":
+        obj.change_value("wave_modebool", self.sender().isChecked())
       case "cbxMapMute":
         obj.change_value("mute", self.sender().isChecked())
       case "chkTunedVersion":
@@ -2093,8 +2100,8 @@ class MainWindow(QMainWindow):
         obj.change_value("wave_mod_depth_ccbool", self.sender().isChecked())
       case "cbxWaveDetuneCc":
         obj.change_value("wave_detune_ccbool", self.sender().isChecked())
-      case "chkSampleOffsetValue":
-        obj.change_value("offsetbool", self.sender().isChecked())
+      #case "chkSampleOffsetValue":
+      #  obj.change_value("offsetbool", self.sender().isChecked())
       case "chkRegionExclusiveClass":
         obj.change_value("exclass", self.sender().isChecked())
       case "gbxPan":
@@ -3151,7 +3158,7 @@ class MainWindow(QMainWindow):
         if m.mute:
           None
         else:
-          sfz_content += f"<master>\n"
+          sfz_content += f"<master> //{m.comment}\n"
           sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n"
           sfz_content += f"bend_down={m.pitch_bend_range[0]} bend_up={m.pitch_bend_range[1]}\n\n"
           sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
@@ -3171,6 +3178,8 @@ class MainWindow(QMainWindow):
           sfz_content += f"output={m.output}\n"
           sfz_content += f"width={m.width}\n"
           sfz_content += f"trigger={m.trigger}\n"
+          if m.note_selfmask is not True:
+            sfz_content += f"note_selfmask=off\n"
           if m.rt_dead:
             sfz_content += f"rt_dead=on\n"
           if m.rt_decaybool:
@@ -3362,13 +3371,14 @@ class MainWindow(QMainWindow):
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
 
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 1: # UNISON
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc89=PleaseSetMe127\n" # # FX delay
@@ -3418,13 +3428,14 @@ class MainWindow(QMainWindow):
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
 
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3470,14 +3481,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
                 #sfz_content += f"label_cc118=PleaseSetMe127\n" # lfo FX tune
@@ -3532,14 +3543,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3580,14 +3591,15 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 3: # STEREO CHORUS (WET)
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
@@ -3639,14 +3651,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3692,14 +3704,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
               case 4: # STEREO CHORUS (WET+DRY)
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
@@ -3753,13 +3765,14 @@ class MainWindow(QMainWindow):
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
 
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3805,14 +3818,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
                 # OSC 3 (DRY)
                 sfz_content += f"<group>\n"
@@ -3853,14 +3866,14 @@ class MainWindow(QMainWindow):
                     sfz_content += f"oscillator=on\n"
                   else:
                     sfz_content += f"<region> sample={m.get_wave()}\n"
-
-                  sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
-                  sfz_content += f"oscillator_detune={m.wave_detune}\n"
-                  if m.wave_detune_ccbool:
-                    sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
-                  if m.wave_mod_depth_ccbool:
-                    sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
-                  sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  if m.wave_modebool:
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_detune={m.wave_detune}\n"
+                    if m.wave_detune_ccbool:
+                      sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
+                    if m.wave_mod_depth_ccbool:
+                      sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
+                    sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
 
           else: # sample mapping
             match m.fx_mode:

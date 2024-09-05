@@ -1012,16 +1012,6 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lblWaveMode">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <property name="text">
-               <string>Mode:</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="2">
              <widget class="QLabel" name="lblWaveQuality">
               <property name="text">
@@ -1052,7 +1042,7 @@
                <double>20.000000000000000</double>
               </property>
               <property name="singleStep">
-               <double>0.020000000000000</double>
+               <double>0.050000000000000</double>
               </property>
              </widget>
             </item>
@@ -1161,6 +1151,13 @@
               </property>
               <property name="maximum">
                <double>100.900000000000006</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="chkWaveMode">
+              <property name="text">
+               <string>Mode</string>
               </property>
              </widget>
             </item>
@@ -1569,13 +1566,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QCheckBox" name="chkSampleOffsetValue">
-              <property name="text">
-               <string>Offset Value</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="1">
              <widget class="QSpinBox" name="sbxSampleOffsetRandom">
               <property name="maximum">
@@ -1588,11 +1578,17 @@
             </item>
             <item row="4" column="1">
              <widget class="QSpinBox" name="sbxSampleOffsetVelocity">
+              <property name="minimum">
+               <number>-999999999</number>
+              </property>
               <property name="maximum">
                <number>999999999</number>
               </property>
               <property name="singleStep">
                <number>25</number>
+              </property>
+              <property name="value">
+               <number>0</number>
               </property>
              </widget>
             </item>
@@ -1603,6 +1599,13 @@
               </property>
               <property name="singleStep">
                <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_44">
+              <property name="text">
+               <string>Offset Value</string>
               </property>
              </widget>
             </item>
@@ -1682,10 +1685,10 @@
             <item row="0" column="1">
              <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
               <property name="decimals">
-               <number>3</number>
+               <number>4</number>
               </property>
               <property name="singleStep">
-               <double>0.010000000000000</double>
+               <double>0.000100000000000</double>
               </property>
              </widget>
             </item>
@@ -1809,7 +1812,7 @@
                <number>3</number>
               </property>
               <property name="singleStep">
-               <double>0.010000000000000</double>
+               <double>0.001000000000000</double>
               </property>
              </widget>
             </item>

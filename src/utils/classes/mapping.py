@@ -25,6 +25,7 @@ class Mapping:
 
     # WAVETABLE
     self.wave = "Sine"
+    self.wave_modebool = False
     self.wave_mode = "Normal/RM"
     self.wave_unison = 1
     self.wave_quality = 0
@@ -111,7 +112,7 @@ class Mapping:
     self.poly = 16
     self.note_polybool = False
     self.note_poly = 16
-    self.note_selfmask = False
+    self.note_selfmask = True
 
     self.trigger = trigger_modes[0]
     self.rt_dead = False
@@ -126,7 +127,7 @@ class Mapping:
     self.tune = 0
 
     # SAMPLE PROPERTIES
-    self.offsetbool = False
+    #self.offsetbool = False
     self.offset = 0
     self.offset_random = 0
     self.delay = 0

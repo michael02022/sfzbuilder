@@ -77,6 +77,8 @@ The essential opcodes for mappings are:
 
 `lovel/hivel` are allowed, but maps with seperated dynamics would be nice to have for flexibility reasons.
 
+`seq_length` `seq_position` `lorand` `hirand` are allowed too.
+
 For percussion instruments **(AND 1 sample-only instruments)** only is allowed `lovel/hivel` (do not write `pitch_keycenter` `key` `lokey` `hikey`), everything else will be written in the preset, for flexibility reasons.
 
 These opcodes should be present if FLAC/OGG files are involved (not all sfz players/importers support this metadata for those formats):
@@ -86,7 +88,7 @@ These opcodes should be present if FLAC/OGG files are involved (not all sfz play
 * loop_start
 * loop_end
 
-For oneshot samples, at least with melodic ones (like winds, brass and so on), you can write secret loop points only using `loop_start``loop_end` for them where only are enable if the preset has a defined `loop_mode` opcode.
+For oneshot samples, at least with melodic ones (like winds, brass and so on), you can write secret loop points only using `loop_start` `loop_end` for them where only are enable if the preset has a defined `loop_mode` opcode.
 
 Also, for instruments with natural tuning (pianos to put an example), it's recommendeded to preserve both versions of it (one that is artificially tuned and the original) since there are people who would rather use the natural tuning. This can be made when you have the exact same name of the mapping but adding `--TN`, and the `--TN` one being of course, the same mapping but with `tune` opcodes. Example:
 

@@ -4,8 +4,9 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore           import QSettings, Qt, QEvent
 from PySide6.QtGui            import QIcon, QCursor, QAction, QHoverEvent
-from PySide6.QtWidgets        import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup, QMenu
+from PySide6.QtWidgets        import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup, QMenu, QDialog
 from .ui_mainwindow           import Ui_MainWindow
+from .ui_importwindow         import Ui_Dialog
 #from .tabpan                 import setupKnobs
 from .rc_resources            import *
 from collections              import defaultdict
@@ -19,6 +20,41 @@ import os
 import copy
 import math
 
+
+class ImportWindow(QDialog):
+  def __init__(self, parent):
+    super().__init__()
+    self._mainwindow = parent
+
+    self.uim = Ui_Dialog()
+    self.uim.setupUi(self)
+
+    self.temp_maps = []
+    self.uim.pbnImportAccept.clicked.connect(self.onImportAccept)
+    self.uim.pbnImportCancel.clicked.connect(self.onImportCancel)
+    self.uim.listImportMap.itemClicked.connect(self.onImportClickItemList)
+
+  def onImportClickItemList(self):
+    idx = self.uim.listImportMap.currentRow()
+    self.uim.lblImportPack.setText(f"Pack: {self.temp_maps[idx].pack}")
+    self.uim.lblImportMap.setText(f"Map: {self.temp_maps[idx].map}")
+    self.uim.lblImportComment.setText(f"Comment: {self.temp_maps[idx].comment}")
+  
+  def loadMapping(self, maps):
+    self.temp_maps = maps
+    self.uim.listImportMap.clear(); self.uim.listImportMap.addItems(get_map_names(self.temp_maps))
+
+  def onImportAccept(self):
+    itms = self.uim.listImportMap.selectedItems()
+    for item in itms:
+      self._mainwindow.map_objects.append(copy.deepcopy(self.temp_maps[self.uim.listImportMap.row(item)])) # since selectedItems is the only way to get a list of items, you have to use QWidgetList.row(QWidgetListItem) to get the indexes of them
+      self._mainwindow.ui.listMap.clear(); self._mainwindow.ui.listMap.addItems(get_map_names(self._mainwindow.map_objects)) # update listMap
+    self.temp_maps.clear()
+    self.close()
+
+  def onImportCancel(self):
+    self.temp_maps.clear()
+    self.close()
 
 class MainWindow(QMainWindow):
   def __init__(self, app, parent=None):
@@ -102,6 +138,7 @@ class MainWindow(QMainWindow):
     self.ui.pbnMapUp.clicked.connect(self.onMapUp)
     self.ui.pbnMapDown.clicked.connect(self.onMapDown)
     self.ui.pbnMapClone.clicked.connect(self.onMapClone)
+    self.ui.pbnMapImport.clicked.connect(self.onMapImport)
 
     self.ui.cbxPack.activated.connect(self.onPackChanged)
     self.ui.cbxMap.activated.connect(self.onMapChanged)
@@ -258,6 +295,19 @@ class MainWindow(QMainWindow):
     self.pitch_keycenter_hover = False
     self.cc_hover = False
   
+  #def show_importwindow(self):
+  #  self.iw = ImportWindow()
+  #  self.iw.show()
+
+    if self.enable_edit:
+      self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
+
+      self.pack_ls = list(self.current_pack_dict)
+
+      self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
+      self.map_ls = self.current_pack_dict[self.pack_ls[0]]
+      self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
+  
   def get_fx_names(self, ls):
     r = []
     for i in ls:
@@ -311,7 +361,7 @@ class MainWindow(QMainWindow):
         
   def onFxImport(self):
     fxpath = QFileDialog.getOpenFileName(parent=self, caption="Open FX preset", dir=f"{self.settings.value('mainfolderpath')}", filter="JSON(*.json)")
-    if fxpath[0] != 0:
+    if fxpath[0] != "":
       self.fx_ls.append(json.load(open(pathlib.Path(fxpath[0]))))
       self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls)) # update list
     
@@ -490,6 +540,18 @@ class MainWindow(QMainWindow):
       self.map_objects.insert(clip(idx + 1, (0, len(self.map_objects))), self.map_objects.pop(idx))
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(clip(idx + 1, (0, len(self.map_objects) - 1)))
+  
+  def onMapImport(self):
+    if self.enable_edit:
+      projpath = QFileDialog.getOpenFileName(parent=self, caption="Select a SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}", filter="SFZPROJ(*.sfzproj)")
+      if projpath[0] != "":
+        temp_proj = self.open_project(projpath[0])
+        self.iw = ImportWindow(parent=self)
+        self.iw.show()
+        self.iw.loadMapping(temp_proj)
+    else:
+      self.msgbox_ok.setText("Please select a SFZBuilder folder.")
+      self.msgbox_ok.exec()
 
   def onPackChanged(self):
     self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())

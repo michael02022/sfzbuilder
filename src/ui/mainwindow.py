@@ -1026,6 +1026,8 @@ class MainWindow(QMainWindow):
         ## PAN
         case "panbool":
           self.ui.gbxPan.setChecked(map_dict.get(k))
+        case "pan_stereo":
+          self.ui.chkPanStereoMode.setChecked(map_dict.get(k))
         case "pan_keycenter":
           self.ui.sbxPanKeycenter.setValue(map_dict.get(k))
         case "pan_value":
@@ -1555,6 +1557,7 @@ class MainWindow(QMainWindow):
     self.ui.chkSampleQuality.stateChanged.connect(self.onUiValueChanged)
 
     self.ui.gbxPan.toggled.connect(self.onUiValueChanged)
+    self.ui.chkPanStereoMode.stateChanged.connect(self.onUiValueChanged)
     self.ui.gbxPanLfo.toggled.connect(self.onUiValueChanged)
 
     self.ui.chkAmpVelFloor.stateChanged.connect(self.onUiValueChanged)
@@ -2168,6 +2171,8 @@ class MainWindow(QMainWindow):
         obj.change_value("exclass", self.sender().isChecked())
       case "gbxPan":
         obj.change_value("panbool", self.sender().isChecked())
+      case "chkPanStereoMode":
+        obj.change_value("pan_stereo", self.sender().isChecked())
       case "gbxPanLfo":
         obj.change_value("pan_lfo", self.sender().isChecked())
       case "chkAmpVelFloor":
@@ -3282,16 +3287,16 @@ class MainWindow(QMainWindow):
           # PAN
           if m.panbool:
             sfz_content += "\n\n"
-            sfz_content += f"pan={m.pan_value}\n"
-            sfz_content += f"pan_keycenter={m.pan_keycenter}\n"
-            sfz_content += f"pan_keytrack={m.pan_keytrack}\n"
-            sfz_content += f"pan_veltrack={m.pan_veltrack}\n"
-            sfz_content += f"pan_random={m.pan_random}\n"
+            sfz_content += f"pan_oncc117={m.pan_value * 2 if m.pan_stereo else m.pan_value}\n"
+            sfz_content += f"pan_keycenter={m.pan_keycenter * 2 if m.pan_stereo else m.pan_keycenter}\n"
+            sfz_content += f"pan_keytrack={m.pan_keytrack * 2 if m.pan_stereo else m.pan_keytrack}\n"
+            sfz_content += f"pan_veltrack={m.pan_veltrack * 2 if m.pan_stereo else m.pan_veltrack}\n"
+            sfz_content += f"pan_random={m.pan_random * 2 if m.pan_stereo else m.pan_random}\n"
 
             if m.pan_lfo:
               sfz_content += f"lfo{lfo_idx}_delay={m.pan_lfo_delay}\n"
               sfz_content += f"lfo{lfo_idx}_fade={m.pan_lfo_fade}\n"
-              sfz_content += f"lfo{lfo_idx}_pan={m.pan_lfo_depth}\n"
+              sfz_content += f"lfo{lfo_idx}_pan={m.pan_lfo_depth * 2 if m.pan_stereo else m.pan_lfo_depth}\n"
               sfz_content += f"lfo{lfo_idx}_freq={m.pan_lfo_freq}\n"
               sfz_content += f"lfo{lfo_idx}_wave={m.pan_lfo_wave}\n"
 
@@ -3389,6 +3394,10 @@ class MainWindow(QMainWindow):
           # offset
           sfz_content += f"label_cc118=PleaseSetMe127\n"
           sfz_content += f"set_cc118=127\n"
+          # pan
+          if m.pan_stereo:
+            sfz_content += f"label_cc117=PleaseSetMe127\n"
+            sfz_content += f"set_cc117=127\n"  
 
           # ###
           if m.type == "Wavetables":

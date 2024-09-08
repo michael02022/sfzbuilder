@@ -40,6 +40,12 @@ def cc_sw(cc, value):
   except:
     return cc
 
+def pan_sw(mode, value):
+  if mode:
+    return value * 2
+  else:
+    return value
+
 def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   # please I need a better way to do this
   # SFZ v2

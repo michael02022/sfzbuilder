@@ -1969,6 +1969,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QCheckBox" name="chkPanStereoMode">
+                <property name="text">
+                 <string>Stereo mode</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="hspPanKeycenter">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -2010,10 +2017,10 @@
                  </sizepolicy>
                 </property>
                 <property name="minimum">
-                 <number>-100000</number>
+                 <number>-200000</number>
                 </property>
                 <property name="maximum">
-                 <number>100000</number>
+                 <number>200000</number>
                 </property>
                </widget>
               </item>
@@ -2172,10 +2179,10 @@
                  </sizepolicy>
                 </property>
                 <property name="minimum">
-                 <number>-100000</number>
+                 <number>-200000</number>
                 </property>
                 <property name="maximum">
-                 <number>100000</number>
+                 <number>200000</number>
                 </property>
                 <property name="value">
                  <number>0</number>
@@ -2191,10 +2198,10 @@
                  </sizepolicy>
                 </property>
                 <property name="minimum">
-                 <number>-100000</number>
+                 <number>-200000</number>
                 </property>
                 <property name="maximum">
-                 <number>100000</number>
+                 <number>200000</number>
                 </property>
                </widget>
               </item>
@@ -2204,10 +2211,10 @@
                  <number>3</number>
                 </property>
                 <property name="minimum">
-                 <double>-100.000000000000000</double>
+                 <double>-200.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>100.000000000000000</double>
+                 <double>200.000000000000000</double>
                 </property>
                 <property name="singleStep">
                  <double>1.000000000000000</double>
@@ -2220,10 +2227,10 @@
                  <number>3</number>
                 </property>
                 <property name="minimum">
-                 <double>-100.000000000000000</double>
+                 <double>-200.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>100.000000000000000</double>
+                 <double>200.000000000000000</double>
                 </property>
                 <property name="singleStep">
                  <double>1.000000000000000</double>
@@ -2236,10 +2243,10 @@
                  <number>3</number>
                 </property>
                 <property name="minimum">
-                 <double>-100.000000000000000</double>
+                 <double>-200.000000000000000</double>
                 </property>
                 <property name="maximum">
-                 <double>100.000000000000000</double>
+                 <double>200.000000000000000</double>
                 </property>
                 <property name="singleStep">
                  <double>1.000000000000000</double>
@@ -2384,10 +2391,10 @@
             <item row="2" column="3">
              <widget class="QDial" name="dialPanLfoDepth">
               <property name="minimum">
-               <number>-100000</number>
+               <number>-200000</number>
               </property>
               <property name="maximum">
-               <number>100000</number>
+               <number>200000</number>
               </property>
              </widget>
             </item>
@@ -2410,10 +2417,10 @@
                <number>3</number>
               </property>
               <property name="minimum">
-               <double>-100.000000000000000</double>
+               <double>-200.000000000000000</double>
               </property>
               <property name="maximum">
-               <double>100.000000000000000</double>
+               <double>200.000000000000000</double>
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>

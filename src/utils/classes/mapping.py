@@ -153,6 +153,7 @@ class Mapping:
 
     # PAN PROPERTIES
     self.panbool = False
+    self.pan_stereo = False
     self.pan_value = 0
     self.pan_keycenter = 60
     self.pan_keytrack = 0

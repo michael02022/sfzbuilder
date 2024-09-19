@@ -272,7 +272,7 @@ class Mapping:
     path = str(pathlib.Path(pstr).parent).replace(os.sep, '/')
     filename = pathlib.Path(pstr).stem
     if self.tuned is True and self.tuned_checkbox is True:
-        return f"{path}/{filename} --TN.sfz"
+      return f"{path}/{filename} --TN.sfz"
     else:
       return f"{path}/{filename}.sfz"
 

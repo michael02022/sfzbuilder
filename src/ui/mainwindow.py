@@ -3436,12 +3436,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
-
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3450,6 +3444,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
               case 1: # UNISON
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc89=PleaseSetMe127\n" # # FX delay
@@ -3493,12 +3498,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
-
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3507,6 +3506,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3547,11 +3557,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3560,6 +3565,18 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
                 #sfz_content += f"label_cc118=PleaseSetMe127\n" # lfo FX tune
@@ -3609,11 +3626,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3622,6 +3634,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                    
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3657,12 +3680,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
-                  
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3671,6 +3688,18 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
               case 3: # STEREO CHORUS (WET)
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
@@ -3717,11 +3746,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3730,6 +3754,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3770,11 +3805,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3783,6 +3813,18 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
+
               case 4: # STEREO CHORUS (WET+DRY)
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc117=PleaseSetMe127\n"
@@ -3830,12 +3872,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
-
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3844,6 +3880,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
                 # OSC 2
                 sfz_content += f"<group>\n"
@@ -3884,11 +3931,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3897,6 +3939,17 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
                 # OSC 3 (DRY)
                 sfz_content += f"<group>\n"
@@ -3932,11 +3985,6 @@ class MainWindow(QMainWindow):
                     sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
-                  if m.wave == "Sample":
-                    sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
-                    sfz_content += f"oscillator=on\n"
-                  else:
-                    sfz_content += f"<region> sample={m.get_wave()}\n"
                   if m.wave_modebool:
                     sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
@@ -3945,6 +3993,16 @@ class MainWindow(QMainWindow):
                     if m.wave_mod_depth_ccbool:
                       sfz_content += f"oscillator_mod_depth_oncc{m.wave_mod_depth_cc[0]}={m.wave_mod_depth_cc[1]}\n"
                     sfz_content += f"oscillator_mod_depth={m.wave_mod_depth}\n\n"
+                  
+                  if m.wave == "Sample":
+                    if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
+                    else:
+                      sfz_content += f"<region> sample=$USERPATH/Wavetables/{m.pack}/{m.get_wave()}\n"
+                      sfz_content += f"oscillator=on\n"
+                  else:
+                    sfz_content += f"<region> sample={m.get_wave()}\n"
 
           else: # sample mapping
             match m.fx_mode:

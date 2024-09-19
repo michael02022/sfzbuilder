@@ -74,6 +74,7 @@ The essential opcodes for mappings are:
 * key (if is used to simplify the mapping)
 * tune
 * offset (if needed)
+* pan (if the stereo samples are separated mono samples)
 
 `lovel/hivel` are allowed, but maps with seperated dynamics would be nice to have for flexibility reasons.
 

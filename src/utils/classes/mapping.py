@@ -88,11 +88,12 @@ class Mapping:
     self.map_key_range = [0, 127]
     self.map_vel_range = [0, 127]
     #self.map_chan_range = [1, 1]
-    #self.map_prog_range = [0, 0]
+    self.map_prog_rangebool = False
+    self.map_prog_range = [0, 0]
     self.on_cc_rangebool = False
     self.on_cc_range = [64, 0, 127] # CC value, on_locc, on_hicc (CC64 is default because sustain pedal)
-    self.random_rangebool = False
-    self.random_range = [0, 1] # lorand / hirand
+    #self.random_rangebool = False
+    #self.random_range = [0, 1] # lorand / hirand
     #self.chanaft_range = [0, 127]
     #self.polyaft_range = [0, 127]
 

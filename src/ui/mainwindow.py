@@ -15,6 +15,7 @@ from utils.classes.mapping    import Mapping
 from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
 from utils.constants          import *
+from utils.sfztemplates       import *
 import time
 import os
 import copy
@@ -680,6 +681,10 @@ class MainWindow(QMainWindow):
           self.ui.sbxKeyswitchDefault.setValue(global_dict.get(k))
         case "oversampling":
           self.ui.cbxOversampling.setCurrentIndex(oversamplings.index(global_dict.get(k)))
+        case "portamento":
+          self.ui.chkGlobalPortamento.setChecked(global_dict.get(k))
+        case "portamento_time":
+          self.ui.dsbGlobalPortamentoTime.setValue(global_dict.get(k))
   
   def get_fx_values(self):
     idx = self.ui.listFx.currentRow()
@@ -943,11 +948,11 @@ class MainWindow(QMainWindow):
           self.ui.sbxCc.setValue(map_dict.get(k)[0])
           self.ui.sbxCcLo.setValue(map_dict.get(k)[1])
           self.ui.sbxCcHi.setValue(map_dict.get(k)[2])
-        case "random_rangebool":
-          self.ui.chkRandom.setChecked(map_dict.get(k))
-        case "random_range":
-          self.ui.dsbRandomLo.setValue(map_dict.get(k)[0])
-          self.ui.dsbRandomLo.setValue(map_dict.get(k)[1])
+        case "map_prog_rangebool":
+          self.ui.chkProgram.setChecked(map_dict.get(k))
+        case "map_prog_range":
+          self.ui.sbxProgramLo.setValue(map_dict.get(k)[0])
+          self.ui.sbxProgramHi.setValue(map_dict.get(k)[1])
         case "volume":
           self.ui.dsbVolume.setValue(map_dict.get(k))
         case "keyswitchbool":
@@ -1440,6 +1445,8 @@ class MainWindow(QMainWindow):
     self.ui.sbxKeyswitchHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxKeyswitchDefault.valueChanged.connect(self.onUiValueChanged)
     self.ui.cbxOversampling.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.chkGlobalPortamento.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbGlobalPortamentoTime.valueChanged.connect(self.onUiValueChanged)
 
     # Spinboxes
     self.ui.dsbVolume.valueChanged.connect(self.onUiValueChanged)
@@ -1450,8 +1457,8 @@ class MainWindow(QMainWindow):
     self.ui.sbxCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcHi.valueChanged.connect(self.onUiValueChanged)
-    self.ui.dsbRandomLo.valueChanged.connect(self.onUiValueChanged)
-    self.ui.dsbRandomHi.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxProgramLo.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxProgramHi.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxOutput.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxWidth.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxPolyphony.valueChanged.connect(self.onUiValueChanged)
@@ -1540,7 +1547,7 @@ class MainWindow(QMainWindow):
     self.ui.cbxMapMute.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkTunedVersion.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNoteOn.stateChanged.connect(self.onUiValueChanged)
-    self.ui.chkRandom.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkProgram.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkPolyphony.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNotePolyphony.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkNoteSelfmask.stateChanged.connect(self.onUiValueChanged)
@@ -1935,6 +1942,10 @@ class MainWindow(QMainWindow):
         self.global_header.change_value("sw_default", self.sender().value())
       case "cbxOversampling":
         self.global_header.change_value("oversampling", oversamplings[self.sender().currentIndex()])
+      case "chkGlobalPortamento":
+        self.global_header.change_value("portamento", self.sender().isChecked())
+      case "dsbGlobalPortamentoTime":
+        self.global_header.change_value("portamento_time", self.sender().value())
       # SPINBOXES
       case "dsbVolume":
         obj.change_value("volume", self.sender().value())
@@ -1954,10 +1965,10 @@ class MainWindow(QMainWindow):
         obj.change_value("on_cc_range", [obj.on_cc_range[0], obj.on_cc_range[1], self.sender().value()])
       case "sbxCcLo":
         obj.change_value("on_cc_range", [obj.on_cc_range[0], self.sender().value(), obj.on_cc_range[2]])
-      case "dsbRandomLo":
-        obj.change_value("random_range", [self.sender().value(), obj.random_range[1]])
-      case "dsbRandomHi":
-        obj.change_value("random_range", [obj.random_range[0], self.sender().value()])
+      case "sbxProgramLo":
+        obj.change_value("map_prog_range", [self.sender().value(), obj.map_prog_range[1]])
+      case "sbxProgramHi":
+        obj.change_value("map_prog_range", [obj.map_prog_range[0], self.sender().value()])
       case "sbxOutput":
         obj.change_value("output", self.sender().value())
       case "sbxWidth":
@@ -2139,8 +2150,8 @@ class MainWindow(QMainWindow):
         obj.change_value("tuned", self.sender().isChecked())
       case "chkNoteOn":
         obj.change_value("on_cc_rangebool", self.sender().isChecked())
-      case "chkRandom":
-        obj.change_value("random_rangebool", self.sender().isChecked())
+      case "chkProgram":
+        obj.change_value("map_prog_rangebool", self.sender().isChecked())
       case "chkPolyphony":
         obj.change_value("polybool", self.sender().isChecked())
       case "chkNotePolyphony":
@@ -3181,12 +3192,13 @@ class MainWindow(QMainWindow):
       sfz_content += f"<control>\n#define $USERPATH {define_userpath}\n"
       if global_obj.oversampling != "x1":
         sfz_content += f"hint_min_samplerate={44100 * (int(oversamplings.index(global_obj.oversampling)) + 1)}\n"
-      sfz_content += "\n"
+      sfz_content += "\n<global>\n"
 
       if global_obj.keysw:
-        sfz_global = f"<global>\nsw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
-        sfz_content += sfz_global
-      
+        sfz_content += f"sw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
+      if global_obj.portamento:
+        sfz_content += sfz_portamento(9999, global_obj.portamento_time)
+
       if fx_mode_save is True:
         None
       else:
@@ -3232,8 +3244,8 @@ class MainWindow(QMainWindow):
           sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
           if m.on_cc_rangebool:
             sfz_content += f"on_locc{m.on_cc_range[0]}={m.on_cc_range[1]} on_hicc{m.on_cc_range[0]}={m.on_cc_range[2]}\n"
-          if m.random_rangebool:
-            sfz_content += f"lorand={m.random_range[0]} hirand={m.random_range[0]}\n"
+          if m.map_prog_rangebool:
+            sfz_content += f"loprog={m.map_prog_range[0]} hiprog={m.map_prog_range[1]}\n"
           sfz_content += f"volume={m.volume}\n\n"
 
           # MAP
@@ -3437,7 +3449,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3447,6 +3459,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3499,7 +3512,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3509,6 +3522,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3558,7 +3572,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3568,6 +3582,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3627,7 +3642,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3637,6 +3652,7 @@ class MainWindow(QMainWindow):
                     
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3681,7 +3697,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3691,6 +3707,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3747,7 +3764,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3757,6 +3774,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3806,7 +3824,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3816,6 +3834,7 @@ class MainWindow(QMainWindow):
                 
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3873,7 +3892,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3883,6 +3902,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3932,7 +3952,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3942,6 +3962,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
@@ -3986,7 +4007,7 @@ class MainWindow(QMainWindow):
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
-                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase / 100}\n"
+                    sfz_content += f"oscillator_mode={wave_modes.index(m.wave_mode)} oscillator_quality={m.wave_quality} oscillator_multi={m.wave_unison} oscillator_phase={m.wave_phase}\n"
                     sfz_content += f"oscillator_detune={m.wave_detune}\n"
                     if m.wave_detune_ccbool:
                       sfz_content += f"oscillator_detune_oncc{m.wave_detune_cc[0]}={m.wave_detune_cc[1]}\n"
@@ -3996,6 +4017,7 @@ class MainWindow(QMainWindow):
                   
                   if m.wave == "Sample":
                     if m.get_wave().endswith(".sfz"):
+                      sfz_content += f"oscillator=on\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"default_path=$USERPATH/Wavetables/{m.get_default_path()}\n#include \"$USERPATH/Wavetables/{m.get_include_path()}\"\n\n"
                     else:

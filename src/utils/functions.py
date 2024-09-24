@@ -159,7 +159,7 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
       case 0:
         output += f"eg{idx+1}_ampeg=100\n"
         output += f"eg{idx+1}_sustain=4\n"
-        output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=0.0000001\n"
+        output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=-1\n"
         output += f"eg{idx+1}_level1={float(start) / 100} eg{idx+1}_time1={delay}\n"
         output += f"eg{idx+1}_level2=1 eg{idx+1}_time2={attack}\n"
         if shapes[0][0]:
@@ -173,7 +173,7 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
             output += f"eg{idx+1}_shape5={shapes[2][1]}\n"
       case 1:
         output += f"eg{idx+2}_sustain=4\n"
-        output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=0.0000001\n"
+        output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=-1\n"
         output += f"eg{idx+2}_level1={float(start) / 100} eg{idx+2}_time1={delay}\n"
         output += f"eg{idx+2}_level2=1 eg{idx+2}_time2={attack}\n"
         if shapes[0][0]:
@@ -187,7 +187,7 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
             output += f"eg{idx+2}_shape5={shapes[2][1]}\n"
       case 2:
         output += f"eg{idx+3}_sustain=4\n"
-        output += f"eg{idx+3}_level0={float(start) / 100} eg{idx+3}_time0=0.0000001\n"
+        output += f"eg{idx+3}_level0={float(start) / 100} eg{idx+3}_time0=-1\n"
         output += f"eg{idx+3}_level1={float(start) / 100} eg{idx+3}_time1={delay}\n"
         output += f"eg{idx+3}_level2=1 eg{idx+3}_time2={attack}\n"
         if shapes[0][0]:
@@ -204,7 +204,7 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
 def generate_eg_tw(idx, start, delay, attack, attack_shape, hold, decay, decay_shape, sustain, release, release_shape):
   output = ""
   output += f"eg{idx}_sustain=4\n"
-  output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=0.0000001\n"
+  output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=-1\n"
   output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
   output += f"eg{idx}_level2=1 eg{idx}_time2={attack}\n"
   output += f"eg{idx}_shape2={attack_shape}\n"

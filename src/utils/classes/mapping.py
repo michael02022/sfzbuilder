@@ -339,3 +339,6 @@ class Mapping:
         if val == 0:
           val = ZERO
       exec(f"self.{var} = {val}")
+  
+  def add_opcode_txt(self, txt):
+    self.opcode_notepad += txt

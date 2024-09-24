@@ -91,7 +91,10 @@ def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   r31 = r30.replace("lfoTW1", f"lfo{lfo_idx+5}")
   r32 = r31.replace("lfoTW2", f"lfo{lfo_idx+6}")
 
-  return r32
+  # Portamento
+  r33 = r32.replace("egPORT", f"eg{eg_idx+6}")
+
+  return r33
 
 def generate_eg(type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
   output = ""

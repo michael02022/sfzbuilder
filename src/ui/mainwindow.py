@@ -1925,7 +1925,15 @@ class MainWindow(QMainWindow):
     self.ui.cbxFxEqType.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.sbxFxEqFreq.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbFxEqGain.valueChanged.connect(self.onUiValueChanged) 
-    self.ui.dsbFxEqBw.valueChanged.connect(self.onUiValueChanged) 
+    self.ui.dsbFxEqBw.valueChanged.connect(self.onUiValueChanged)
+
+    # Opcode buttons
+    self.ui.pbnPortamento.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnXfadeKey.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnXfadeVel.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnXfadeCc.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnRR.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnRand.clicked.connect(self.onUiValueChanged)
 
   # UPDATE WIDGET -> OBJECT
   def onUiValueChanged(self):
@@ -2279,6 +2287,24 @@ class MainWindow(QMainWindow):
         obj.change_value("opcode_notepad", self.sender().toPlainText())
       case "txtComment":
         obj.change_value("comment", self.sender().text())
+      case "pbnPortamento":
+        obj.add_opcode_txt(sfz_portamento("PORT", 0.05))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnXfadeKey":
+        obj.add_opcode_txt(sfz_xfade("key"))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnXfadeVel":
+        obj.add_opcode_txt(sfz_xfade("vel"))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnXfadeCc":
+        obj.add_opcode_txt(sfz_xfade("MOD"))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnRR":
+        obj.add_opcode_txt(sfz_roundrobin(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnRand":
+        obj.add_opcode_txt(sfz_random(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
 
       # KNOBS / DIALS
       # PAN
@@ -3334,7 +3360,7 @@ class MainWindow(QMainWindow):
           if m.amp_env:
             eg_ver = m.amp_env_ver
             shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
-            sfz_content += generate_eg(eg_ver, "amp", eg_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
+            sfz_content += generate_eg(eg_ver, "amp", eg_idx+1, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
 
           # FILTER
           if m.fil:
@@ -3392,7 +3418,7 @@ class MainWindow(QMainWindow):
                   sfz_content += f"eg{eg_idx+3}_pitch={m.pit_env_depth}\n"
 
               #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
-              sfz_content += generate_eg(eg_ver, "pit", eg_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+              sfz_content += generate_eg(eg_ver, "pit", eg_idx+3, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
 
           sfz_content += "\n\n"
           sfz_content += "// ADDITIONAL OPCODES\n"
@@ -4156,7 +4182,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
         lfo_idx += 7
-        eg_idx += 6
+        eg_idx += 7
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")

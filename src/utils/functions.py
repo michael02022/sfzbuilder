@@ -45,6 +45,25 @@ def pan_sw(mode, value):
     return value * 2
   else:
     return value
+  
+# following the most basic parse for Cakewalk instruments, the first 127 names only count
+def get_list_from_ins(file):
+  Lines = file.readlines()
+  patch_ls = []
+  patch_mode = False
+
+  for line in Lines:
+    if line[:12] == ".Patch Names":
+      patch_mode = True
+    elif line[0] == ";" or line[0] == "[" or line in ['\n', '\r\n']:
+      None
+    else:
+      if patch_mode:
+        patch_name = line.split("=")[1].rstrip("\n")
+        patch_ls.append(patch_name)
+        
+  return patch_ls[:128]
+
 
 def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   # please I need a better way to do this

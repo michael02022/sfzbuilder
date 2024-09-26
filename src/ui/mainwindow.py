@@ -71,6 +71,7 @@ class MainWindow(QMainWindow):
     self.current_pack_dict = {}
     self.map_objects = []
     self.fx_ls = []
+    self.program_names_ls = []
 
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
     self.enable_edit = False
@@ -117,6 +118,12 @@ class MainWindow(QMainWindow):
     self.ui.cbxFxFverbType.clear();self.ui.cbxFxFverbType.addItems(fverb_types)
     self.ui.cbxFxFilterType.clear();self.ui.cbxFxFilterType.addItems(filter_type)
     self.ui.cbxFxEqType.clear();self.ui.cbxFxEqType.addItems(eq_types)
+
+    # init list of ins files
+    p_program = pathlib.Path(__file__).parts[:-2]
+    self.p_programlist = pathlib.Path(os.path.join(*p_program)).joinpath("utils/programlist")
+    self.ui.cbxProgramIns.clear();self.ui.cbxProgramIns.addItems([f for f in os.listdir(self.p_programlist) if f.endswith(".ins")])
+    self.program_names_ls = get_list_from_ins(open(f"{self.p_programlist}/empty.ins", "r"))
 
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
@@ -948,11 +955,10 @@ class MainWindow(QMainWindow):
           self.ui.sbxCc.setValue(map_dict.get(k)[0])
           self.ui.sbxCcLo.setValue(map_dict.get(k)[1])
           self.ui.sbxCcHi.setValue(map_dict.get(k)[2])
-        case "map_prog_rangebool":
+        case "map_progbool":
           self.ui.chkProgram.setChecked(map_dict.get(k))
-        case "map_prog_range":
-          self.ui.sbxProgramLo.setValue(map_dict.get(k)[0])
-          self.ui.sbxProgramHi.setValue(map_dict.get(k)[1])
+        case "map_prog":
+          self.ui.sbxProgram.setValue(map_dict.get(k))
         case "volume":
           self.ui.dsbVolume.setValue(map_dict.get(k))
         case "keyswitchbool":
@@ -1457,8 +1463,7 @@ class MainWindow(QMainWindow):
     self.ui.sbxCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcLo.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxCcHi.valueChanged.connect(self.onUiValueChanged)
-    self.ui.sbxProgramLo.valueChanged.connect(self.onUiValueChanged)
-    self.ui.sbxProgramHi.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxProgram.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxOutput.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxWidth.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxPolyphony.valueChanged.connect(self.onUiValueChanged)
@@ -1586,6 +1591,8 @@ class MainWindow(QMainWindow):
     self.ui.gbxTwLfoWarp.toggled.connect(self.onUiValueChanged)
 
     # ComboBoxes
+    self.ui.cbxProgramIns.currentIndexChanged.connect(self.onUiValueChanged)
+
     self.ui.cbxWave.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveMode.currentIndexChanged.connect(self.onUiValueChanged)
 
@@ -1934,6 +1941,7 @@ class MainWindow(QMainWindow):
     self.ui.pbnXfadeCc.clicked.connect(self.onUiValueChanged)
     self.ui.pbnRR.clicked.connect(self.onUiValueChanged)
     self.ui.pbnRand.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnMidi.clicked.connect(self.onUiValueChanged)
 
   # UPDATE WIDGET -> OBJECT
   def onUiValueChanged(self):
@@ -1954,6 +1962,10 @@ class MainWindow(QMainWindow):
         self.global_header.change_value("portamento", self.sender().isChecked())
       case "dsbGlobalPortamentoTime":
         self.global_header.change_value("portamento_time", self.sender().value())
+      case "cbxProgramIns":
+        self.program_names_ls = get_list_from_ins(open(f"{self.p_programlist}/{self.ui.cbxProgramIns.currentText()}", "r"))
+        self.ui.lblProgramName.setText(self.program_names_ls[self.ui.sbxProgram.value()])
+        #print(self.program_names_ls)
       # SPINBOXES
       case "dsbVolume":
         obj.change_value("volume", self.sender().value())
@@ -1973,10 +1985,9 @@ class MainWindow(QMainWindow):
         obj.change_value("on_cc_range", [obj.on_cc_range[0], obj.on_cc_range[1], self.sender().value()])
       case "sbxCcLo":
         obj.change_value("on_cc_range", [obj.on_cc_range[0], self.sender().value(), obj.on_cc_range[2]])
-      case "sbxProgramLo":
-        obj.change_value("map_prog_range", [self.sender().value(), obj.map_prog_range[1]])
-      case "sbxProgramHi":
-        obj.change_value("map_prog_range", [obj.map_prog_range[0], self.sender().value()])
+      case "sbxProgram":
+        obj.change_value("map_prog", self.sender().value())
+        self.ui.lblProgramName.setText(self.program_names_ls[self.sender().value()])
       case "sbxOutput":
         obj.change_value("output", self.sender().value())
       case "sbxWidth":
@@ -2159,7 +2170,7 @@ class MainWindow(QMainWindow):
       case "chkNoteOn":
         obj.change_value("on_cc_rangebool", self.sender().isChecked())
       case "chkProgram":
-        obj.change_value("map_prog_rangebool", self.sender().isChecked())
+        obj.change_value("map_progbool", self.sender().isChecked())
       case "chkPolyphony":
         obj.change_value("polybool", self.sender().isChecked())
       case "chkNotePolyphony":
@@ -2304,6 +2315,9 @@ class MainWindow(QMainWindow):
         self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
       case "pbnRand":
         obj.add_opcode_txt(sfz_random(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnMidi":
+        obj.add_opcode_txt(sfz_midi_value(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
         self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
 
       # KNOBS / DIALS
@@ -3270,8 +3284,8 @@ class MainWindow(QMainWindow):
           sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
           if m.on_cc_rangebool:
             sfz_content += f"on_locc{m.on_cc_range[0]}={m.on_cc_range[1]} on_hicc{m.on_cc_range[0]}={m.on_cc_range[2]}\n"
-          if m.map_prog_rangebool:
-            sfz_content += f"loprog={m.map_prog_range[0]} hiprog={m.map_prog_range[1]}\n"
+          if m.map_progbool:
+            sfz_content += f"loprog={m.map_prog} hiprog={m.map_prog}\n"
           sfz_content += f"volume={m.volume}\n\n"
 
           # MAP

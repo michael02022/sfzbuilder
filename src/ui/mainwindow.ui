@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1142</width>
+    <width>1232</width>
     <height>776</height>
    </rect>
   </property>
@@ -495,6 +495,19 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="layProgram">
         <property name="sizeConstraint">
          <enum>QLayout::SetNoConstraint</enum>
@@ -507,6 +520,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="lblProgramName">
+          <property name="text">
+           <string>---</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="chkProgram">
           <property name="text">
            <string>Program Change:</string>
@@ -514,38 +534,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sbxProgramLo">
+         <widget class="QSpinBox" name="sbxProgram">
           <property name="maximum">
            <number>127</number>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_45">
-          <property name="text">
-           <string>-</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="sbxProgramHi">
-          <property name="maximum">
-           <number>127</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         <widget class="QComboBox" name="cbxProgramIns"/>
         </item>
        </layout>
       </item>
@@ -7145,6 +7141,25 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="6">
+          <widget class="QSpinBox" name="sbxLength">
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="prefix">
+            <string>Length </string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>999999999</number>
+           </property>
+           <property name="value">
+            <number>3</number>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="5">
           <widget class="Line" name="line_29">
            <property name="orientation">
@@ -7166,29 +7181,17 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0" colspan="12">
-          <widget class="QPlainTextEdit" name="txtOpcodes"/>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pbnPortamento">
+         <item row="0" column="9">
+          <widget class="QPushButton" name="pbnRand">
            <property name="text">
-            <string>Portamento</string>
+            <string>Rand</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="6">
-          <widget class="QSpinBox" name="sbxLength">
-           <property name="suffix">
-            <string/>
-           </property>
-           <property name="prefix">
-            <string>Length </string>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>999999999</number>
+         <item row="0" column="8">
+          <widget class="QPushButton" name="pbnRR">
+           <property name="text">
+            <string>RR</string>
            </property>
           </widget>
          </item>
@@ -7205,17 +7208,20 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="8">
-          <widget class="QPushButton" name="pbnRR">
+         <item row="1" column="0" colspan="12">
+          <widget class="QPlainTextEdit" name="txtOpcodes"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pbnPortamento">
            <property name="text">
-            <string>RR</string>
+            <string>Portamento</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="9">
-          <widget class="QPushButton" name="pbnRand">
+         <item row="0" column="11">
+          <widget class="QPushButton" name="pbnMidi">
            <property name="text">
-            <string>Rand</string>
+            <string>MIDI</string>
            </property>
           </widget>
          </item>
@@ -10784,7 +10790,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1142</width>
+     <width>1232</width>
      <height>20</height>
     </rect>
    </property>

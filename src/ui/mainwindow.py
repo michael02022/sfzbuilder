@@ -2299,7 +2299,7 @@ class MainWindow(QMainWindow):
       case "txtComment":
         obj.change_value("comment", self.sender().text())
       case "pbnPortamento":
-        obj.add_opcode_txt(sfz_portamento("PORT", 0.05))
+        obj.add_opcode_txt(sfz_portamento("EXTRA", 0.05))
         self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
       case "pbnXfadeKey":
         obj.add_opcode_txt(sfz_xfade("key"))

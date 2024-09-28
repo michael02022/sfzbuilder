@@ -110,8 +110,8 @@ def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   r31 = r30.replace("lfoTW1", f"lfo{lfo_idx+5}")
   r32 = r31.replace("lfoTW2", f"lfo{lfo_idx+6}")
 
-  # Portamento
-  r33 = r32.replace("egPORT", f"eg{eg_idx+6}")
+  # Portamento / Extra eg
+  r33 = r32.replace("egEXTRA", f"eg{eg_idx+6}")
 
   return r33
 

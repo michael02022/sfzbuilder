@@ -18,7 +18,7 @@
       <property name="title">
        <string>Global</string>
       </property>
-      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
        </property>
@@ -131,7 +131,7 @@
         <widget class="QComboBox" name="cbxGlobalPortamentoTimeMode">
          <item>
           <property name="text">
-           <string>None</string>
+           <string>CC</string>
           </property>
          </item>
          <item>
@@ -149,6 +149,16 @@
            <string>Alternate</string>
           </property>
          </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sbxGlobalPortamentoCc">
+         <property name="maximum">
+          <number>127</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
         </widget>
        </item>
        <item>
@@ -7189,7 +7199,11 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_13">
          <item row="1" column="0" colspan="13">
-          <widget class="QPlainTextEdit" name="txtOpcodes"/>
+          <widget class="QPlainTextEdit" name="txtOpcodes">
+           <property name="toolTip">
+            <string>&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;cc&lt;/th&gt;&lt;th&gt;alias&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;MOD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;BREATH&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;FOOT&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;GLIDE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;VOL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;PAN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;EXP&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;64&lt;/td&gt;&lt;td&gt;HOLD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;69&lt;/td&gt;&lt;td&gt;HOLD2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;71&lt;/td&gt;&lt;td&gt;RESO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;72&lt;/td&gt;&lt;td&gt;RELEASE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;73&lt;/td&gt;&lt;td&gt;ATTACK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;74&lt;/td&gt;&lt;td&gt;CUTOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;sfz&lt;/td&gt;&lt;td&gt;-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;128&lt;/td&gt;&lt;td&gt;PITCHBEND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;131&lt;/td&gt;&lt;td&gt;VEL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;132&lt;/td&gt;&lt;td&gt;VELOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;133&lt;/td&gt;&lt;td&gt;KEY&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;134&lt;/td&gt;&lt;td&gt;KEYGATE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;135&lt;/td&gt;&lt;td&gt;UNIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;136&lt;/td&gt;&lt;td&gt;BIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;137&lt;/td&gt;&lt;td&gt;ALTER&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</string>
+           </property>
+          </widget>
          </item>
          <item row="0" column="10">
           <widget class="QPushButton" name="pbnRand">

@@ -707,10 +707,18 @@ class MainWindow(QMainWindow):
           self.ui.chkGlobalPortamento.setChecked(global_dict.get(k))
         case "portamento_time":
           self.ui.dsbGlobalPortamentoTime.setValue(global_dict.get(k))
+        case "portamento_cc":
+          self.ui.sbxGlobalPortamentoCc.setValue(global_dict.get(k))
         case "portamento_time_mode":
           self.ui.cbxGlobalPortamentoTimeMode.setCurrentIndex(global_dict.get(k))
         case "portamento_time_mode_add":
           self.ui.dsbGlobalPortamentoTimeModeAdd.setValue(global_dict.get(k))
+          if self.ui.dsbGlobalPortamentoTimeModeAdd.value() == 0.0:
+            self.ui.sbxGlobalPortamentoCc.setEnabled(False)
+            self.ui.cbxGlobalPortamentoTimeMode.setEnabled(False)
+          else:
+            self.ui.sbxGlobalPortamentoCc.setEnabled(True)
+            self.ui.cbxGlobalPortamentoTimeMode.setEnabled(True)
 
   def get_fx_values(self):
     idx = self.ui.listFx.currentRow()
@@ -1472,6 +1480,7 @@ class MainWindow(QMainWindow):
     self.ui.cbxOversampling.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.chkGlobalPortamento.stateChanged.connect(self.onUiValueChanged)
     self.ui.dsbGlobalPortamentoTime.valueChanged.connect(self.onUiValueChanged)
+    self.ui.sbxGlobalPortamentoCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.cbxGlobalPortamentoTimeMode.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.dsbGlobalPortamentoTimeModeAdd.valueChanged.connect(self.onUiValueChanged)
 
@@ -1984,10 +1993,18 @@ class MainWindow(QMainWindow):
         self.global_header.change_value("portamento", self.sender().isChecked())
       case "dsbGlobalPortamentoTime":
         self.global_header.change_value("portamento_time", self.sender().value())
+      case "sbxGlobalPortamentoCc":
+        self.global_header.change_value("portamento_cc", self.sender().value())
       case "cbxGlobalPortamentoTimeMode":
         self.global_header.change_value("portamento_time_mode", self.sender().currentIndex())
       case "dsbGlobalPortamentoTimeModeAdd":
         self.global_header.change_value("portamento_time_mode_add", self.sender().value())
+        if self.ui.dsbGlobalPortamentoTimeModeAdd.value() == 0.0:
+          self.ui.sbxGlobalPortamentoCc.setEnabled(False)
+          self.ui.cbxGlobalPortamentoTimeMode.setEnabled(False)
+        else:
+          self.ui.sbxGlobalPortamentoCc.setEnabled(True)
+          self.ui.cbxGlobalPortamentoTimeMode.setEnabled(True)
       case "cbxProgramIns":
         self.program_names_ls = get_list_from_ins(open(f"{self.p_programlist}/{self.ui.cbxProgramIns.currentText()}", "r"))
         self.ui.lblProgramName.setText(self.program_names_ls[self.ui.sbxProgram.value()])
@@ -3277,9 +3294,8 @@ class MainWindow(QMainWindow):
         sfz_content += f"sw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
       if global_obj.portamento:
         sfz_content += sfz_portamento(99, global_obj.portamento_time)
-        print(global_obj.portamento_time_mode)
-        if global_obj.portamento_time_mode != 0:
-          sfz_content += f"{opcode_sw("eg99_time1", global_obj.portamento_time_mode, global_obj.portamento_time_mode_add)}\n"
+        if global_obj.portamento_time_mode_add != 0.0:
+          sfz_content += f"{opcode_sw("eg99_time1", global_obj.portamento_time_mode, global_obj.portamento_time_mode_add, global_obj.portamento_cc)}\n"
 
       if fx_mode_save is True:
         None
@@ -4278,6 +4294,7 @@ class MainWindow(QMainWindow):
     projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
     if projectpath[0] != "":
       self.map_objects = self.open_project(projectpath[0])
+      self.ui.txtPreset.setText(projectpath[0].split('/')[-1].split('.')[0])
       # update
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(0)

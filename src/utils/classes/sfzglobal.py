@@ -6,6 +6,7 @@ class SfzGlobal:
     self.oversampling = "x1"
     self.portamento = False
     self.portamento_time = 0.05
+    self.portamento_cc = 5
     self.portamento_time_mode = 0
     self.portamento_time_mode_add = 0.0
     self.bend_range = [-98304, 98304] # two octaves

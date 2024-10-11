@@ -54,7 +54,7 @@ def delay_sw(cc, value):
   except:
     return cc
 
-def opcode_sw(opcode, type, value, add_value=None):
+def opcode_sw(opcode, type, value, cc=None, add_value=None):
   print(type)
   try:
     match int(type):
@@ -77,10 +77,16 @@ def opcode_sw(opcode, type, value, add_value=None):
           op = f"{opcode}_oncc137={add_value}"
         return op
       case _:
-        op = f"{opcode}={value}"
+        if cc is not None:
+          op = f"{opcode}_oncc{cc}={value}"
+        else:
+          op = f"{opcode}={value}"
         return op
   except:
-    op = f"{opcode}={value}"
+    if cc is not None:
+      op = f"{opcode}_oncc{cc}={value}"
+    else:
+      op = f"{opcode}={value}"
     return op
 
 def pan_sw(mode, value):

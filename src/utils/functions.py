@@ -40,6 +40,49 @@ def cc_sw(cc, value):
   except:
     return cc
 
+def delay_sw(cc, value):
+  try:
+    match int(str(value).split('.')[0]):
+      case 1:
+        return 135 # unipolar random
+      case 2:
+        return 136 # bipolar random
+      case 3:
+        return 137 # alternate random
+      case _:
+        return cc
+  except:
+    return cc
+
+def opcode_sw(opcode, type, value, add_value=None):
+  print(type)
+  try:
+    match int(type):
+      case 1: # unipolar random
+        if add_value is None:
+          op = f"{opcode}_oncc135={value}"
+        else:
+          op = f"{opcode}_oncc135={add_value}"
+        return op
+      case 2: # bipolar random
+        if add_value is None:
+          op = f"{opcode}_oncc136={value}"
+        else:
+          op = f"{opcode}_oncc136={add_value}"
+        return op
+      case 3: # alternate random
+        if add_value is None:
+          op = f"{opcode}_oncc137={value}"
+        else:
+          op = f"{opcode}_oncc137={add_value}"
+        return op
+      case _:
+        op = f"{opcode}={value}"
+        return op
+  except:
+    op = f"{opcode}={value}"
+    return op
+
 def pan_sw(mode, value):
   if mode:
     return value * 2

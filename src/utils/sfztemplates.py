@@ -9,6 +9,18 @@ eg{eg_idx}_pitch_oncc140=100 //This is the pitch depth
 eg{eg_idx}_time1={time} //GLIDE TIME
 eg{eg_idx}_level1=0\n"""
 
+def sfz_eg_v2(eg_idx):
+    return f"""
+//eg{eg_idx}_ampeg=1
+eg{eg_idx}_sustain=4
+eg{eg_idx}_level0=START_LEVEL   eg{eg_idx}_time0=-1
+eg{eg_idx}_level1=START_LEVEL   eg{eg_idx}_time1=DELAY_TIME
+eg{eg_idx}_level2=1             eg{eg_idx}_time2=ATTACK_TIME  eg{eg_idx}_shape2=0.00001
+eg{eg_idx}_level3=1             eg{eg_idx}_time3=HOLD_TIME
+eg{eg_idx}_level4=SUSTAIN_LEVEL eg{eg_idx}_time4=DECAY_TIME   eg{eg_idx}_shape4=-0.3616
+eg{eg_idx}_level5=0             eg{eg_idx}_time5=RELEASE_TIME eg{eg_idx}_shape5=-6.3616
+"""
+
 def sfz_xfade(str):
     match str:
         case "key":

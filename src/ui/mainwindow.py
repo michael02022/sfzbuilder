@@ -16,6 +16,7 @@ from utils.classes.sfzglobal  import SfzGlobal
 from utils.enums              import *
 from utils.constants          import *
 from utils.sfztemplates       import *
+from datetime                 import datetime
 import time
 import os
 import copy
@@ -127,6 +128,7 @@ class MainWindow(QMainWindow):
 
     # Init folders and mapping dictionary
     self.ui.pbnMainFolder.clicked.connect(self.onMainFolder)
+    self.ui.pbnSetDefaultAuthor.clicked.connect(self.onSetDefaultAuthor)
     #self.ui.pbnPresetFolder.clicked.connect(self.onPresetFolder)
     if self.settings.value("mainfolderpath") is not None:
       self.ui.txtMainFolder.setText(self.settings.value("mainfolderpath"))
@@ -134,6 +136,9 @@ class MainWindow(QMainWindow):
       self.mappings_dict = get_mappings(self.settings.value("mainfolderpath"))
       self.enable_edit = True
       #print(self.mappings_dict)
+    
+    if self.settings.value("authorname") is not None:
+      self.ui.txtAuthor.setText(self.settings.value("authorname"))
 
     # init global header
     self.global_header = SfzGlobal()
@@ -202,6 +207,7 @@ class MainWindow(QMainWindow):
     # MENUS
     self.save_menu = QMenu(self)
     save_temp_sfz = self.save_menu.addAction("Save TEMP SFZ")
+    save_quick_sfz = self.save_menu.addAction("Save Quick SFZ")
     self.save_menu.addSeparator()
     save_as_sfz = self.save_menu.addAction("Save as SFZ")
     save_project = self.save_menu.addAction("Save as Project") # 🟩
@@ -213,6 +219,7 @@ class MainWindow(QMainWindow):
     open_proj.setIcon(QIcon.fromTheme("Open Project", QIcon(":/document-open")))
 
     save_temp_sfz.triggered.connect(self.onSaveTempfz)
+    save_quick_sfz.triggered.connect(self.onSaveQuickSfz)
     save_as_sfz.triggered.connect(self.onSaveAsSfz)
     save_project.triggered.connect(self.onSaveProject)
 
@@ -220,6 +227,10 @@ class MainWindow(QMainWindow):
     self.ui.actOpen.triggered.connect(self.onOpenProject)
 
     self.ui.actNew.triggered.connect(self.onNew)
+
+    # preferences theme
+    #print(QtGui.QStyleFactory.keys())
+    #self.ui.menuChange_theme.addAction()
 
     # cc menu
     self.cc_menu = QMenu(self)
@@ -448,6 +459,10 @@ class MainWindow(QMainWindow):
     else:
       self.ui.txtMainFolder.setText(main_folder_path)
       self.settings.setValue("mainfolderpath", main_folder_path)
+  
+  def onSetDefaultAuthor(self):
+    self.settings.setValue("authorname", self.ui.txtAuthor.text())
+    self.ui.lblLog.setText(f"Author name {self.settings.value("authorname")} saved")
 
   def onPresetFolder(self):
     preset_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a preset folder", options=QFileDialog.ShowDirsOnly, dir=f"{self.settings.value('mainfolderpath')}/Presets")
@@ -692,7 +707,11 @@ class MainWindow(QMainWindow):
           self.ui.chkGlobalPortamento.setChecked(global_dict.get(k))
         case "portamento_time":
           self.ui.dsbGlobalPortamentoTime.setValue(global_dict.get(k))
-  
+        case "portamento_time_mode":
+          self.ui.cbxGlobalPortamentoTimeMode.setCurrentIndex(global_dict.get(k))
+        case "portamento_time_mode_add":
+          self.ui.dsbGlobalPortamentoTimeModeAdd.setValue(global_dict.get(k))
+
   def get_fx_values(self):
     idx = self.ui.listFx.currentRow()
     fx_widget = self.ui.stackedWidget.currentWidget()
@@ -1453,6 +1472,8 @@ class MainWindow(QMainWindow):
     self.ui.cbxOversampling.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.chkGlobalPortamento.stateChanged.connect(self.onUiValueChanged)
     self.ui.dsbGlobalPortamentoTime.valueChanged.connect(self.onUiValueChanged)
+    self.ui.cbxGlobalPortamentoTimeMode.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.dsbGlobalPortamentoTimeModeAdd.valueChanged.connect(self.onUiValueChanged)
 
     # Spinboxes
     self.ui.dsbVolume.valueChanged.connect(self.onUiValueChanged)
@@ -1939,6 +1960,7 @@ class MainWindow(QMainWindow):
     self.ui.pbnXfadeKey.clicked.connect(self.onUiValueChanged)
     self.ui.pbnXfadeVel.clicked.connect(self.onUiValueChanged)
     self.ui.pbnXfadeCc.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnEg.clicked.connect(self.onUiValueChanged)
     self.ui.pbnRR.clicked.connect(self.onUiValueChanged)
     self.ui.pbnRand.clicked.connect(self.onUiValueChanged)
     self.ui.pbnMidi.clicked.connect(self.onUiValueChanged)
@@ -1962,10 +1984,13 @@ class MainWindow(QMainWindow):
         self.global_header.change_value("portamento", self.sender().isChecked())
       case "dsbGlobalPortamentoTime":
         self.global_header.change_value("portamento_time", self.sender().value())
+      case "cbxGlobalPortamentoTimeMode":
+        self.global_header.change_value("portamento_time_mode", self.sender().currentIndex())
+      case "dsbGlobalPortamentoTimeModeAdd":
+        self.global_header.change_value("portamento_time_mode_add", self.sender().value())
       case "cbxProgramIns":
         self.program_names_ls = get_list_from_ins(open(f"{self.p_programlist}/{self.ui.cbxProgramIns.currentText()}", "r"))
         self.ui.lblProgramName.setText(self.program_names_ls[self.ui.sbxProgram.value()])
-        #print(self.program_names_ls)
       # SPINBOXES
       case "dsbVolume":
         obj.change_value("volume", self.sender().value())
@@ -2318,6 +2343,9 @@ class MainWindow(QMainWindow):
         self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
       case "pbnMidi":
         obj.add_opcode_txt(sfz_midi_value(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
+      case "pbnEg":
+        obj.add_opcode_txt(sfz_eg_v2("EXTRA"))
         self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
 
       # KNOBS / DIALS
@@ -3192,6 +3220,14 @@ class MainWindow(QMainWindow):
       if self.ui.tabGroup.currentIndex() == 11:
         fx_switch = True
       self.save_sfz("", "", self.global_header, self.map_objects, True, fx_switch)
+    
+  def onSaveQuickSfz(self):
+    if len(self.map_objects) == 0:
+      self.msgbox_ok.setText("Please add a mapping.")
+      self.msgbox_ok.exec()
+    else:
+      date_now = str(datetime.now()).replace(":","-").replace(".","-")
+      self.save_sfz(f"{self.settings.value('mainfolderpath')}/Presets/!QUICK", date_now, self.global_header, self.map_objects)
 
   def callme(foo):
       print(f"{foo}, I have been called")
@@ -3228,16 +3264,22 @@ class MainWindow(QMainWindow):
       #print(pathstr)
 
       # generating sfz
-      sfz_content = f"//THIS SFZ WAS GENERATED BY SFZBUILDER 0.1.0\n\n"
+      sfz_content = f"//THIS SFZ WAS GENERATED BY SFZBUILDER 0.1.0\n//AUTHOR: {self.ui.txtAuthor.text()}\n"
       sfz_content += f"<control>\n#define $USERPATH {define_userpath}\n"
       if global_obj.oversampling != "x1":
         sfz_content += f"hint_min_samplerate={44100 * (int(oversamplings.index(global_obj.oversampling)) + 1)}\n"
       sfz_content += "\n<global>\n"
+      sfz_content += f"lobend={global_obj.bend_range[0]} hibend={global_obj.bend_range[1]}\n"
+      sfz_content += f"bend_down={global_obj.pitch_bend_range[0]} bend_up={global_obj.pitch_bend_range[1]}\n"
+      sfz_content += f"//bend_down=-8192 bend_up=8192 //uncomment these opcodes for MIDI pitch bend values\n\n"
 
       if global_obj.keysw:
         sfz_content += f"sw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
       if global_obj.portamento:
-        sfz_content += sfz_portamento(9999, global_obj.portamento_time)
+        sfz_content += sfz_portamento(99, global_obj.portamento_time)
+        print(global_obj.portamento_time_mode)
+        if global_obj.portamento_time_mode != 0:
+          sfz_content += f"{opcode_sw("eg99_time1", global_obj.portamento_time_mode, global_obj.portamento_time_mode_add)}\n"
 
       if fx_mode_save is True:
         None
@@ -3278,8 +3320,6 @@ class MainWindow(QMainWindow):
           None
         else:
           sfz_content += f"<master> //{m.comment}\n"
-          sfz_content += f"lobend={m.bend_range[0]} hibend={m.bend_range[1]}\n"
-          sfz_content += f"bend_down={m.pitch_bend_range[0]} bend_up={m.pitch_bend_range[1]}\n\n"
           sfz_content += f"locc133={m.map_key_range[0]} hicc133={m.map_key_range[1]}\n"
           sfz_content += f"locc131={m.map_vel_range[0]} hicc131={m.map_vel_range[1]}\n"
           if m.on_cc_rangebool:
@@ -3578,7 +3618,7 @@ class MainWindow(QMainWindow):
                 if m.fx_pan > 0:
                   sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
                   sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
@@ -3646,7 +3686,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 if m.wave == "TableWarp2":
@@ -3769,7 +3809,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -3828,7 +3868,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
@@ -3896,7 +3936,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 if m.wave == "TableWarp2":
@@ -3956,7 +3996,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
@@ -4095,7 +4135,7 @@ class MainWindow(QMainWindow):
                 if m.fx_pan >= 0:
                   sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
@@ -4113,7 +4153,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 sfz_content += f"<control>\n"
@@ -4139,7 +4179,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
@@ -4150,7 +4190,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"
@@ -4171,7 +4211,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
@@ -4182,7 +4222,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
 
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{cc_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
                 sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"

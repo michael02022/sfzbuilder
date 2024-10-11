@@ -73,6 +73,7 @@ lfo_waves = ("Triangle", "Sine", "75% Pulse", "Square", "25% Pulse", "12.5% Puls
 wavetables = ("Sine", "Triangle", "Square", "Saw", "Noise", "Sample", "TableWarp2")
 wave_modes = ("Normal/RM", "PM", "FM")
 eg_types = ("Normal", "Flex")
+modulation_modes = ("None", "Unipolar", "Bipolar", "Alternate")
 
 fx_types = ("com.Garritan.Ambience",
             "com.mda.Detune",

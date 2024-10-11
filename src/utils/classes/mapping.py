@@ -97,8 +97,8 @@ class Mapping:
     #self.chanaft_range = [0, 127]
     #self.polyaft_range = [0, 127]
 
-    self.bend_range = [-98304, 98304] # two octaves
-    self.pitch_bend_range = [-2400, 2400] # two octaves
+    #self.bend_range = [-98304, 98304] # two octaves
+    #self.pitch_bend_range = [-2400, 2400] # two octaves
 
     self.volume = 0
 

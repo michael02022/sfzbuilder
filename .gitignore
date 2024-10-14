@@ -3,8 +3,11 @@ __pycache__/
 *.pyc
 *.qm
 *.user
+*.spec
 src/ui/rc_resources.py
 resources/rc_resources.py
 src/ui/ui_mainwindow.py
 src/ui/ui_importwindow.py
 .venv
+build
+dist

@@ -16,4 +16,6 @@ Once updated the UI and/or resource files, run `scripts/update_ui_files.sh`.<br/
 From VSCode just press <kbd>CTRL</kbd> <kbd>Shift</kbd> <kbd>B</kbd> or press <kbd>CTRL</kbd> <kbd>P</kbd> and write `task`, then press space and select `Save UI` task.
 
 ## Building
+If you want to straight build SFZBuilder, you have to run `update_ui_files.sh` first through VSCode before running pyinstaller.
+
 To make a build for Windows/macOS/Linux, run `pyinstaller ./src/main.py --name=sfzbuilder` and then run the bash script `build.sh` to move the required files to run it normally.

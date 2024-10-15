@@ -1,5 +1,6 @@
 from collections  import defaultdict
 from pathlib      import Path
+from natsort      import os_sorted
 import pathlib
 import os
 import json
@@ -288,9 +289,9 @@ def generate_eg_tw(idx, start, delay, attack, attack_shape, hold, decay, decay_s
 
 def get_mappings(config_path):
   mappings_dict = {}
-  mappings_dict["MSamples"] = [p.replace('\\',"/") for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz") and not p.endswith(" --TN.sfz")]
-  mappings_dict["PSamples"] = [p.replace('\\',"/") for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")]
-  mappings_dict["Wavetables"] = [p.replace('\\',"/") for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav") or p.endswith(".sfz")]
+  mappings_dict["MSamples"] = os_sorted([p.replace('\\',"/") for p in glob.glob(f"**/MSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz") and not p.endswith(" --TN.sfz")])
+  mappings_dict["PSamples"] = os_sorted([p.replace('\\',"/") for p in glob.glob(f"**/PSamples/**", recursive=True, root_dir=f"{config_path}/MappingPool/") if p.endswith(".sfz")])
+  mappings_dict["Wavetables"] = os_sorted([p.replace('\\',"/") for p in glob.glob(f"**", recursive=True, root_dir=f"{config_path}/Wavetables/") if p.endswith(".wav") or p.endswith(".sfz")])
   return mappings_dict
 
 def get_pack(ls):

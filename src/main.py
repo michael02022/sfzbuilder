@@ -6,9 +6,10 @@ from PySide6.QtCore    import QLocale, QTranslator
 from PySide6.QtGui     import QCursor, QIcon
 from PySide6.QtWidgets import QApplication
 #from PySide6.QtUiTools import QUiLoader
-from ui.mainwindow import MainWindow
 
 import os, sys
+sys.path.append(f"{os.getcwd()}")
+from ui.mainwindow import MainWindow
 #sys.path.insert(0, "..")
 
 testingOtherTranslation = False # FIXME: put this somewhere in a gitignored config file

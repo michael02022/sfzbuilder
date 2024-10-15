@@ -7,6 +7,7 @@ Create a virtual environment and install the next dependencies
 
 ```
 pip install PySide6==6.7.3
+pip install natsort
 pip install pyinstaller
 ```
 

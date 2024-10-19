@@ -3505,7 +3505,7 @@ class MainWindow(QMainWindow):
           sfz_content += f"label_cc118=PleaseSetMe127\n"
           sfz_content += f"set_cc118=127\n"
           # pan
-          if m.pan_stereo:
+          if m.panbool:
             sfz_content += f"label_cc117=PleaseSetMe127\n"
             sfz_content += f"set_cc117=127\n"  
 
@@ -3574,7 +3574,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"set_cc90=127\n"
                 # OSC 1
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={int(m.fx_detune)}\n"
+                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
                 if m.fx_pan > 0:
                   sfz_content += f"pan={int(m.fx_pan)}\n"
                 if m.wave == "TableWarp2":
@@ -3632,11 +3632,11 @@ class MainWindow(QMainWindow):
 
                 # OSC 2
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={-abs(int(m.fx_detune))}\n"
+                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
                 if m.fx_pan > 0:
                   sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
                   sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
@@ -3704,7 +3704,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 if m.wave == "TableWarp2":
@@ -3827,8 +3827,8 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
                   sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
@@ -3885,9 +3885,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -3954,8 +3952,8 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -4013,9 +4011,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -4140,7 +4136,7 @@ class MainWindow(QMainWindow):
 
                 # OSC 1
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={int(m.fx_detune)}\n"
+                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
                 if m.fx_pan >= 0:
                   sfz_content += f"pan={int(m.fx_pan)}\n"
                 sfz_content += f"<control>\n"
@@ -4149,11 +4145,11 @@ class MainWindow(QMainWindow):
 
                 # OSC 2
                 sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc90={-abs(int(m.fx_detune))}\n"
+                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
                 if m.fx_pan >= 0:
                   sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
@@ -4171,7 +4167,7 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay >= 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 sfz_content += f"<control>\n"
@@ -4197,8 +4193,8 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4207,9 +4203,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4229,8 +4223,8 @@ class MainWindow(QMainWindow):
                 # OSC 1
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4239,9 +4233,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={m.fx_delay}\n"
-                sfz_content += f"tune_oncc90={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4252,6 +4244,8 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
                 sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+        sfz_content += "\n"
 
         lfo_idx += 7
         eg_idx += 7

@@ -55,6 +55,9 @@ def delay_sw(cc, value):
   except:
     return cc
 
+def get_decimals(value):
+  return float(f"0.{str(value).split('.')[1]}")
+
 def opcode_sw(opcode, type, value, cc=None, add_value=None):
   print(type)
   try:

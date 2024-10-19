@@ -333,7 +333,7 @@ class Mapping:
       if var == "opcode_notepad":
         self.opcode_notepad = val
       else:
-        exec(f"self.{var} = '{val}'")
+        exec(f"""self.{var} = \"{val}\"""")
     else:
       if "env_release" in var and not isinstance(val, bool):
         if val == 0:

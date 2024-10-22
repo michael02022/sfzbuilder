@@ -60,9 +60,13 @@ def sfz_random(length, index):
     return f"""lorand={rand_ls[clip(index-1, (0, length-1))]}\nhirand={rand_ls[clip(index, (0, length))]}\n\n"""
 
 def sfz_midi_value(length, index):
+    r = ""
     value_base = 127 // length
     value_ls = []
     for i in range(length):
         value_ls.append(value_base * i)
+    value_ls.pop(0)
     value_ls.append(127)
-    return f"""{value_ls[clip(index-1, (0, length-1))]}\n{value_ls[clip(index, (0, length))]}\n\n"""
+    for v in value_ls:
+        r += f"{v}\n"
+    return r

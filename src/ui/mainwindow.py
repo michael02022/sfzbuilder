@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
     self.program_names_ls = []
 
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
+    self.settings.setValue("last_file_path", None)
     self.enable_edit = False
     self.msgbox_ok = QMessageBox(self)
     self.chk_group = QButtonGroup(self); self.chk_group.addButton(self.ui.chkMap); self.chk_group.addButton(self.ui.chkPercussion); self.chk_group.addButton(self.ui.chkWavetable)
@@ -209,6 +210,7 @@ class MainWindow(QMainWindow):
     save_temp_sfz = self.save_menu.addAction("Save TEMP SFZ")
     save_quick_sfz = self.save_menu.addAction("Save Quick SFZ")
     self.save_menu.addSeparator()
+    save_current_sfz = self.save_menu.addAction("Save current SFZ")
     save_as_sfz = self.save_menu.addAction("Save as SFZ")
     save_project = self.save_menu.addAction("Save as Project") # 🟩
     self.save_menu.addSeparator()
@@ -220,6 +222,7 @@ class MainWindow(QMainWindow):
 
     save_temp_sfz.triggered.connect(self.onSaveTempfz)
     save_quick_sfz.triggered.connect(self.onSaveQuickSfz)
+    save_current_sfz.triggered.connect(self.onSaveCurrentSfz)
     save_as_sfz.triggered.connect(self.onSaveAsSfz)
     save_project.triggered.connect(self.onSaveProject)
 
@@ -949,10 +952,20 @@ class MainWindow(QMainWindow):
         case "fx_mode":
           self.ui.sbxFxMode.setValue(map_dict.get(k))
           match map_dict.get(k):
+            case 1:
+              self.ui.dsbFxSpeed.setEnabled(False)
+              self.ui.sbxFxDepth.setEnabled(False)
+              self.ui.sbxFxWave.setEnabled(False)
             case 2:
               self.ui.lblFx1.setText("WavePhase:")
+              self.ui.dsbFxSpeed.setEnabled(True)
+              self.ui.sbxFxDepth.setEnabled(True)
+              self.ui.sbxFxWave.setEnabled(True)
             case _:
               self.ui.lblFx1.setText("PanEffect:")
+              self.ui.dsbFxSpeed.setEnabled(True)
+              self.ui.sbxFxDepth.setEnabled(True)
+              self.ui.sbxFxWave.setEnabled(True)
         case "fx_pan":
           self.ui.sbxFxPan.setValue(map_dict.get(k))
         case "fx_detune":
@@ -1056,6 +1069,8 @@ class MainWindow(QMainWindow):
           self.ui.chkRegionExclusiveClass.setChecked(map_dict.get(k))
         case "group":
           self.ui.sbxGroup.setValue(map_dict.get(k))
+        case "off_bybool":
+          self.ui.chkOffBy.setChecked(map_dict.get(k))
         case "off_by":
           self.ui.sbxOffBy.setValue(map_dict.get(k))
         case "off_mode":
@@ -1595,6 +1610,7 @@ class MainWindow(QMainWindow):
     self.ui.chkUseKey.stateChanged.connect(self.onUiValueChanged)
     #self.ui.chkSampleOffsetValue.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkRegionExclusiveClass.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkOffBy.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveModDepthCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxWaveDetuneCc.stateChanged.connect(self.onUiValueChanged)
     self.ui.cbxTune.stateChanged.connect(self.onUiValueChanged)
@@ -2075,14 +2091,30 @@ class MainWindow(QMainWindow):
       case "sbxFxMode":
         obj.change_value("fx_mode", self.sender().value())
         match obj.fx_mode:
+          case 1:
+            self.ui.dsbFxSpeed.setEnabled(False)
+            self.ui.sbxFxDepth.setEnabled(False)
+            self.ui.sbxFxWave.setEnabled(False)
           case 2:
             self.ui.lblFx1.setText("WavePhase:")
+            self.ui.dsbFxSpeed.setEnabled(True)
+            self.ui.sbxFxDepth.setEnabled(True)
+            self.ui.sbxFxWave.setEnabled(True)
           case 3:
             self.ui.lblFx1.setText("WavePhase:")
+            self.ui.dsbFxSpeed.setEnabled(True)
+            self.ui.sbxFxDepth.setEnabled(True)
+            self.ui.sbxFxWave.setEnabled(True)
           case 4:
             self.ui.lblFx1.setText("WavePhase:")
+            self.ui.dsbFxSpeed.setEnabled(True)
+            self.ui.sbxFxDepth.setEnabled(True)
+            self.ui.sbxFxWave.setEnabled(True)
           case _:
             self.ui.lblFx1.setText("PanEffect:")
+            self.ui.dsbFxSpeed.setEnabled(True)
+            self.ui.sbxFxDepth.setEnabled(True)
+            self.ui.sbxFxWave.setEnabled(True)
       case "sbxFxPan":
         obj.change_value("fx_pan", self.sender().value())
       case "sbxFxDetune":
@@ -2243,6 +2275,8 @@ class MainWindow(QMainWindow):
       #  obj.change_value("offsetbool", self.sender().isChecked())
       case "chkRegionExclusiveClass":
         obj.change_value("exclass", self.sender().isChecked())
+      case "chkOffBy":
+        obj.change_value("off_bybool", self.sender().isChecked())
       case "gbxPan":
         obj.change_value("panbool", self.sender().isChecked())
       case "chkPanStereoMode":
@@ -3248,6 +3282,13 @@ class MainWindow(QMainWindow):
       date_now = str(datetime.now()).replace(":","-").replace(".","-")
       self.save_sfz(f"{self.settings.value('mainfolderpath')}/Presets/!QUICK", date_now, self.global_header, self.map_objects)
 
+  def onSaveCurrentSfz(self):
+    if self.settings.value('last_file_path') is None:
+      self.msgbox_ok.setText("Please load a project.")
+      self.msgbox_ok.exec()
+    else:
+      self.save_sfz(f"{self.settings.value('last_file_path')}", self.ui.txtPreset.text(), self.global_header, self.map_objects)
+
   def callme(foo):
       print(f"{foo}, I have been called")
 
@@ -3390,9 +3431,10 @@ class MainWindow(QMainWindow):
           if m.exclass:
             sfz_content += "\n\n"
             sfz_content += f"group={m.group}\n"
-            sfz_content += f"off_by={m.off_by}\n"
-            sfz_content += f"off_mode={m.off_mode}\n"
-            sfz_content += f"off_time={m.off_time}\n"
+            if m.off_bybool:
+              sfz_content += f"off_by={m.off_by}\n"
+              sfz_content += f"off_mode={m.off_mode}\n"
+              sfz_content += f"off_time={m.off_time}\n"
 
           # PAN
           if m.panbool:
@@ -4291,6 +4333,10 @@ class MainWindow(QMainWindow):
     if projectpath[0] != "":
       self.map_objects = self.open_project(projectpath[0])
       self.ui.txtPreset.setText(projectpath[0].split('/')[-1].split('.')[0])
+
+      file_path = pathlib.Path(projectpath[0]).parent # get the path of the loaded project and save it
+      self.settings.setValue('last_file_path', str(file_path).replace(f"{os.sep}Projects{os.sep}", f"{os.sep}Presets{os.sep}"))
+      #print(self.settings.value("last_file_path"))
       # update
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
       self.ui.listMap.setCurrentRow(0)

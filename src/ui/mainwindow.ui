@@ -1842,7 +1842,7 @@
             <item row="5" column="0">
              <widget class="QLabel" name="lblOffTime">
               <property name="text">
-               <string>Off time:</string>
+               <string>        Off time:</string>
               </property>
              </widget>
             </item>
@@ -1853,17 +1853,10 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lblOffBy">
-              <property name="text">
-               <string>Off by:</string>
-              </property>
-             </widget>
-            </item>
             <item row="4" column="0">
              <widget class="QLabel" name="lblOffMode">
               <property name="text">
-               <string>Off mode:</string>
+               <string>        Off mode:</string>
               </property>
              </widget>
             </item>
@@ -1895,6 +1888,13 @@
               </property>
               <property name="singleStep">
                <double>0.001000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="chkOffBy">
+              <property name="text">
+               <string>Off by</string>
               </property>
              </widget>
             </item>
@@ -10908,7 +10908,7 @@ p, li { white-space: pre-wrap; }
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Open project...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>

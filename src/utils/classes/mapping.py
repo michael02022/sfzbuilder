@@ -148,6 +148,7 @@ class Mapping:
     # (EXCLUSIVE CLASS)
     self.exclass = False
     self.group = 0
+    self.off_bybool = False
     self.off_by = 0
     self.off_mode = off_modes[0]
     self.off_time = 0.006

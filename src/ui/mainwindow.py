@@ -207,10 +207,11 @@ class MainWindow(QMainWindow):
 
     # MENUS
     self.save_menu = QMenu(self)
+    self.save_current_sfz = self.save_menu.addAction("Save current SFZ")
+    self.save_current_sfz.setEnabled(False)
     save_temp_sfz = self.save_menu.addAction("Save TEMP SFZ")
     save_quick_sfz = self.save_menu.addAction("Save Quick SFZ")
     self.save_menu.addSeparator()
-    save_current_sfz = self.save_menu.addAction("Save current SFZ")
     save_as_sfz = self.save_menu.addAction("Save as SFZ")
     save_project = self.save_menu.addAction("Save as Project") # 🟩
     self.save_menu.addSeparator()
@@ -222,7 +223,7 @@ class MainWindow(QMainWindow):
 
     save_temp_sfz.triggered.connect(self.onSaveTempfz)
     save_quick_sfz.triggered.connect(self.onSaveQuickSfz)
-    save_current_sfz.triggered.connect(self.onSaveCurrentSfz)
+    self.save_current_sfz.triggered.connect(self.onSaveCurrentSfz)
     save_as_sfz.triggered.connect(self.onSaveAsSfz)
     save_project.triggered.connect(self.onSaveProject)
 
@@ -4332,10 +4333,11 @@ class MainWindow(QMainWindow):
     projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
     if projectpath[0] != "":
       self.map_objects = self.open_project(projectpath[0])
-      self.ui.txtPreset.setText(projectpath[0].split('/')[-1].split('.')[0])
+      self.ui.txtPreset.setText(projectpath[0].split(os.sep)[-1].split('.')[0])
 
       file_path = pathlib.Path(projectpath[0]).parent # get the path of the loaded project and save it
       self.settings.setValue('last_file_path', str(file_path).replace(f"{os.sep}Projects{os.sep}", f"{os.sep}Presets{os.sep}"))
+      self.save_current_sfz.setEnabled(True)
       #print(self.settings.value("last_file_path"))
       # update
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))

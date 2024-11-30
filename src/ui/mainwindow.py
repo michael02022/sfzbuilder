@@ -3,7 +3,7 @@
 
 # This Python file uses the following encoding: utf-8
 from PySide6.QtCore           import QSettings, Qt, QEvent
-from PySide6.QtGui            import QIcon, QCursor, QAction, QHoverEvent
+from PySide6.QtGui            import QIcon, QCursor, QAction, QHoverEvent, QKeySequence
 from PySide6.QtWidgets        import QMainWindow, QFileDialog, QMessageBox, QApplication, QButtonGroup, QMenu, QDialog
 from .ui_mainwindow           import Ui_MainWindow
 from .ui_importwindow         import Ui_Dialog
@@ -65,6 +65,7 @@ class MainWindow(QMainWindow):
 
     self.ui = Ui_MainWindow()
     self.ui.setupUi(self)
+    self.setAcceptDrops(True)
 
     #setupKnobs(self.ui)
 
@@ -445,6 +446,26 @@ class MainWindow(QMainWindow):
         self.save_menu.exec(QCursor.pos())
       #self.cc_menu.exec(QCursor.pos())
       #self.drum_menu.exec(QCursor.pos())
+  
+  def dragEnterEvent(self, event):
+    if event.mimeData().hasUrls():
+        event.accept()
+    else:
+        event.ignore()
+
+  def dropEvent(self, event):
+      files = [u.toLocalFile() for u in event.mimeData().urls()]
+      if files[0].endswith(".sfzproj"):
+        self.map_objects = self.open_project(files[0])
+        self.ui.txtPreset.setText(files[0].split(os.sep)[-1].split('.')[0])
+
+        file_path = pathlib.Path(files[0]).parent # get the path of the loaded project and save it
+        self.settings.setValue('last_file_path', str(file_path).replace(f"{os.sep}Projects{os.sep}", f"{os.sep}Presets{os.sep}"))
+        self.save_current_sfz.setEnabled(True)
+        #print(self.settings.value("last_file_path"))
+        # update
+        self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+        self.ui.listMap.setCurrentRow(0)
 
   def onPercMenu(self, action):
     val = int(only_nums(action.text()[:3]))
@@ -486,6 +507,8 @@ class MainWindow(QMainWindow):
         self.fx_ls.clear()
         self.ui.listMap.clear()
         self.ui.listFx.clear()
+        self.settings.setValue("last_file_path", None)
+        self.save_current_sfz.setEnabled(False)
       case QMessageBox.No:
         None
 
@@ -3257,6 +3280,11 @@ class MainWindow(QMainWindow):
       if projectpath[0] != "":
         #print(projectpath[0])
         self.save_sfz(os.path.dirname(projectpath[0]), os.path.splitext(os.path.basename(projectpath[0]))[0], self.global_header, self.map_objects)
+        self.ui.txtPreset.setText(os.path.splitext(os.path.basename(projectpath[0]))[0])
+        file_path = pathlib.Path(projectpath[0]).parent # get the path of the loaded project and save it
+        self.settings.setValue('last_file_path', str(file_path).replace(f"{os.sep}Projects{os.sep}", f"{os.sep}Presets{os.sep}"))
+        self.save_current_sfz.setEnabled(True)
+
   '''
   def onSaveSfz(self):
     if len(self.map_objects) == 0:
@@ -3290,8 +3318,13 @@ class MainWindow(QMainWindow):
     else:
       self.save_sfz(f"{self.settings.value('last_file_path')}", self.ui.txtPreset.text(), self.global_header, self.map_objects)
 
-  def callme(foo):
-      print(f"{foo}, I have been called")
+  def keyPressEvent(self, event):
+    if event.modifiers() & Qt.ControlModifier:
+        if event.key() == Qt.Key_S:
+          if self.settings.value('last_file_path') is None:
+            self.onSaveTempfz()
+          else:
+            self.onSaveCurrentSfz()
 
   def save_sfz(self, path, name, global_obj, mappings, temp=False, fx_mode_save=False):
     if len(mappings) == 0:

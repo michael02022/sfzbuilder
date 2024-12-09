@@ -3332,8 +3332,19 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.exec()
     else:
       self.ui.lblLog.setText(f"Generating SFZ...")
-      lfo_idx = 1
-      eg_idx = 1
+      # init indexes
+      eg_pan = 0
+      eg_amp = 0
+      eg_fil = 0
+      eg_pit = 0
+
+      lfo_pan = 0
+      lfo_amp = 0
+      lfo_fil = 0
+      lfo_pit = 0
+
+      lfo_idx = 0
+      eg_idx = 0
       fx_idx = 300
 
       # calculate the dots for relative path
@@ -3480,6 +3491,10 @@ class MainWindow(QMainWindow):
             sfz_content += f"pan_random={m.pan_random * 2 if m.pan_stereo else m.pan_random}\n"
 
             if m.pan_lfo:
+              lfo_idx += 1
+              lfo_pan = lfo_idx
+              eg_idx += 1
+              eg_pan = eg_idx
               sfz_content += f"lfo{lfo_idx}_delay={m.pan_lfo_delay}\n"
               sfz_content += f"lfo{lfo_idx}_fade={m.pan_lfo_fade}\n"
               sfz_content += f"lfo{lfo_idx}_pan={m.pan_lfo_depth * 2 if m.pan_stereo else m.pan_lfo_depth}\n"
@@ -3494,21 +3509,25 @@ class MainWindow(QMainWindow):
           sfz_content += f"amp_random={m.amp_random}\n"
 
           if m.amp_lfo:
+            lfo_idx += 1
+            lfo_amp = lfo_idx
             sfz_content += "\n\n"
-            sfz_content += f"lfo{lfo_idx+1}_delay={m.amp_lfo_delay}\n"
-            sfz_content += f"lfo{lfo_idx+1}_fade={m.amp_lfo_fade}\n"
-            sfz_content += f"lfo{lfo_idx+1}_volume={m.amp_lfo_depth}\n"
-            sfz_content += f"lfo{lfo_idx+1}_freq={m.amp_lfo_freq}\n"
-            sfz_content += f"lfo{lfo_idx+1}_wave={m.amp_lfo_wave}\n"
+            sfz_content += f"lfo{lfo_idx}_delay={m.amp_lfo_delay}\n"
+            sfz_content += f"lfo{lfo_idx}_fade={m.amp_lfo_fade}\n"
+            sfz_content += f"lfo{lfo_idx}_volume={m.amp_lfo_depth}\n"
+            sfz_content += f"lfo{lfo_idx}_freq={m.amp_lfo_freq}\n"
+            sfz_content += f"lfo{lfo_idx}_wave={m.amp_lfo_wave}\n"
           if m.amp_velfloorbool:
             sfz_content += f"amp_velcurve_1={m.amp_velfloor}\n"
           if m.amp_env_vel2attackbool:
             sfz_content += f"ampeg_vel2attack={m.amp_env_vel2attack}\n"
 
           if m.amp_env:
+            eg_idx += 1
+            eg_amp = eg_idx
             eg_ver = m.amp_env_ver
             shplst = [[m.amp_env_attack_shapebool, m.amp_env_attack_shape], [m.amp_env_decay_shapebool, m.amp_env_decay_shape], [m.amp_env_release_shapebool, m.amp_env_release_shape]]
-            sfz_content += generate_eg(eg_ver, "amp", eg_idx+1, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
+            sfz_content += generate_eg(eg_ver, "amp", eg_idx, m.amp_env_start, m.amp_env_delay, m.amp_env_attack, m.amp_env_hold, m.amp_env_decay, m.amp_env_sustain, m.amp_env_release, shplst)
 
           # FILTER
           if m.fil:
@@ -3523,22 +3542,26 @@ class MainWindow(QMainWindow):
             sfz_content += f"fil_random={m.fil_random}\n"
 
             if m.fil_lfo:
+              lfo_idx += 1
+              lfo_fil = lfo_idx
               sfz_content += "\n\n"
-              sfz_content += f"lfo{lfo_idx+2}_delay={m.fil_lfo_delay}\n"
-              sfz_content += f"lfo{lfo_idx+2}_fade={m.fil_lfo_fade}\n"
-              sfz_content += f"lfo{lfo_idx+2}_cutoff={m.fil_lfo_depth}\n" # Hz
-              sfz_content += f"lfo{lfo_idx+2}_freq={m.fil_lfo_freq}\n"
-              sfz_content += f"lfo{lfo_idx+2}_wave={m.fil_lfo_wave}\n"
+              sfz_content += f"lfo{lfo_idx}_delay={m.fil_lfo_delay}\n"
+              sfz_content += f"lfo{lfo_idx}_fade={m.fil_lfo_fade}\n"
+              sfz_content += f"lfo{lfo_idx}_cutoff={m.fil_lfo_depth}\n" # Hz
+              sfz_content += f"lfo{lfo_idx}_freq={m.fil_lfo_freq}\n"
+              sfz_content += f"lfo{lfo_idx}_wave={m.fil_lfo_wave}\n"
 
             if m.fil_env:
+              eg_idx += 1
+              eg_fil = eg_idx
               eg_ver = m.fil_env_ver
               match m.fil_env_ver:
                 case 0:
                   sfz_content += f"fileg_depth={m.fil_env_depth}\n"
                   sfz_content += f"fileg_vel2depth={m.fil_vel2depth}\n"
                 case 1:
-                  sfz_content += f"eg{eg_idx+2}_cutoff={m.fil_env_depth}\n"
-                  sfz_content += f"eg{eg_idx+2}_cutoff_oncc131={m.fil_vel2depth}\n"
+                  sfz_content += f"eg{eg_idx}_cutoff={m.fil_env_depth}\n"
+                  sfz_content += f"eg{eg_idx}_cutoff_oncc131={m.fil_vel2depth}\n"
 
               shplst = [[m.fil_env_attack_shapebool, m.fil_env_attack_shape], [m.fil_env_decay_shapebool, m.fil_env_decay_shape], [m.fil_env_release_shapebool, m.fil_env_release_shape]]
               sfz_content += generate_eg(eg_ver, "fil", eg_idx, m.fil_env_start, m.fil_env_delay, m.fil_env_attack, m.fil_env_hold, m.fil_env_decay, m.fil_env_sustain, m.fil_env_release, shplst)
@@ -3550,27 +3573,31 @@ class MainWindow(QMainWindow):
             sfz_content += f"pitch_random={m.pitch_random}\n"
 
             if m.pit_lfo:
+              lfo_idx += 1
+              lfo_pit = lfo_idx
               sfz_content += "\n\n"
-              sfz_content += f"lfo{lfo_idx+3}_delay={m.pit_lfo_delay}\n"
-              sfz_content += f"lfo{lfo_idx+3}_fade={m.pit_lfo_fade}\n"
-              sfz_content += f"lfo{lfo_idx+3}_pitch={m.pit_lfo_depth}\n"
-              sfz_content += f"lfo{lfo_idx+3}_freq={m.pit_lfo_freq}\n"
-              sfz_content += f"lfo{lfo_idx+3}_wave={m.pit_lfo_wave}\n"
+              sfz_content += f"lfo{lfo_idx}_delay={m.pit_lfo_delay}\n"
+              sfz_content += f"lfo{lfo_idx}_fade={m.pit_lfo_fade}\n"
+              sfz_content += f"lfo{lfo_idx}_pitch={m.pit_lfo_depth}\n"
+              sfz_content += f"lfo{lfo_idx}_freq={m.pit_lfo_freq}\n"
+              sfz_content += f"lfo{lfo_idx}_wave={m.pit_lfo_wave}\n"
 
             if m.pit_env:
+              eg_idx += 1
+              eg_pit = eg_idx
               eg_ver = m.pit_env_ver
               match m.pit_env_ver:
                 case 0:
                   sfz_content += f"pitcheg_depth={m.pit_env_depth}\n"
                 case 1:
-                  sfz_content += f"eg{eg_idx+3}_pitch={m.pit_env_depth}\n"
+                  sfz_content += f"eg{eg_idx}_pitch={m.pit_env_depth}\n"
 
               #shplst = [[m.pit_env_attack_shapebool, m.pit_env_attack_shape], [m.pit_env_decay_shapebool, m.pit_env_decay_shape], [m.pit_env_release_shapebool, m.pit_env_release_shape]]
-              sfz_content += generate_eg(eg_ver, "pit", eg_idx+3, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
+              sfz_content += generate_eg(eg_ver, "pit", eg_idx, m.pit_env_start, m.pit_env_delay, m.pit_env_attack, m.pit_env_hold, m.pit_env_decay, m.pit_env_sustain, m.pit_env_release)
 
           sfz_content += "\n\n"
           sfz_content += "// ADDITIONAL OPCODES\n"
-          sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, lfo_idx, eg_idx)}\n\n"
+          sfz_content += f"{notepad_opcode_filter(m.opcode_notepad, eg_pan, eg_amp, eg_fil, eg_pit, lfo_pan, lfo_amp, lfo_fil, lfo_pit, lfo_idx, eg_idx)}\n\n"
 
           sfz_content += "//MAPPING\n"
           sfz_content += f"<control>\n"
@@ -3597,29 +3624,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3660,29 +3687,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3720,29 +3747,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3781,7 +3808,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -3790,29 +3817,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3845,29 +3872,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3904,7 +3931,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
                   sfz_content += f"sample_dyn_param03={(tablewarp_switch[m.tw_waveform] * 15.875) / 100}\n"
@@ -3912,29 +3939,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -3961,7 +3988,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -3970,29 +3997,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -4029,7 +4056,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -4038,29 +4065,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -4087,7 +4114,7 @@ class MainWindow(QMainWindow):
                 # OSC 2
                 sfz_content += f"<group>\n"
 
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
                 if m.wave == "TableWarp2":
                   sfz_content += f"<region> sample={m.get_wave()}\n"
@@ -4096,29 +4123,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -4151,29 +4178,29 @@ class MainWindow(QMainWindow):
 
                   if m.tw_waveform_eg:
                     #print(eg_idx)
-                    sfz_content += f"eg{eg_idx+4}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+4, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+1}_sample_dyn_param01={m.tw_waveform_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+1, m.tw_waveform_eg_start, m.tw_waveform_eg_delay, m.tw_waveform_eg_attack, m.tw_waveform_eg_attack_shape, m.tw_waveform_eg_hold, m.tw_waveform_eg_decay, m.tw_waveform_eg_decay_shape, m.tw_waveform_eg_sustain, m.tw_waveform_eg_release, m.tw_waveform_eg_release_shape)
                   if m.tw_waveform_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+5}_delay={m.tw_waveform_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_fade={m.tw_waveform_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_freq={m.tw_waveform_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+5}_wave={m.tw_waveform_lfo_wave}\n\n"
+                    sfz_content += f"lfo{lfo_idx+1}_delay={m.tw_waveform_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_fade={m.tw_waveform_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_sample_dyn_param01={m.tw_waveform_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_freq={m.tw_waveform_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+1}_wave={m.tw_waveform_lfo_wave}\n\n"
 
                   sfz_content += f"sample_dyn_param04={(tablewarp_switch[m.tw_warp] * 15.875) / 100}\n"
                   sfz_content += f"sample_dyn_param02={m.tw_warp_offset}\n"
 
                   if m.tw_warp_eg:
-                    sfz_content += f"eg{eg_idx+5}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
-                    sfz_content += generate_eg_tw(eg_idx+5, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
+                    sfz_content += f"eg{eg_idx+2}_sample_dyn_param02={m.tw_warp_eg_depth}\n"
+                    sfz_content += generate_eg_tw(eg_idx+2, m.tw_warp_eg_start, m.tw_warp_eg_delay, m.tw_warp_eg_attack, m.tw_warp_eg_attack_shape, m.tw_warp_eg_hold, m.tw_warp_eg_decay, m.tw_warp_eg_decay_shape, m.tw_warp_eg_sustain, m.tw_warp_eg_release, m.tw_warp_eg_release_shape)
                   if m.tw_warp_lfo:
                     sfz_content += "\n\n"
-                    sfz_content += f"lfo{lfo_idx+6}_delay={m.tw_warp_lfo_delay}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_fade={m.tw_warp_lfo_fade}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_freq={m.tw_warp_lfo_freq}\n"
-                    sfz_content += f"lfo{lfo_idx+6}_wave={m.tw_warp_lfo_wave}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_delay={m.tw_warp_lfo_delay}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_fade={m.tw_warp_lfo_fade}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_sample_dyn_param02={m.tw_warp_lfo_depth / 100}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_freq={m.tw_warp_lfo_freq}\n"
+                    sfz_content += f"lfo{lfo_idx+2}_wave={m.tw_warp_lfo_wave}\n"
                   sfz_content += "\n"
                 else:
                   if m.wave_modebool:
@@ -4244,7 +4271,8 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay >= 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+                lfo_fx = lfo_idx
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4270,7 +4298,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4300,7 +4328,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"<group>\n"
                 if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+4}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4323,8 +4351,8 @@ class MainWindow(QMainWindow):
 
         sfz_content += "\n"
 
-        lfo_idx += 7
-        eg_idx += 7
+        lfo_idx += 3
+        eg_idx += 3
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")

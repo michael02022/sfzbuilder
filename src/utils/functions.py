@@ -118,18 +118,18 @@ def get_list_from_ins(file):
   return patch_ls[:128]
 
 
-def notepad_opcode_filter(txt, lfo_idx, eg_idx):
+def notepad_opcode_filter(txt, eg_pan, eg_amp, eg_fil, eg_pit, lfo_pan, lfo_amp, lfo_fil, lfo_pit, lfo_idx, eg_idx):
   # please I need a better way to do this
   # SFZ v2
-  r1 = txt.replace("egN_", f"eg{eg_idx}")
-  r2 = r1.replace("egNA", f"eg{eg_idx+1}")
-  r3 = r2.replace("egNF", f"eg{eg_idx+2}")
-  r4 = r3.replace("egNP", f"eg{eg_idx+3}")
+  r1 = txt.replace("egN_", f"eg{eg_pan}")
+  r2 = r1.replace("egNA", f"eg{eg_amp}")
+  r3 = r2.replace("egNF", f"eg{eg_fil}")
+  r4 = r3.replace("egNP", f"eg{eg_pit}")
 
-  r5 = r4.replace("lfoN_", f"lfo{lfo_idx}")
-  r6 = r5.replace("lfoNA", f"lfo{lfo_idx+1}")
-  r7 = r6.replace("lfoNF", f"lfo{lfo_idx+2}")
-  r8 = r7.replace("lfoNP", f"lfo{lfo_idx+3}")
+  r5 = r4.replace("lfoN_", f"lfo{lfo_pan}")
+  r6 = r5.replace("lfoNA", f"lfo{lfo_amp}")
+  r7 = r6.replace("lfoNF", f"lfo{lfo_fil}")
+  r8 = r7.replace("lfoNP", f"lfo{lfo_pit}")
 
   # CC
   r9 = r8.replace("ccMOD", "cc1")
@@ -157,16 +157,18 @@ def notepad_opcode_filter(txt, lfo_idx, eg_idx):
   r29 = r28.replace("ccALTER", "cc137")
 
   # FX
-  r30 = r29.replace("lfoFX", f"lfo{lfo_idx+4}")
+  r30 = r29.replace("lfoFX", f"lfo{lfo_idx+3}")
 
   # TABLEWARP
-  r31 = r30.replace("lfoTW1", f"lfo{lfo_idx+5}")
-  r32 = r31.replace("lfoTW2", f"lfo{lfo_idx+6}")
+  r31 = r30.replace("lfoTW1", f"lfo{eg_idx+1}")
+  r32 = r31.replace("lfoTW2", f"lfo{eg_idx+2}")
+  r33 = r32.replace("egTW1", f"lfo{lfo_idx+1}")
+  r34 = r33.replace("egTW2", f"lfo{lfo_idx+2}")
 
   # Portamento / Extra eg
-  r33 = r32.replace("egEXTRA", f"eg{eg_idx+6}")
+  r35 = r34.replace("egEXTRA", f"eg{eg_idx+3}")
 
-  return r33
+  return r35
 
 def generate_eg(type, destination, idx, start, delay, attack, hold, decay, sustain, release, shapes=[[False, 0], [False, 0], [False, 0]]): # [attackshape, decayshape, releaseshape]
   output = ""
@@ -232,48 +234,48 @@ def generate_eg(type, destination, idx, start, delay, attack, hold, decay, susta
   else: # Flex
     match eg:
       case 0:
-        output += f"eg{idx+1}_ampeg=100\n"
-        output += f"eg{idx+1}_sustain=4\n"
-        output += f"eg{idx+1}_level0={float(start) / 100} eg{idx+1}_time0=-1\n"
-        output += f"eg{idx+1}_level1={float(start) / 100} eg{idx+1}_time1={delay}\n"
-        output += f"eg{idx+1}_level2=1 eg{idx+1}_time2={attack}\n"
+        output += f"eg{idx}_ampeg=100\n"
+        output += f"eg{idx}_sustain=4\n"
+        output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=-1\n"
+        output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
+        output += f"eg{idx}_level2=1 eg{idx}_time2={attack}\n"
         if shapes[0][0]:
-            output += f"eg{idx+1}_shape2={shapes[0][1]}\n"
-        output += f"eg{idx+1}_level3=1 eg{idx+1}_time3={hold}\n"
-        output += f"eg{idx+1}_level4={float(sustain) / 100} eg{idx+1}_time4={decay}\n"
+            output += f"eg{idx}_shape2={shapes[0][1]}\n"
+        output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
+        output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
         if shapes[1][0]:
-            output += f"eg{idx+1}_shape4={shapes[1][1]}\n"
-        output += f"eg{idx+1}_level5=0 eg{idx+1}_time5={release}\n"
+            output += f"eg{idx}_shape4={shapes[1][1]}\n"
+        output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
         if shapes[2][0]:
-            output += f"eg{idx+1}_shape5={shapes[2][1]}\n"
+            output += f"eg{idx}_shape5={shapes[2][1]}\n"
       case 1:
-        output += f"eg{idx+2}_sustain=4\n"
-        output += f"eg{idx+2}_level0={float(start) / 100} eg{idx+2}_time0=-1\n"
-        output += f"eg{idx+2}_level1={float(start) / 100} eg{idx+2}_time1={delay}\n"
-        output += f"eg{idx+2}_level2=1 eg{idx+2}_time2={attack}\n"
+        output += f"eg{idx}_sustain=4\n"
+        output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=-1\n"
+        output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
+        output += f"eg{idx}_level2=1 eg{idx}_time2={attack}\n"
         if shapes[0][0]:
-            output += f"eg{idx+2}_shape2={shapes[0][1]}\n"
-        output += f"eg{idx+2}_level3=1 eg{idx+2}_time3={hold}\n"
-        output += f"eg{idx+2}_level4={float(sustain) / 100} eg{idx+2}_time4={decay}\n"
+            output += f"eg{idx}_shape2={shapes[0][1]}\n"
+        output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
+        output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
         if shapes[1][0]:
-            output += f"eg{idx+2}_shape4={shapes[1][1]}\n"
-        output += f"eg{idx+2}_level5=0 eg{idx+2}_time5={release}\n"
+            output += f"eg{idx}_shape4={shapes[1][1]}\n"
+        output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
         if shapes[2][0]:
-            output += f"eg{idx+2}_shape5={shapes[2][1]}\n"
+            output += f"eg{idx}_shape5={shapes[2][1]}\n"
       case 2:
-        output += f"eg{idx+3}_sustain=4\n"
-        output += f"eg{idx+3}_level0={float(start) / 100} eg{idx+3}_time0=-1\n"
-        output += f"eg{idx+3}_level1={float(start) / 100} eg{idx+3}_time1={delay}\n"
-        output += f"eg{idx+3}_level2=1 eg{idx+3}_time2={attack}\n"
+        output += f"eg{idx}_sustain=4\n"
+        output += f"eg{idx}_level0={float(start) / 100} eg{idx}_time0=-1\n"
+        output += f"eg{idx}_level1={float(start) / 100} eg{idx}_time1={delay}\n"
+        output += f"eg{idx}_level2=1 eg{idx}_time2={attack}\n"
         if shapes[0][0]:
-            output += f"eg{idx+3}_shape2={shapes[0][1]}\n"
-        output += f"eg{idx+3}_level3=1 eg{idx+3}_time3={hold}\n"
-        output += f"eg{idx+3}_level4={float(sustain) / 100} eg{idx+3}_time4={decay}\n"
+            output += f"eg{idx}_shape2={shapes[0][1]}\n"
+        output += f"eg{idx}_level3=1 eg{idx}_time3={hold}\n"
+        output += f"eg{idx}_level4={float(sustain) / 100} eg{idx}_time4={decay}\n"
         if shapes[1][0]:
-            output += f"eg{idx+3}_shape4={shapes[1][1]}\n"
-        output += f"eg{idx+3}_level5=0 eg{idx+3}_time5={release}\n"
+            output += f"eg{idx}_shape4={shapes[1][1]}\n"
+        output += f"eg{idx}_level5=0 eg{idx}_time5={release}\n"
         if shapes[2][0]:
-            output += f"eg{idx+3}_shape5={shapes[2][1]}\n"
+            output += f"eg{idx}_shape5={shapes[2][1]}\n"
   return output
 
 def generate_eg_tw(idx, start, delay, attack, attack_shape, hold, decay, decay_shape, sustain, release, release_shape):

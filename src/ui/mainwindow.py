@@ -1511,6 +1511,8 @@ class MainWindow(QMainWindow):
           self.ui.txtOpcodes.setPlainText(map_dict.get(k))
         case "comment":
           self.ui.txtComment.setText(map_dict.get(k))
+        case "disable_indexes":
+          self.ui.chkDisableIndexes.setChecked(map_dict.get(k))
 
     # /// WIDGET MONITORING
     # global header
@@ -1661,6 +1663,8 @@ class MainWindow(QMainWindow):
     self.ui.gbxTwLfoWave.toggled.connect(self.onUiValueChanged)
     self.ui.gbxTwEgWarp.toggled.connect(self.onUiValueChanged)
     self.ui.gbxTwLfoWarp.toggled.connect(self.onUiValueChanged)
+
+    self.ui.chkDisableIndexes.stateChanged.connect(self.onUiValueChanged)
 
     # ComboBoxes
     self.ui.cbxProgramIns.currentIndexChanged.connect(self.onUiValueChanged)
@@ -2350,6 +2354,9 @@ class MainWindow(QMainWindow):
         obj.change_value("tw_warp_eg", self.sender().isChecked())
       case "gbxTwLfoWarp":
         obj.change_value("tw_warp_lfo", self.sender().isChecked())
+
+      case "chkDisableIndexes":
+        obj.change_value("disable_indexes", self.sender().isChecked())
 
       # COMBO BOXES
       case "cbxWave":
@@ -4351,8 +4358,9 @@ class MainWindow(QMainWindow):
 
         sfz_content += "\n"
 
-        lfo_idx += 3
-        eg_idx += 3
+        if not m.disable_indexes:
+          lfo_idx += 3
+          eg_idx += 3
 
       # write sfz
       f_sfz = open(os.path.normpath(pathstr + ".sfz"), "w", encoding="utf8")

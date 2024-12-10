@@ -265,6 +265,7 @@ class Mapping:
 
     # MISC
     self.opcode_notepad = ""
+    self.disable_indexes = False
 
   def get_default_path(self):
     return f"{self.pack}/{os.path.dirname(self.map).replace(os.sep, '/')}"

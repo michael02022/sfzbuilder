@@ -1607,211 +1607,6 @@
          <property name="bottomMargin">
           <number>6</number>
          </property>
-         <item row="1" column="0">
-          <widget class="QGroupBox" name="gbxSampleOffset">
-           <property name="title">
-            <string>Offset</string>
-           </property>
-           <property name="checkable">
-            <bool>false</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <layout class="QGridLayout" name="laySampleOffset">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetNoConstraint</enum>
-            </property>
-            <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lblSampleOffsetRandom">
-              <property name="text">
-               <string>Random:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lblSampleOffsetVelocity">
-              <property name="text">
-               <string>Velocity:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetRandom">
-              <property name="maximum">
-               <number>999999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetVelocity">
-              <property name="minimum">
-               <number>-999999999</number>
-              </property>
-              <property name="maximum">
-               <number>999999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-              <property name="value">
-               <number>0</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetValue">
-              <property name="maximum">
-               <number>999999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_44">
-              <property name="text">
-               <string>Offset Value</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QGroupBox" name="gbxSampleGeneral">
-           <property name="title">
-            <string>General</string>
-           </property>
-           <layout class="QGridLayout" name="laySampleGeneral">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetNoConstraint</enum>
-            </property>
-            <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <item row="3" column="1">
-             <widget class="QComboBox" name="cbxLoopMode">
-              <item>
-               <property name="text">
-                <string>None</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>no_loop</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>one_shot</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>loop_continuous</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>loop_sustain</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="chkSampleQuality">
-              <property name="text">
-               <string>Quality (interpolation):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="sbxSampleQuality">
-              <property name="minimum">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <number>10</number>
-              </property>
-              <property name="value">
-               <number>2</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
-              <property name="decimals">
-               <number>4</number>
-              </property>
-              <property name="singleStep">
-               <double>0.000100000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblSampleMapDelay">
-              <property name="text">
-               <string>Map Delay (sec):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lblLoopMode">
-              <property name="text">
-               <string>Loop Mode:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lblDirection">
-              <property name="text">
-               <string>Direction:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QComboBox" name="cbxDirection">
-              <item>
-               <property name="text">
-                <string>forward</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>reverse</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
          <item row="0" column="1">
           <widget class="QGroupBox" name="gbxSampleRegion">
            <property name="title">
@@ -1901,6 +1696,106 @@
            </layout>
           </widget>
          </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="gbxSampleOffset">
+           <property name="title">
+            <string>Offset</string>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="laySampleOffset">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblSampleOffsetRandom">
+              <property name="text">
+               <string>Random:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblSampleOffsetVelocity">
+              <property name="text">
+               <string>Velocity:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="sbxSampleOffsetRandom">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QSpinBox" name="sbxSampleOffsetVelocity">
+              <property name="minimum">
+               <number>-999999999</number>
+              </property>
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sbxSampleOffsetValue">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_44">
+              <property name="text">
+               <string>Offset Value</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <spacer name="vspOffset">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="1" column="1">
           <widget class="QGroupBox" name="gbxSampleTranspose">
            <property name="title">
@@ -1984,18 +1879,123 @@
            </layout>
           </widget>
          </item>
-         <item row="2" column="0">
-          <spacer name="vspOffset">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="gbxSampleGeneral">
+           <property name="title">
+            <string>General</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
+           <layout class="QGridLayout" name="laySampleGeneral">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblDirection">
+              <property name="text">
+               <string>Direction:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QComboBox" name="cbxLoopMode">
+              <item>
+               <property name="text">
+                <string>None</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>no_loop</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>one_shot</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>loop_continuous</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>loop_sustain</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="chkSampleQuality">
+              <property name="text">
+               <string>Quality (interpolation):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="dsbSampleMapDelay">
+              <property name="decimals">
+               <number>4</number>
+              </property>
+              <property name="singleStep">
+               <double>0.000100000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblLoopMode">
+              <property name="text">
+               <string>Loop Mode:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="cbxDirection">
+              <item>
+               <property name="text">
+                <string>forward</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>reverse</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSampleMapDelay">
+              <property name="text">
+               <string>Map Delay (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="sbxSampleQuality">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -7198,38 +7198,10 @@
          <string>Opcodes</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_13">
-         <item row="1" column="0" colspan="13">
-          <widget class="QPlainTextEdit" name="txtOpcodes">
-           <property name="toolTip">
-            <string>&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;cc&lt;/th&gt;&lt;th&gt;alias&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;MOD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;BREATH&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;FOOT&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;GLIDE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;VOL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;PAN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;EXP&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;64&lt;/td&gt;&lt;td&gt;HOLD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;69&lt;/td&gt;&lt;td&gt;HOLD2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;71&lt;/td&gt;&lt;td&gt;RESO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;72&lt;/td&gt;&lt;td&gt;RELEASE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;73&lt;/td&gt;&lt;td&gt;ATTACK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;74&lt;/td&gt;&lt;td&gt;CUTOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;sfz&lt;/td&gt;&lt;td&gt;-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;128&lt;/td&gt;&lt;td&gt;PITCHBEND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;131&lt;/td&gt;&lt;td&gt;VEL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;132&lt;/td&gt;&lt;td&gt;VELOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;133&lt;/td&gt;&lt;td&gt;KEY&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;134&lt;/td&gt;&lt;td&gt;KEYGATE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;135&lt;/td&gt;&lt;td&gt;UNIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;136&lt;/td&gt;&lt;td&gt;BIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;137&lt;/td&gt;&lt;td&gt;ALTER&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="10">
           <widget class="QPushButton" name="pbnRand">
            <property name="text">
             <string>Rand</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="pbnXfadeKey">
-           <property name="text">
-            <string>Xfade Key</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="pbnXfadeVel">
-           <property name="text">
-            <string>Xfade Vel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblOpcodes">
-           <property name="text">
-            <string>Templates:</string>
            </property>
           </widget>
          </item>
@@ -7253,6 +7225,41 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="12">
+          <widget class="QPushButton" name="pbnMidi">
+           <property name="text">
+            <string>MIDI</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="13">
+          <widget class="QPlainTextEdit" name="txtOpcodes">
+           <property name="toolTip">
+            <string>&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;cc&lt;/th&gt;&lt;th&gt;alias&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;MOD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;BREATH&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4&lt;/td&gt;&lt;td&gt;FOOT&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5&lt;/td&gt;&lt;td&gt;GLIDE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;VOL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;PAN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11&lt;/td&gt;&lt;td&gt;EXP&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;64&lt;/td&gt;&lt;td&gt;HOLD&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;69&lt;/td&gt;&lt;td&gt;HOLD2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;71&lt;/td&gt;&lt;td&gt;RESO&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;72&lt;/td&gt;&lt;td&gt;RELEASE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;73&lt;/td&gt;&lt;td&gt;ATTACK&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;74&lt;/td&gt;&lt;td&gt;CUTOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;sfz&lt;/td&gt;&lt;td&gt;-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;128&lt;/td&gt;&lt;td&gt;PITCHBEND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;131&lt;/td&gt;&lt;td&gt;VEL&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;132&lt;/td&gt;&lt;td&gt;VELOFF&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;133&lt;/td&gt;&lt;td&gt;KEY&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;134&lt;/td&gt;&lt;td&gt;KEYGATE&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;135&lt;/td&gt;&lt;td&gt;UNIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;136&lt;/td&gt;&lt;td&gt;BIRAND&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;137&lt;/td&gt;&lt;td&gt;ALTER&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="6">
+          <widget class="Line" name="line_29">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="pbnXfadeKey">
+           <property name="text">
+            <string>Xfade Key</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblOpcodes">
+           <property name="text">
+            <string>Templates:</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="7">
           <widget class="QSpinBox" name="sbxLength">
            <property name="suffix">
@@ -7272,24 +7279,10 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="6">
-          <widget class="Line" name="line_29">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pbnPortamento">
+         <item row="0" column="5">
+          <widget class="QPushButton" name="pbnEg">
            <property name="text">
-            <string>Portamento</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="12">
-          <widget class="QPushButton" name="pbnMidi">
-           <property name="text">
-            <string>MIDI</string>
+            <string>EG v2</string>
            </property>
           </widget>
          </item>
@@ -7300,10 +7293,24 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="5">
-          <widget class="QPushButton" name="pbnEg">
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pbnPortamento">
            <property name="text">
-            <string>EG v2</string>
+            <string>Portamento</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="pbnXfadeVel">
+           <property name="text">
+            <string>Xfade Vel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="4">
+          <widget class="QCheckBox" name="chkDisableIndexes">
+           <property name="text">
+            <string>Disable reserved SFZv2 opcode indexes for this map</string>
            </property>
           </widget>
          </item>

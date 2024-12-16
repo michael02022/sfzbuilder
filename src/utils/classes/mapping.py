@@ -251,10 +251,16 @@ class Mapping:
     self.pit_env_depth = 0
     self.pit_env_delay = 0
     self.pit_env_attack = 0
+    self.pit_env_attack_shapebool = False
+    self.pit_env_attack_shape = 0 # linear
     self.pit_env_hold = 0
     self.pit_env_decay = 0
+    self.pit_env_decay_shapebool = False
+    self.pit_env_decay_shape = DECAY_CURVE_B
     self.pit_env_sustain = 100
     self.pit_env_release = 0
+    self.pit_env_release_shapebool = False
+    self.pit_env_release_shape = DECAY_CURVE_B
     # PITCH LFO
     self.pit_lfo = False
     self.pit_lfo_delay = 0

@@ -748,6 +748,10 @@ class MainWindow(QMainWindow):
           else:
             self.ui.sbxGlobalPortamentoCc.setEnabled(True)
             self.ui.cbxGlobalPortamentoTimeMode.setEnabled(True)
+        case "pitch_bendbool":
+          self.ui.chkGlobalPitchbend.setChecked(global_dict.get(k))
+        case "pitch_bend":
+          self.ui.sbxGlobalPitchbend.setValue(global_dict.get(k))
 
   def get_fx_values(self):
     idx = self.ui.listFx.currentRow()
@@ -1526,6 +1530,8 @@ class MainWindow(QMainWindow):
     self.ui.sbxGlobalPortamentoCc.valueChanged.connect(self.onUiValueChanged)
     self.ui.cbxGlobalPortamentoTimeMode.currentIndexChanged.connect(self.onUiValueChanged)
     self.ui.dsbGlobalPortamentoTimeModeAdd.valueChanged.connect(self.onUiValueChanged)
+    self.ui.chkGlobalPitchbend.stateChanged.connect(self.onUiValueChanged)
+    self.ui.sbxGlobalPitchbend.valueChanged.connect(self.onUiValueChanged)
 
     # Spinboxes
     self.ui.dsbVolume.valueChanged.connect(self.onUiValueChanged)
@@ -2051,6 +2057,11 @@ class MainWindow(QMainWindow):
         else:
           self.ui.sbxGlobalPortamentoCc.setEnabled(True)
           self.ui.cbxGlobalPortamentoTimeMode.setEnabled(True)
+      case "chkGlobalPitchbend":
+        self.global_header.change_value("pitch_bendbool", self.sender().isChecked())
+      case "sbxGlobalPitchbend":
+        self.global_header.change_value("pitch_bend", self.sender().value())
+      
       case "cbxProgramIns":
         self.program_names_ls = get_list_from_ins(open(f"{self.p_programlist}/{self.ui.cbxProgramIns.currentText()}", "r"))
         self.ui.lblProgramName.setText(self.program_names_ls[self.ui.sbxProgram.value()])
@@ -3382,8 +3393,8 @@ class MainWindow(QMainWindow):
         sfz_content += f"hint_min_samplerate={44100 * (int(oversamplings.index(global_obj.oversampling)) + 1)}\n"
       sfz_content += "\n<global>\n"
       sfz_content += f"lobend={global_obj.bend_range[0]} hibend={global_obj.bend_range[1]}\n"
-      sfz_content += f"bend_down={global_obj.pitch_bend_range[0]} bend_up={global_obj.pitch_bend_range[1]}\n"
-      sfz_content += f"//bend_down=-8192 bend_up=8192 //uncomment these opcodes for MIDI pitch bend values\n\n"
+      if global_obj.pitch_bendbool:
+        sfz_content += f"bend_down=-{global_obj.pitch_bend} bend_up={global_obj.pitch_bend}\n"
 
       if global_obj.keysw:
         sfz_content += f"sw_lokey={global_obj.keysw_range[0]} sw_hikey={global_obj.keysw_range[1]} sw_default={global_obj.sw_default}\n\n"
@@ -3391,6 +3402,8 @@ class MainWindow(QMainWindow):
         sfz_content += sfz_portamento(99, global_obj.portamento_time)
         if global_obj.portamento_time_mode_add != 0.0:
           sfz_content += f"{opcode_sw("eg99_time1", global_obj.portamento_time_mode, global_obj.portamento_time_mode_add, global_obj.portamento_cc)}\n"
+      
+      sfz_content += "\n"
 
       if fx_mode_save is True:
         None

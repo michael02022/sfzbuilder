@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1399</width>
+    <width>1408</width>
     <height>977</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
       <property name="title">
        <string>Global</string>
       </property>
-      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="layGlobalBox" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
        </property>
@@ -175,9 +175,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblVoices">
+        <widget class="QCheckBox" name="chkGlobalPitchbend">
          <property name="text">
-          <string>Voices per note: 1</string>
+          <string>Set pitchbend as</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="sbxGlobalPitchbend">
+         <property name="maximum">
+          <number>48000</number>
          </property>
         </widget>
        </item>
@@ -10879,7 +10886,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1399</width>
+     <width>1408</width>
      <height>30</height>
     </rect>
    </property>

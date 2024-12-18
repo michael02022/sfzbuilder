@@ -1,0 +1,12 @@
+{
+    "sfz_name": "com.Plogue.Saturation",
+    "mute": false,
+    "names": false,
+
+    "amount": 0.700000,
+    "oversampling_rate": 0.000000,
+    "oversampling_quality": 0.000000,
+    "waveshaper": 0.000000,
+
+    "ids": [0, 1, 2, 3]
+}

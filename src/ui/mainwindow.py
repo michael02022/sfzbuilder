@@ -122,6 +122,10 @@ class MainWindow(QMainWindow):
     self.ui.cbxFxFilterType.clear();self.ui.cbxFxFilterType.addItems(filter_type)
     self.ui.cbxFxEqType.clear();self.ui.cbxFxEqType.addItems(eq_types)
 
+    self.ui.cbxFxPlogueSaturationWaveshaper.clear();self.ui.cbxFxPlogueSaturationWaveshaper.addItems(plgsat_waveshaper)
+    self.ui.cbxFxPlogueSaturationOversamplingQuality.clear();self.ui.cbxFxPlogueSaturationOversamplingQuality.addItems(plgsat_oversampling_quality)
+    self.ui.cbxFxPlogueSaturationOversampling.clear();self.ui.cbxFxPlogueSaturationOversampling.addItems(plgsat_oversampling_rate)
+
     # init list of ins files
     p_program = pathlib.Path(__file__).parts[:-2]
     self.p_programlist = pathlib.Path(os.path.join(*p_program)).joinpath("utils/programlist")
@@ -456,7 +460,9 @@ class MainWindow(QMainWindow):
   def dropEvent(self, event):
       files = [u.toLocalFile() for u in event.mimeData().urls()]
       if files[0].endswith(".sfzproj"):
-        self.map_objects = self.open_project(files[0])
+        tmp_ls = self.open_project(files[0])
+        self.map_objects = tmp_ls[0]
+        self.fx_ls = tmp_ls[1]
         self.ui.txtPreset.setText(files[0].split(os.sep)[-1].split('.')[0])
 
         file_path = pathlib.Path(files[0]).parent # get the path of the loaded project and save it
@@ -465,6 +471,7 @@ class MainWindow(QMainWindow):
         #print(self.settings.value("last_file_path"))
         # update
         self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+        self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls))
         self.ui.listMap.setCurrentRow(0)
 
   def onPercMenu(self, action):
@@ -597,7 +604,7 @@ class MainWindow(QMainWindow):
     if self.enable_edit:
       projpath = QFileDialog.getOpenFileName(parent=self, caption="Select a SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}", filter="SFZPROJ(*.sfzproj)")
       if projpath[0] != "":
-        temp_proj = self.open_project(projpath[0])
+        temp_proj = self.open_project(projpath[0])[0]
         self.iw = ImportWindow(parent=self)
         self.iw.show()
         self.iw.loadMapping(temp_proj)
@@ -782,6 +789,15 @@ class MainWindow(QMainWindow):
         self.ui.dsbFxAriaAmbianceEqHiGain.setValue(self.fx_ls[idx]["eq_hi_gain"])
 
         self.ui.dsbFxAriaAmbianceLevel.setValue(self.fx_ls[idx]["level"])
+
+      case "com.Plogue.Saturation":
+        self.ui.chkFxPlogueSaturation.setChecked(self.fx_ls[idx]["mute"])
+        self.ui.chkFxPlogueSaturationNames.setChecked(self.fx_ls[idx]["names"])
+        self.ui.dsbFxPlogueSaturationAmount.setValue(self.fx_ls[idx]["amount"])
+
+        self.ui.cbxFxPlogueSaturationOversampling.setCurrentIndex(plgsat_oversampling_rate_values.index(self.fx_ls[idx]["oversampling_rate"]))
+        self.ui.cbxFxPlogueSaturationOversamplingQuality.setCurrentIndex(plgsat_oversampling_quality_values.index(self.fx_ls[idx]["oversampling_quality"]))
+        self.ui.cbxFxPlogueSaturationWaveshaper.setCurrentIndex(int(self.fx_ls[idx]["waveshaper"]))        
 
       case "com.mda.Detune":
         self.ui.chkFxMdaDetuneMute.setChecked(self.fx_ls[idx]["mute"])
@@ -1873,6 +1889,13 @@ class MainWindow(QMainWindow):
     self.ui.dsbFxAriaAmbianceEqHiFreq.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbFxAriaAmbianceEqHiGain.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbFxAriaAmbianceLevel.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.chkFxPlogueSaturation.stateChanged.connect(self.onUiValueChanged)
+    self.ui.chkFxPlogueSaturationNames.stateChanged.connect(self.onUiValueChanged)
+    self.ui.dsbFxPlogueSaturationAmount.valueChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxPlogueSaturationWaveshaper.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxPlogueSaturationOversamplingQuality.currentIndexChanged.connect(self.onUiValueChanged)
+    self.ui.cbxFxPlogueSaturationOversampling.currentIndexChanged.connect(self.onUiValueChanged)
 
     self.ui.chkFxMdaDetuneMute.stateChanged.connect(self.onUiValueChanged)
     self.ui.chkFxMdaDetuneNames.stateChanged.connect(self.onUiValueChanged)
@@ -3016,6 +3039,19 @@ class MainWindow(QMainWindow):
         self.fx_ls[self.ui.listFx.currentRow()]["eq_hi_gain"] = self.sender().value()
       case "dsbFxAriaAmbianceLevel":
         self.fx_ls[self.ui.listFx.currentRow()]["level"] = self.sender().value()
+
+      case "chkFxPlogueSaturation":
+        self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
+      case "chkFxPlogueSaturationNames":
+        self.fx_ls[self.ui.listFx.currentRow()]["names"] = self.sender().isChecked()
+      case "dsbFxPlogueSaturationAmount":
+        self.fx_ls[self.ui.listFx.currentRow()]["amount"] = self.sender().value()
+      case "cbxFxPlogueSaturationOversamplingQuality":
+        self.fx_ls[self.ui.listFx.currentRow()]["oversampling_quality"] = plgsat_oversampling_quality_values[plgsat_oversampling_quality.index(self.sender().currentText())]
+      case "cbxFxPlogueSaturationOversampling":
+        self.fx_ls[self.ui.listFx.currentRow()]["oversampling_rate"] = plgsat_oversampling_rate_values[plgsat_oversampling_rate.index(self.sender().currentText())]
+      case "cbxFxPlogueSaturationWaveshaper":
+        self.fx_ls[self.ui.listFx.currentRow()]["waveshaper"] = float(plgsat_waveshaper.index(self.sender().currentText()))
       
       case "chkFxMdaDetuneMute":
         self.fx_ls[self.ui.listFx.currentRow()]["mute"] = self.sender().isChecked()
@@ -4414,7 +4450,9 @@ class MainWindow(QMainWindow):
   def onOpenProject(self):
     projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
     if projectpath[0] != "":
-      self.map_objects = self.open_project(projectpath[0])
+      tmp_file = self.open_project(projectpath[0])
+      self.map_objects = tmp_file[0]
+      self.fx_ls = tmp_file[1]
       self.ui.txtPreset.setText(projectpath[0].split(os.sep)[-1].split('.')[0])
 
       file_path = pathlib.Path(projectpath[0]).parent # get the path of the loaded project and save it
@@ -4423,6 +4461,7 @@ class MainWindow(QMainWindow):
       #print(self.settings.value("last_file_path"))
       # update
       self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+      self.ui.listFx.clear(); self.ui.listFx.addItems(self.get_fx_names(self.fx_ls)) # update list
       self.ui.listMap.setCurrentRow(0)
 
   def open_project(self, filepath):
@@ -4430,9 +4469,14 @@ class MainWindow(QMainWindow):
       proj_dict = json.load(f)
     global_dict = proj_dict["global"]
     mappings_dict = proj_dict["maps"]
+    effects_dict = proj_dict["effects"]
+    fx_ls = []
 
     for k, v in global_dict.items():
       self.global_header.change_value(k, v)
+
+    for effect in effects_dict:
+      fx_ls.append(effect)
 
     mappings_list = []
     for i in range(len(mappings_dict)):
@@ -4446,5 +4490,5 @@ class MainWindow(QMainWindow):
           except:
             pass
       mappings_list.append(sfzmap)
-    return mappings_list
+    return [mappings_list, fx_ls]
 

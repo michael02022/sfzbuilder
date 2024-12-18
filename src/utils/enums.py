@@ -76,6 +76,7 @@ eg_types = ("Normal", "Flex")
 modulation_modes = ("None", "Unipolar", "Bipolar", "Alternate")
 
 fx_types = ("com.Garritan.Ambience",
+            "com.Plogue.Saturation",
             "com.mda.Detune",
             "com.mda.Ambience",
             "com.mda.Bandisto",
@@ -95,6 +96,45 @@ fx_types = ("com.Garritan.Ambience",
             "lofi",
             "filter",
             "eq")
+
+plgsat_oversampling_rate = ("none",
+                            "2x",
+                            "2x + LPF",
+                            "4x",
+                            "8x",
+                            "16x")
+
+plgsat_oversampling_rate_values = (0.0000,
+                                   0.1666,
+                                   0.3333,
+                                   0.5000,
+                                   0.6666,
+                                   0.8333)
+
+plgsat_oversampling_quality = ("O(4), 53dB, 0.05",
+                               "O(4), 70dB, 0.1",
+                               "O(6), 51dB, 0.01",
+                               "O(6), 80dB, 0.05",
+                               "O(8), 69dB, 0.01",
+                               "O(8), 106dB, 0.05",
+                               "O(10), 86dB, 0.01",
+                               "O(10), 133dB, 0.05",
+                               "O(12), 104dB, 0.01",
+                               "O(12), 150dB, 0.05")
+
+plgsat_oversampling_quality_values = (0.0,
+                                      0.1,
+                                      0.2,
+                                      0.3,
+                                      0.4,
+                                      0.5,
+                                      0.6,
+                                      0.7,
+                                      0.8,
+                                      0.9)
+
+plgsat_waveshaper = ("Symmetrical soft clipping",
+                     "Third harmonic cubic")
 
 sw_onoff = ("on", "off")
 

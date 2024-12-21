@@ -11038,6 +11038,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actNew"/>
     <addaction name="actOpen"/>
+    <addaction name="actionExport_Presets"/>
     <addaction name="separator"/>
     <addaction name="actQuit"/>
    </widget>
@@ -11132,6 +11133,11 @@ p, li { white-space: pre-wrap; }
   <action name="actiontest">
    <property name="text">
     <string>test</string>
+   </property>
+  </action>
+  <action name="actionExport_Presets">
+   <property name="text">
+    <string>Export Presets</string>
    </property>
   </action>
  </widget>

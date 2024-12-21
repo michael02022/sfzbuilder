@@ -4307,7 +4307,7 @@ class MainWindow(QMainWindow):
                 sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
                 if m.fx_pan >= 0:
                   sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
-                if m.fx_delay >= 0:
+                if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 sfz_content += f"<control>\n"
                 sfz_content += f"note_offset={m.note_offset}\n"
@@ -4325,7 +4325,7 @@ class MainWindow(QMainWindow):
 
                 # OSC 1
                 sfz_content += f"<group>\n"
-                if m.fx_delay >= 0.0:
+                if m.fx_delay > 0:
                   sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                 lfo_fx = lfo_idx
                 sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"

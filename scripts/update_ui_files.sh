@@ -1,8 +1,8 @@
 #!/bin/bash
 
-rcc -g python resources/resources.qrc >  src/ui/rc_resources.py
-uic -g python -o src/ui/ui_mainwindow.py src/ui/mainwindow.ui
-uic -g python -o src/ui/ui_importwindow.py src/ui/importwindow.ui
+.venv/bin/pyside6-rcc -g python resources/resources.qrc >  src/ui/rc_resources.py
+.venv/bin/pyside6-uic -g python -o src/ui/ui_mainwindow.py src/ui/mainwindow.ui
+.venv/bin/pyside6-uic -g python -o src/ui/ui_importwindow.py src/ui/importwindow.ui
 
 sed -i 's/PySide2/PySide6/g' src/ui/rc_resources.py
 sed -i 's/PySide2/PySide6/g' src/ui/ui_mainwindow.py

@@ -29,4 +29,4 @@ If you have problems to run `build.sh` in macOS, execute `sudo chmod 755 build.s
 ## Usage
 Download the init folder and save it in a place you find comfortable: https://github.com/michael02022/sfzbuilder-init-folder
 
-And install a SFZPack, a ready-to-go start would be the [Fairlight IIx](https://github.com/sfzbuilder/sfzpack-gm.dls), alternately, you can use the [gm.dls bank](https://github.com/sfzbuilder/sfzpack-gm.dls)
+And install a SFZPack, a ready-to-go start would be the [Fairlight IIx](https://github.com/sfzbuilder/sfzpack-Fairlight_IIx), alternately, you can use the [gm.dls bank](https://github.com/sfzbuilder/sfzpack-gm.dls)

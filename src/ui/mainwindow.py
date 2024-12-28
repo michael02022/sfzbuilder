@@ -4418,7 +4418,7 @@ class MainWindow(QMainWindow):
 
       # write project
       if temp:
-        proj = f"{config_path}/Projects"
+        proj = f"{config_path}/Presets"
         save_project(proj, f"!TEMP.sfzproj", self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
 
@@ -4430,7 +4430,7 @@ class MainWindow(QMainWindow):
           self.ui.lblLog.setText(f"""WRITTEN: TEMP""")
       else:
         proj_path = preset_path.replace(f"{common_path}/Presets/", "") # get only the folders of the preset
-        proj = f"{common_path}/Projects/{proj_path}"
+        proj = f"{common_path}/Presets/{proj_path}"
         #print(proj)
         #for i in range(len())
         save_project(proj, f"{name}.sfzproj", self.global_header, self.map_objects, self.fx_ls)
@@ -4441,14 +4441,14 @@ class MainWindow(QMainWindow):
       self.msgbox_ok.setText("Please add a mapping.")
       self.msgbox_ok.exec()
     else:
-      projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects/{self.ui.txtPreset.text()}", filter="Project(*.sfzproj)")
+      projectpath = QFileDialog.getSaveFileName(parent=self, caption="Save SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Presets/{self.ui.txtPreset.text()}", filter="Project(*.sfzproj)")
       if projectpath[0] != "":
         #print(projectpath[0])
         save_project(os.path.dirname(projectpath[0]), os.path.basename(projectpath[0]), self.global_header, self.map_objects, self.fx_ls)
         self.ui.lblLog.setText(f"""WRITTEN: {str(os.path.basename(projectpath[0]) + ".sfz")}""")
 
   def onOpenProject(self):
-    projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Projects", filter="Project(*.sfzproj)")
+    projectpath = QFileDialog.getOpenFileName(parent=self, caption="Open SFZBuilder project", dir=f"{self.settings.value('mainfolderpath')}/Presets", filter="Project(*.sfzproj)")
     if projectpath[0] != "":
       tmp_file = self.open_project(projectpath[0])
       self.map_objects = tmp_file[0]

@@ -603,6 +603,7 @@ class MainWindow(QMainWindow):
       self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
       self.map_ls = self.current_pack_dict[self.pack_ls[0]]
       self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
+      self.ui.cbxVelMap.clear();self.ui.cbxVelMap.addItems(reformat_string_paths(self.map_ls))
 
       # update
       idx = self.ui.listMap.currentRow()
@@ -2106,14 +2107,36 @@ class MainWindow(QMainWindow):
     self.ui.dsbFxEqBw.valueChanged.connect(self.onUiValueChanged)
 
     # Opcode buttons
-    self.ui.pbnPortamento.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnXfadeKey.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnXfadeVel.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnXfadeCc.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnEg.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnRR.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnRand.clicked.connect(self.onUiValueChanged)
-    self.ui.pbnMidi.clicked.connect(self.onUiValueChanged)
+    self.ui.pbnPortamento.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnXfadeKey.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnXfadeVel.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnXfadeCc.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnEg.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnRR.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnRand.clicked.connect(self.onOpcodeTab)
+    self.ui.pbnMidi.clicked.connect(self.onOpcodeTab)
+
+  def onOpcodeTab(self):
+    obj = self.map_objects[self.ui.listMap.currentRow()]
+    cb = QApplication.clipboard()
+    cb.clear()
+    match self.sender().objectName():
+      case "pbnPortamento":
+        cb.setText(sfz_portamento("EXTRA", 0.05))
+      case "pbnXfadeKey":
+        cb.setText(sfz_xfade("key"))
+      case "pbnXfadeVel":
+        cb.setText(sfz_xfade("vel"))
+      case "pbnXfadeCc":
+        cb.setText(sfz_xfade("MOD"))
+      case "pbnRR":
+        cb.setText(sfz_roundrobin(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+      case "pbnRand":
+        cb.setText(sfz_random(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+      case "pbnMidi":
+        cb.setText(sfz_midi_value(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
+      case "pbnEg":
+        cb.setText(sfz_eg_v2("EXTRA"))
 
   # UPDATE WIDGET -> OBJECT
   def onUiValueChanged(self):
@@ -2512,30 +2535,6 @@ class MainWindow(QMainWindow):
         obj.change_value("opcode_notepad", self.sender().toPlainText())
       case "txtComment":
         obj.change_value("comment", self.sender().text())
-      case "pbnPortamento":
-        obj.add_opcode_txt(sfz_portamento("EXTRA", 0.05))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnXfadeKey":
-        obj.add_opcode_txt(sfz_xfade("key"))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnXfadeVel":
-        obj.add_opcode_txt(sfz_xfade("vel"))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnXfadeCc":
-        obj.add_opcode_txt(sfz_xfade("MOD"))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnRR":
-        obj.add_opcode_txt(sfz_roundrobin(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnRand":
-        obj.add_opcode_txt(sfz_random(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnMidi":
-        obj.add_opcode_txt(sfz_midi_value(self.ui.sbxLength.value(), self.ui.sbxPosition.value()))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
-      case "pbnEg":
-        obj.add_opcode_txt(sfz_eg_v2("EXTRA"))
-        self.ui.txtOpcodes.setPlainText(obj.opcode_notepad)
 
       # KNOBS / DIALS
       # PAN

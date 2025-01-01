@@ -1653,6 +1653,9 @@
          </item>
          <item row="6" column="0">
           <widget class="QPushButton" name="pbnVelSave">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Save result as SFZ file</string>
            </property>
@@ -1748,7 +1751,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>First = Quiet | Last = Loud</string>
+              <string>First = Quiet | Last = Loud    (Only works for Map and Percussion)</string>
              </property>
             </widget>
            </item>
@@ -7279,7 +7282,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="lblOpcodes">
            <property name="text">
-            <string>Templates:</string>
+            <string>Templates (clipboard):</string>
            </property>
           </widget>
          </item>

@@ -1,55 +1,49 @@
 from .functions import clip
 
 def sfz_portamento(eg_idx, time):
-    return f"""
-eg{eg_idx}_sustain=1
+    return f"""eg{eg_idx}_sustain=1
 eg{eg_idx}_level0=-1
 eg{eg_idx}_time0=0
 eg{eg_idx}_pitch_oncc140=100 //This is the pitch depth
 eg{eg_idx}_time1={time} //GLIDE TIME
-eg{eg_idx}_level1=0\n"""
+eg{eg_idx}_level1=0"""
 
 def sfz_eg_v2(eg_idx):
-    return f"""
-//eg{eg_idx}_ampeg=1
+    return f"""//eg{eg_idx}_ampeg=1
 eg{eg_idx}_sustain=4
 eg{eg_idx}_level0=START_LEVEL   eg{eg_idx}_time0=-1
 eg{eg_idx}_level1=START_LEVEL   eg{eg_idx}_time1=DELAY_TIME
 eg{eg_idx}_level2=1             eg{eg_idx}_time2=ATTACK_TIME  eg{eg_idx}_shape2=0.00001
 eg{eg_idx}_level3=1             eg{eg_idx}_time3=HOLD_TIME
 eg{eg_idx}_level4=SUSTAIN_LEVEL eg{eg_idx}_time4=DECAY_TIME   eg{eg_idx}_shape4=-0.3616
-eg{eg_idx}_level5=0             eg{eg_idx}_time5=RELEASE_TIME eg{eg_idx}_shape5=-6.3616
-"""
+eg{eg_idx}_level5=0             eg{eg_idx}_time5=RELEASE_TIME eg{eg_idx}_shape5=-6.3616"""
 
 def sfz_xfade(str):
     match str:
         case "key":
-            return f"""
-xfin_lokey=0 //in
+            return f"""xfin_lokey=0 //in
 xfin_hikey=63
 xfout_lokey=64 //out
 xfout_hikey=127
-xf_keycurve=power // gain, power\n"""
+xf_keycurve=power // gain, power"""
         case "vel":
-            return f"""
-xfin_lovel=0 //in
+            return f"""xfin_lovel=0 //in
 xfin_hivel=63
 xfout_lovel=64 //out
 xfout_hivel=127
-xf_velcurve=power // gain, power\n"""
+xf_velcurve=power // gain, power"""
         case _: # number
-            return f"""
-xfin_locc{str}=0 //in
+            return f"""xfin_locc{str}=0 //in
 xfin_hicc{str}=63
 xfout_locc{str}=64 //out
 xfout_hicc{str}=127
-xf_cccurve=power // gain, power\n"""
+xf_cccurve=power // gain, power"""
 
 def sfz_roundrobin(length, index):
     if index > length:
         index = length
     len_ls = list(range(1, length+1))
-    return f"""seq_length={length}\nseq_position={len_ls[index - 1]}\n\n"""
+    return f"""seq_length={length}\nseq_position={len_ls[index - 1]}"""
 
 def sfz_random(length, index):
     rand_base = 1 / length
@@ -57,7 +51,7 @@ def sfz_random(length, index):
     for i in range(length):
         rand_ls.append(rand_base * i)
     rand_ls.append(1)
-    return f"""lorand={rand_ls[clip(index-1, (0, length-1))]}\nhirand={rand_ls[clip(index, (0, length))]}\n\n"""
+    return f"""lorand={rand_ls[clip(index-1, (0, length-1))]}\nhirand={rand_ls[clip(index, (0, length))]}"""
 
 def sfz_midi_value(length, index):
     r = ""

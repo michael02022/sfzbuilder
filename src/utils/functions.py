@@ -8,6 +8,25 @@ import glob
 import math
 import re
 
+def gen_vel_curve(length, _growth, min_amp):
+  max_amp = 127
+  if _growth == 1.0:
+    growth = 1.0000001
+  else:
+    growth = round(_growth, 2)
+  
+  periods = length
+  rint = []
+
+  # generate value list
+  for i in range(periods + 1):
+    result = min_amp+(((min_amp*growth**i)-min_amp)*(max_amp-min_amp)/((min_amp*growth**periods)-min_amp))
+    rint.append(int(result))
+    if i == (periods):
+      rint.pop(0)
+
+  return rint
+
 def only_nums(str):
     r = re.sub(r'[^\d]+', '', str)
     return r

@@ -120,6 +120,11 @@ class Mapping:
     self.rt_decaybool = False
     self.rt_decay = 0
 
+    # Velocity Mapper
+    self.vel_maps = []
+    self.vel_min = 24
+    self.vel_growth = 1.0
+
     # (PERC RELATED)
     self.key_opcode = False # enable/disable key= opcode if the user want to use one note for each percussion
     self.keycenterbool = False
@@ -273,8 +278,11 @@ class Mapping:
     self.opcode_notepad = ""
     self.disable_indexes = False
 
-  def get_default_path(self):
-    return f"{self.pack}/{os.path.dirname(self.map).replace(os.sep, '/')}"
+  def get_default_path(self, str_path=None):
+    if str_path is None:
+      return f"{self.pack}/{os.path.dirname(self.map).replace(os.sep, '/')}"
+    else:
+      return f"{self.pack}/{os.path.dirname(str_path).replace(os.sep, '/')}"
 
   def get_include_path(self):
     pstr = f"{self.pack}/{self.map.replace(os.sep, '/')}"

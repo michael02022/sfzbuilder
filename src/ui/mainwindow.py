@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
     self.map_objects = []
     self.fx_ls = []
     self.program_names_ls = []
+    self.vel_maps = []
 
     self.settings = QSettings(self, QSettings.IniFormat, QSettings.UserScope, QApplication.organizationName, QApplication.applicationDisplayName)
     self.settings.setValue("last_file_path", None)
@@ -164,6 +165,13 @@ class MainWindow(QMainWindow):
     self.ui.listMap.itemClicked.connect(self.onItemMap)
 
     self.ui.btnAutoname.clicked.connect(self.onAutoname)
+
+    # Velocity Mapper
+    self.ui.pbnVelAdd.clicked.connect(self.onVelMapAdd)
+    self.ui.pbnVelDel.clicked.connect(self.onVelMapDel)
+    self.ui.pbnVelUp.clicked.connect(self.onVelMapUp)
+    self.ui.pbnVelDown.clicked.connect(self.onVelMapDown)
+    self.ui.pbnVelSave.clicked.connect(self.onVelMapSave)
 
     # FX
     self.ui.btnFxAdd.clicked.connect(self.onFxAdd)
@@ -335,14 +343,59 @@ class MainWindow(QMainWindow):
       self.ui.cbxPack.clear(); self.ui.cbxPack.addItems(self.pack_ls)
       self.map_ls = self.current_pack_dict[self.pack_ls[0]]
       self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
+      self.ui.cbxVelMap.clear();self.ui.cbxVelMap.addItems(reformat_string_paths(self.map_ls))
   
   def get_fx_names(self, ls):
     r = []
     for i in ls:
       r.append(i["sfz_name"])
     return r
+
+  ## VELOCITY MAPPER
+  def onVelMapAdd(self):
+    if self.enable_edit:
+      idx = self.ui.listMap.currentRow()
+      if self.ui.chkVelTunedVersion.isChecked():
+        tmp_velmap = f"{self.map_ls[self.ui.cbxVelMap.currentIndex()].split('.')[0]} --TN.sfz"
+      else:
+        tmp_velmap = self.map_ls[self.ui.cbxVelMap.currentIndex()]
+      
+      self.vel_maps.append(tmp_velmap)
+      self.map_objects[idx].change_value("vel_maps", self.vel_maps)
+      self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+    else:
+      None
+
+  def onVelMapDel(self):
+    if self.ui.listVelMapper.count() != 0:
+      idx = self.ui.listVelMapper.currentRow()
+
+      del self.vel_maps[idx]
+      self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+      if self.ui.listVelMapper.count() != 0: # if it has objects to select
+        if self.ui.listVelMapper.count() <= idx:
+          self.ui.listVelMapper.setCurrentRow(self.ui.listVelMapper.count() - 1) # set index to the last object
+        else:
+          self.ui.listVelMapper.setCurrentRow(idx)
+
+  def onVelMapUp(self):
+    if self.ui.listVelMapper.count() != 0:
+      idx = clip(self.ui.listVelMapper.currentRow(), (0, len(self.vel_maps)))
+      self.vel_maps.insert(clip(idx - 1, (0, len(self.vel_maps))), self.vel_maps.pop(idx))
+      self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+      self.ui.listVelMapper.setCurrentRow(clip(idx - 1, (0, len(self.vel_maps))))
   
-  # FX tab
+  def onVelMapDown(self):
+    if self.ui.listVelMapper.count() != 0:
+      idx = clip(self.ui.listVelMapper.currentRow(), (0, len(self.vel_maps)))
+      self.vel_maps.insert(clip(idx + 1, (0, len(self.vel_maps))), self.vel_maps.pop(idx))
+      self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+      self.ui.listVelMapper.setCurrentRow(clip(idx + 1, (0, len(self.vel_maps) - 1)))
+  
+  def onVelMapSave(self):
+    None
+  
+  ## FX tab
   def onFxAdd(self):
     #print(__file__)
     if self.enable_edit and self.ui.listMap.count() != 0:
@@ -616,6 +669,7 @@ class MainWindow(QMainWindow):
     self.current_pack_dict = which_pack(self.mappings_dict, self.ui.chkPercussion.isChecked(), self.ui.chkWavetable.isChecked())
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]]
     self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
+    self.ui.cbxVelMap.clear();self.ui.cbxVelMap.addItems(reformat_string_paths(self.map_ls))
 
     # update
     if self.ui.listMap.count() != 0:
@@ -698,6 +752,7 @@ class MainWindow(QMainWindow):
     self.map_ls = self.current_pack_dict[self.pack_ls[self.ui.cbxPack.currentIndex()]] # add map list
     self.ui.cbxMap.clear(); self.ui.cbxMap.addItems(reformat_string_paths(self.map_ls))
     self.ui.cbxMap.setCurrentIndex(self.map_ls.index(self.map_objects[idx].map)) # set map list
+    self.ui.cbxVelMap.clear();self.ui.cbxVelMap.addItems(reformat_string_paths(self.map_ls))
     #mappings_dict
     self.get_map_values()
     # the most horrible line of code I have ever wrote
@@ -1121,6 +1176,14 @@ class MainWindow(QMainWindow):
           self.ui.cbxOffMode.setCurrentIndex(off_modes.index(map_dict.get(k)))
         case "off_time":
           self.ui.dsbOffTime.setValue(map_dict.get(k))
+
+        ## Velocity Mapper
+        case "vel_maps":
+          self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(map_dict.get(k))
+        case "vel_min":
+          self.ui.sbxVelMin.setValue(map_dict.get(k))
+        case "vel_growth":
+          self.ui.dsbVelGrowth.setValue(map_dict.get(k))
 
         ## PAN
         case "panbool":
@@ -1596,6 +1659,9 @@ class MainWindow(QMainWindow):
     self.ui.sbxGroup.valueChanged.connect(self.onUiValueChanged)
     self.ui.sbxOffBy.valueChanged.connect(self.onUiValueChanged)
     self.ui.dsbOffTime.valueChanged.connect(self.onUiValueChanged)
+
+    self.ui.sbxVelMin.valueChanged.connect(self.onUiValueChanged)
+    self.ui.dsbVelGrowth.valueChanged.connect(self.onUiValueChanged)
 
     self.ui.sbxPanKeycenter.valueChanged.connect(self.onUiValueChanged)
 
@@ -2212,6 +2278,11 @@ class MainWindow(QMainWindow):
         obj.change_value("off_by", self.sender().value())
       case "dsbOffTime":
         obj.change_value("off_time", self.sender().value())
+      # velocity mapper
+      case "sbxVelMin":
+        obj.change_value("vel_min", self.sender().value())
+      case "dsbVelGrowth":
+        obj.change_value("vel_growth", self.sender().value())
       # pan
       case "sbxPanKeycenter":
         obj.change_value("pan_keycenter", self.sender().value())
@@ -4282,10 +4353,32 @@ class MainWindow(QMainWindow):
           else: # sample mapping
             match m.fx_mode:
               case 0: # NO FX
-                sfz_content += f"<group>\n"
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                if len(m.vel_maps) > 0:
+                  vel_ls = gen_vel_curve(len(m.vel_maps) + 1, m.vel_growth, m.vel_min)
+                  for i in range(len(vel_ls)):
+                    if i == 0:
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                    elif i == len(vel_ls)-1:
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                    else:
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                else:
+                  sfz_content += f"<group>\n"
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
               case 1: # UNISON
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc89=PleaseSetMe127\n"
@@ -4293,25 +4386,95 @@ class MainWindow(QMainWindow):
                 sfz_content += f"set_cc89=127\n"
                 sfz_content += f"set_cc90=127\n"
 
-                # OSC 1
-                sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
-                if m.fx_pan >= 0:
-                  sfz_content += f"pan={int(m.fx_pan)}\n"
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                if len(m.vel_maps) > 0:
+                  vel_ls = gen_vel_curve(len(m.vel_maps) + 1, m.vel_growth, m.vel_min)
+                  for i in range(len(vel_ls)):
+                    if i == 0: #### FIRST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={int(m.fx_pan)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-                # OSC 2
-                sfz_content += f"<group>\n"
-                sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
-                if m.fx_pan >= 0:
-                  sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                    elif i == len(vel_ls)-1: #### LAST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={int(m.fx_pan)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                    else: #### DEFAULT
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={int(m.fx_pan)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
+                      if m.fx_pan >= 0:
+                        sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                else:
+                  # OSC 1
+                  sfz_content += f"<group>\n"
+                  sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_detune)}\n"
+                  if m.fx_pan >= 0:
+                    sfz_content += f"pan={int(m.fx_pan)}\n"
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                  # OSC 2
+                  sfz_content += f"<group>\n"
+                  sfz_content += f"pitch_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))}\n"
+                  if m.fx_pan >= 0:
+                    sfz_content += f"pan={-abs(int(m.fx_pan))}\n"
+                  if m.fx_delay > 0:
+                    sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc118=PleaseSetMe127\n"
@@ -4323,22 +4486,84 @@ class MainWindow(QMainWindow):
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
-                # OSC 1
-                sfz_content += f"<group>\n"
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                lfo_fx = lfo_idx
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+                if len(m.vel_maps) > 0:
+                  vel_ls = gen_vel_curve(len(m.vel_maps) + 1, m.vel_growth, m.vel_min)
+                  for i in range(len(vel_ls)):
+                    if i == 0: #### FIRST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      lfo_fx = lfo_idx
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
 
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-                # OSC 2
-                sfz_content += f"<group>\n"
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                    elif i == len(vel_ls)-1: #### LAST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      lfo_fx = lfo_idx
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                    else: #### DEFAULT
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      lfo_fx = lfo_idx
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                else:
+                  # OSC 1
+                  sfz_content += f"<group>\n"
+                  if m.fx_delay > 0:
+                    sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                  lfo_fx = lfo_idx
+                  sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_detune))} lfo{lfo_idx+3}_pitch={m.fx_depth} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100}\n"
+
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                  # OSC 2
+                  sfz_content += f"<group>\n"
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
               case 3: # STEREO CHORUS (WET)
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc118=PleaseSetMe127\n"
@@ -4350,24 +4575,88 @@ class MainWindow(QMainWindow):
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
-                # OSC 1
-                sfz_content += f"<group>\n"
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                if len(m.vel_maps) > 0:
+                  vel_ls = gen_vel_curve(len(m.vel_maps) + 1, m.vel_growth, m.vel_min)
+                  for i in range(len(vel_ls)):
+                    if i == 0: #### FIRST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-                # OSC 2
-                sfz_content += f"<group>\n"
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                    elif i == len(vel_ls)-1: #### LAST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                    else: #### DEFAULT
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                else:
+                  # OSC 1
+                  sfz_content += f"<group>\n"
+                  if m.fx_delay > 0:
+                    sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                  sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                  # OSC 2
+                  sfz_content += f"<group>\n"
+
+                  sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
               case 4: # STEREO CHORUS (WET+DRY)
                 sfz_content += f"<control>\n"
@@ -4380,30 +4669,115 @@ class MainWindow(QMainWindow):
                 sfz_content += f"label_cc90=PleaseSetMe127\n"
                 sfz_content += f"set_cc90=127\n"
 
-                # OSC 1
-                sfz_content += f"<group>\n"
-                if m.fx_delay > 0:
-                  sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+                if len(m.vel_maps) > 0:
+                  vel_ls = gen_vel_curve(len(m.vel_maps) + 1, m.vel_growth, m.vel_min)
+                  for i in range(len(vel_ls)):
+                    if i == 0: #### FIRST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-                # OSC 2
-                sfz_content += f"<group>\n"
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
 
-                sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      # OSC 3 (DRY)
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                    elif i == len(vel_ls)-1: #### LAST
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
 
-                # OSC 3 (DRY)
-                sfz_content += f"<group>\n"
-                sfz_content += f"<control>\n"
-                sfz_content += f"note_offset={m.note_offset}\n"
-                sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 3 (DRY)
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                    else: #### DEFAULT
+                      # OSC 1
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      if m.fx_delay > 0:
+                        sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 2
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+
+                      # OSC 3 (DRY)
+                      sfz_content += f"<group>\n"
+                      sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
+                      sfz_content += f"<control>\n"
+                      sfz_content += f"note_offset={m.note_offset}\n"
+                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                else:
+                  # OSC 1
+                  sfz_content += f"<group>\n"
+                  if m.fx_delay > 0:
+                    sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
+                  sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={int(m.fx_depth) * 2} lfo{lfo_idx+3}_pitch={-abs(m.fx_depth)} lfo{lfo_idx+3}_freq={m.fx_speed} lfo{lfo_idx+3}_wave={m.fx_wave} lfo{lfo_idx+3}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=-100\n"
+
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                  # OSC 2
+                  sfz_content += f"<group>\n"
+
+                  sfz_content += f"tune_oncc{cc_sw(90,m.fx_detune)}={-abs(int(m.fx_depth) * 2)} lfo{lfo_idx+4}_pitch={m.fx_depth} lfo{lfo_idx+4}_freq={m.fx_speed} lfo{lfo_idx+4}_wave={m.fx_wave} lfo{lfo_idx+4}_phase_oncc{cc_sw(117,m.fx_pan)}={int(m.fx_pan) / 100} pan=100\n"
+
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+
+                  # OSC 3 (DRY)
+                  sfz_content += f"<group>\n"
+                  sfz_content += f"<control>\n"
+                  sfz_content += f"note_offset={m.note_offset}\n"
+                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
         sfz_content += "\n"
 

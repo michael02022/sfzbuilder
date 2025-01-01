@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1439</width>
-    <height>977</height>
+    <height>1139</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1638,6 +1638,158 @@
          <property name="bottomMargin">
           <number>6</number>
          </property>
+         <item row="7" column="1">
+          <spacer name="verticalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="pbnVelSave">
+           <property name="text">
+            <string>Save result as SFZ file</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="Line" name="line_32">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <layout class="QGridLayout" name="VelMapper">
+           <item row="2" column="0">
+            <widget class="QSpinBox" name="sbxVelMin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string/>
+             </property>
+             <property name="prefix">
+              <string>Min Vel </string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>127</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QPushButton" name="pbnVelAdd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Add</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QPushButton" name="pbnVelUp">
+             <property name="text">
+              <string>^</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="cbxVelMap">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QPushButton" name="pbnVelDown">
+             <property name="text">
+              <string>v</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_52">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>MAP:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_51">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>First = Quiet | Last = Loud</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QDoubleSpinBox" name="dsbVelGrowth">
+             <property name="prefix">
+              <string>Growth </string>
+             </property>
+             <property name="suffix">
+              <string/>
+             </property>
+             <property name="maximum">
+              <double>2.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QPushButton" name="pbnVelDel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Delete</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QCheckBox" name="chkVelTunedVersion">
+             <property name="text">
+              <string>Use tuned variant instead</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
          <item row="0" column="1">
           <widget class="QGroupBox" name="gbxSampleRegion">
            <property name="title">
@@ -1727,6 +1879,19 @@
            </layout>
           </widget>
          </item>
+         <item row="7" column="0">
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="1" column="0">
           <widget class="QGroupBox" name="gbxSampleOffset">
            <property name="title">
@@ -1761,10 +1926,20 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="lblSampleOffsetVelocity">
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sbxSampleOffsetValue">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+              <property name="singleStep">
+               <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_44">
               <property name="text">
-               <string>Velocity:</string>
+               <string>Offset Value</string>
               </property>
              </widget>
             </item>
@@ -1775,6 +1950,13 @@
               </property>
               <property name="singleStep">
                <number>25</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblSampleOffsetVelocity">
+              <property name="text">
+               <string>Velocity:</string>
               </property>
              </widget>
             </item>
@@ -1794,120 +1976,17 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxSampleOffsetValue">
-              <property name="maximum">
-               <number>999999999</number>
-              </property>
-              <property name="singleStep">
-               <number>25</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_44">
-              <property name="text">
-               <string>Offset Value</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
          </item>
-         <item row="3" column="0">
-          <spacer name="vspOffset">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+         <item row="4" column="0">
+          <widget class="QListWidget" name="listVelMapper">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1">
-          <widget class="QGroupBox" name="gbxSampleTranspose">
-           <property name="title">
-            <string>Transpose</string>
-           </property>
-           <layout class="QGridLayout" name="laySampleTranspose">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetNoConstraint</enum>
-            </property>
-            <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="sbxSampleTransposePitch">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimum">
-               <number>-127</number>
-              </property>
-              <property name="maximum">
-               <number>127</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblSampleTransposePitch">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Pitch</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="3" column="1">
-             <widget class="QSpinBox" name="sbxSampleTransposeNote">
-              <property name="minimum">
-               <number>-127</number>
-              </property>
-              <property name="maximum">
-               <number>127</number>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="lblSampleTransposeNote">
-              <property name="text">
-               <string>Note</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </widget>
          </item>
          <item row="0" column="0">
@@ -2026,6 +2105,109 @@
              </widget>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="Line" name="line_31">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QGroupBox" name="gbxSampleTranspose">
+           <property name="title">
+            <string>Transpose</string>
+           </property>
+           <layout class="QGridLayout" name="laySampleTranspose">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>6</number>
+            </property>
+            <property name="topMargin">
+             <number>6</number>
+            </property>
+            <property name="rightMargin">
+             <number>6</number>
+            </property>
+            <property name="bottomMargin">
+             <number>6</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="sbxSampleTransposePitch">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimum">
+               <number>-127</number>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSampleTransposePitch">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Pitch</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="1">
+             <widget class="QSpinBox" name="sbxSampleTransposeNote">
+              <property name="minimum">
+               <number>-127</number>
+              </property>
+              <property name="maximum">
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblSampleTransposeNote">
+              <property name="text">
+               <string>Note</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_53">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>VELOCITY MAPPER</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -3932,7 +4114,7 @@
              </layout>
             </item>
             <item row="2" column="0" colspan="7">
-             <layout class="QGridLayout" name="layFilterGeneralKnobs" rowstretch="0,0,0,0,0" columnstretch="0,0,0,0,0,0,0">
+             <layout class="QGridLayout" name="layFilterGeneralKnobs" rowstretch="0,0,0,0" columnstretch="0,0,0,0,0,0,0">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
               </property>
@@ -5259,7 +5441,7 @@
              <number>6</number>
             </property>
             <item row="1" column="0" colspan="2">
-             <layout class="QGridLayout" name="layPitchKnobs" rowstretch="0,0,0,0" columnstretch="0,0,0,0,0">
+             <layout class="QGridLayout" name="layPitchKnobs" rowstretch="0,0,0" columnstretch="0,0,0,0,0">
               <property name="sizeConstraint">
                <enum>QLayout::SetNoConstraint</enum>
               </property>

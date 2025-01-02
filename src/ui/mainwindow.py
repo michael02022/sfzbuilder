@@ -172,6 +172,7 @@ class MainWindow(QMainWindow):
     self.ui.pbnVelUp.clicked.connect(self.onVelMapUp)
     self.ui.pbnVelDown.clicked.connect(self.onVelMapDown)
     self.ui.pbnVelSave.clicked.connect(self.onVelMapSave)
+    self.ui.pbnVelReplace.clicked.connect(self.onVelMapChanged)
 
     # FX
     self.ui.btnFxAdd.clicked.connect(self.onFxAdd)
@@ -392,6 +393,21 @@ class MainWindow(QMainWindow):
       self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
       self.ui.listVelMapper.setCurrentRow(clip(idx + 1, (0, len(self.vel_maps) - 1)))
   
+  def onVelMapChanged(self):
+    if self.ui.listVelMapper.count() != 0:
+      idx  = self.ui.listMap.currentRow()
+      velidx = self.ui.listVelMapper.currentRow()
+
+      if self.ui.chkVelTunedVersion.isChecked():
+        tmp_velmap = f"{self.map_ls[self.ui.cbxVelMap.currentIndex()].split('.')[0]} --TN.sfz"
+      else:
+        tmp_velmap = self.map_ls[self.ui.cbxVelMap.currentIndex()]
+
+      self.vel_maps[velidx] = tmp_velmap
+      self.map_objects[idx].change_value("vel_maps", self.vel_maps)
+      self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+      self.ui.listVelMapper.setCurrentRow(velidx)
+
   def onVelMapSave(self):
     None
   

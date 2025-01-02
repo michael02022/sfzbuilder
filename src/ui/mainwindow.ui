@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1439</width>
-    <height>1139</height>
+    <width>1467</width>
+    <height>1163</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1692,23 +1692,17 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="2">
-            <widget class="QPushButton" name="pbnVelAdd">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Add</string>
-             </property>
-            </widget>
-           </item>
            <item row="5" column="0">
             <widget class="QPushButton" name="pbnVelUp">
              <property name="text">
               <string>^</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QCheckBox" name="chkVelTunedVersion">
+             <property name="text">
+              <string>Use tuned variant instead</string>
              </property>
             </widget>
            </item>
@@ -1722,10 +1716,29 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QPushButton" name="pbnVelDown">
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_51">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
-              <string>v</string>
+              <string>First = Quiet | Last = Loud    (Only works for Map and Percussion)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
+            <widget class="QPushButton" name="pbnVelDel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Delete</string>
              </property>
             </widget>
            </item>
@@ -1739,19 +1752,6 @@
              </property>
              <property name="text">
               <string>MAP:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_51">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>First = Quiet | Last = Loud    (Only works for Map and Percussion)</string>
              </property>
             </widget>
            </item>
@@ -1771,8 +1771,8 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="2">
-            <widget class="QPushButton" name="pbnVelDel">
+           <item row="5" column="2">
+            <widget class="QPushButton" name="pbnVelAdd">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -1780,14 +1780,27 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Delete</string>
+              <string>Add</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QCheckBox" name="chkVelTunedVersion">
+           <item row="6" column="2">
+            <widget class="QPushButton" name="pbnVelReplace">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
-              <string>Use tuned variant instead</string>
+              <string>Replace</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QPushButton" name="pbnVelDown">
+             <property name="text">
+              <string>v</string>
              </property>
             </widget>
            </item>
@@ -11047,7 +11060,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1439</width>
+     <width>1467</width>
      <height>30</height>
     </rect>
    </property>

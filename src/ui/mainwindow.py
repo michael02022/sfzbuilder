@@ -554,8 +554,8 @@ class MainWindow(QMainWindow):
 
   def onMainFolder(self):
     main_folder_path = QFileDialog.getExistingDirectory(parent=self, caption="Select a SFZBuilder folder", options=QFileDialog.ShowDirsOnly)
-    if False in (os.path.exists(f"{main_folder_path}/MappingPool"), os.path.exists(f"{main_folder_path}/Presets"), os.path.exists(f"{main_folder_path}/Projects"), os.path.exists(f"{main_folder_path}/Wavetables")):
-      self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets, Projects and Wavetables folders.")
+    if False in (os.path.exists(f"{main_folder_path}/MappingPool"), os.path.exists(f"{main_folder_path}/Presets"), os.path.exists(f"{main_folder_path}/Wavetables")):
+      self.msgbox_ok.setText("This is not a valid folder. It must include MappingPool, Presets and Wavetables folders.")
       self.msgbox_ok.exec()
     else:
       self.ui.txtMainFolder.setText(main_folder_path)

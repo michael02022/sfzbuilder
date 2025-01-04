@@ -1,9 +1,16 @@
 #!/bin/bash
+if [[ "$OSTYPE" == "msys"* ]] || [[ "$OSTYPE" == "cygwin"* ]] ; then
+    RCC=".venv/Scripts/pyside6-rcc.exe"
+    UIC=".venv/Scripts/pyside6-uic.exe"
+else
+    RCC=".venv/bin/pyside6-rcc"
+    UIC=".venv/bin/pyside6-uic"
+fi
 
-.venv/bin/pyside6-rcc -g python resources/resources.qrc >  src/ui/rc_resources.py
-.venv/bin/pyside6-uic -g python -o src/ui/ui_mainwindow.py src/ui/mainwindow.ui
-.venv/bin/pyside6-uic -g python -o src/ui/ui_importwindow.py src/ui/importwindow.ui
-.venv/bin/pyside6-uic -g python -o src/ui/ui_exportwindow.py src/ui/exportwindow.ui
+${RCC} -g python resources/resources.qrc >  src/ui/rc_resources.py
+${UIC} -g python -o src/ui/ui_mainwindow.py src/ui/mainwindow.ui
+${UIC} -g python -o src/ui/ui_importwindow.py src/ui/importwindow.ui
+${UIC} -g python -o src/ui/ui_exportwindow.py src/ui/exportwindow.ui
 
 sed -i 's/PySide2/PySide6/g' src/ui/rc_resources.py
 sed -i 's/PySide2/PySide6/g' src/ui/ui_mainwindow.py

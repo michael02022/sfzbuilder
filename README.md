@@ -9,7 +9,7 @@ Windows (CMD):
 
 ```
 python -m venv .venv
-call .venv/Scripts/activate
+call .venv\Scripts\activate
 ```
 
 macOS/Linux (Bash):
@@ -36,7 +36,7 @@ If you want to straight build SFZBuilder, you have to run `update_ui_files.sh` f
 To make a build for Windows/macOS/Linux, run:
 
 ```
-pyinstaller ./src/main.py --name=sfzbuilder
+pyinstaller ./src/main.py --name=sfzbuilder --clean
 ```
 
 and then run the bash script `build.sh` to move the required files to run it normally.

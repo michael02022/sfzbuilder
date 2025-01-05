@@ -61,8 +61,8 @@ You can rename this folder with whatever name you like.
 
 and
 
-[Fairlight IIx](https://github.com/sfzbuilder/sfzpack-Fairlight_IIx)
+[Fairlight IIx](https://github.com/sfzmaker/sfzpack-Fairlight_IIx)
 
-Alternately, you can use the [gm.dls bank](https://github.com/sfzbuilder/sfzpack-gm.dls)
+Alternately, you can use the [gm.dls bank](https://github.com/sfzmaker/sfzpack-gm.dls)
 
 You should cut/copy the folders inside `MappingPool` forder from these SFZPacks to your init folder to install them.

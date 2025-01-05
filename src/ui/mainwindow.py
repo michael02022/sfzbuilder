@@ -369,10 +369,12 @@ class MainWindow(QMainWindow):
 
   def onVelMapDel(self):
     if self.ui.listVelMapper.count() != 0:
+      mapidx = self.ui.listMap.currentRow()
       idx = self.ui.listVelMapper.currentRow()
 
       del self.vel_maps[idx]
       self.ui.listVelMapper.clear();self.ui.listVelMapper.addItems(self.vel_maps)
+      self.map_objects[mapidx].change_value("vel_maps", self.vel_maps)
       if self.ui.listVelMapper.count() != 0: # if it has objects to select
         if self.ui.listVelMapper.count() <= idx:
           self.ui.listVelMapper.setCurrentRow(self.ui.listVelMapper.count() - 1) # set index to the last object

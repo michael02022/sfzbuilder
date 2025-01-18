@@ -1,3 +1,5 @@
+formats = (".wav", ".WAV", ".aif", ".AIF", ".aiff", ".AIFF", ".flac", ".FLAC", ".ogg", ".OGG")
+
 filter_type = ("lpf_1p",
                "lpf_2p",
                "lpf_2p_sv",
@@ -63,7 +65,7 @@ tablewarp_warp = ("Saw bend",
 
 tablewarp_switch = (0, 7, 14, 19, 26, 32, 38, 45, 51, 58, 64, 70, 78, 82, 89, 95)
 
-oversamplings = ("x1", "x2", "x3")
+oversamplings = ("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8")
 off_modes = ("fast", "normal")
 loop_modes = ("None", "no_loop", "one_shot", "loop_continuous", "loop_sustain")
 loop_directions = ("forward", "reverse")

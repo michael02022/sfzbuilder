@@ -4378,24 +4378,36 @@ class MainWindow(QMainWindow):
                       sfz_content += f"hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
                     elif i == len(vel_ls)-1:
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                     else:
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                 else:
                   sfz_content += f"<group>\n"
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
               case 1: # UNISON
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc89=PleaseSetMe127\n"
@@ -4415,7 +4427,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"pan={int(m.fx_pan)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4427,7 +4442,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
                     elif i == len(vel_ls)-1: #### LAST
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4437,7 +4455,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"pan={int(m.fx_pan)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4449,7 +4470,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                     else: #### DEFAULT
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4459,7 +4483,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"pan={int(m.fx_pan)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4471,7 +4498,10 @@ class MainWindow(QMainWindow):
                         sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                 else:
                   # OSC 1
                   sfz_content += f"<group>\n"
@@ -4480,7 +4510,10 @@ class MainWindow(QMainWindow):
                     sfz_content += f"pan={int(m.fx_pan)}\n"
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                   # OSC 2
                   sfz_content += f"<group>\n"
@@ -4491,7 +4524,10 @@ class MainWindow(QMainWindow):
                     sfz_content += f"delay_oncc{delay_sw(89, m.fx_delay)}={get_decimals(m.fx_delay)}\n"
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
               case 2: # MONO CHORUS
                 sfz_content += f"<control>\n"
                 sfz_content += f"label_cc118=PleaseSetMe127\n"
@@ -4517,14 +4553,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
                       sfz_content += f"hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
                     elif i == len(vel_ls)-1: #### LAST
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4536,14 +4578,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                     else: #### DEFAULT
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4555,14 +4603,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                 else:
                   # OSC 1
                   sfz_content += f"<group>\n"
@@ -4573,13 +4627,19 @@ class MainWindow(QMainWindow):
 
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                   # OSC 2
                   sfz_content += f"<group>\n"
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
               case 3: # STEREO CHORUS (WET)
                 sfz_content += f"<control>\n"
@@ -4605,7 +4665,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4614,7 +4677,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
                     elif i == len(vel_ls)-1: #### LAST
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4625,7 +4691,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4634,7 +4703,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                     else: #### DEFAULT
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4645,7 +4717,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4654,7 +4729,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                 else:
                   # OSC 1
                   sfz_content += f"<group>\n"
@@ -4664,7 +4742,10 @@ class MainWindow(QMainWindow):
 
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                   # OSC 2
                   sfz_content += f"<group>\n"
@@ -4673,7 +4754,10 @@ class MainWindow(QMainWindow):
 
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
               case 4: # STEREO CHORUS (WET+DRY)
                 sfz_content += f"<control>\n"
@@ -4699,7 +4783,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4708,14 +4795,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                       # OSC 3 (DRY)
                       sfz_content += f"<group>\n"
                       sfz_content += f"hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
                     elif i == len(vel_ls)-1: #### LAST
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4726,7 +4819,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4735,14 +4831,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 3 (DRY)
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                     else: #### DEFAULT
                       # OSC 1
                       sfz_content += f"<group>\n"
@@ -4753,7 +4855,10 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 2
                       sfz_content += f"<group>\n"
@@ -4762,14 +4867,20 @@ class MainWindow(QMainWindow):
 
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
 
                       # OSC 3 (DRY)
                       sfz_content += f"<group>\n"
                       sfz_content += f"lovel={vel_ls[i-1]+1} hivel={vel_ls[i]}\n"
                       sfz_content += f"<control>\n"
                       sfz_content += f"note_offset={m.note_offset}\n"
-                      sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
+                      if m.map.endswith(formats):
+                        sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                      else:
+                        sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path(m.vel_maps[i-1])}/\n#include \"$USERPATH/MappingPool/{m.pack}/{m.vel_maps[i-1]}\"\n\n"
                 else:
                   # OSC 1
                   sfz_content += f"<group>\n"
@@ -4779,7 +4890,10 @@ class MainWindow(QMainWindow):
 
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                   # OSC 2
                   sfz_content += f"<group>\n"
@@ -4788,13 +4902,19 @@ class MainWindow(QMainWindow):
 
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
                   # OSC 3 (DRY)
                   sfz_content += f"<group>\n"
                   sfz_content += f"<control>\n"
                   sfz_content += f"note_offset={m.note_offset}\n"
-                  sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
+                  if m.map.endswith(formats):
+                    sfz_content += f"<region> sample=$USERPATH/MappingPool/{m.pack}/{m.map}\n\n"
+                  else:
+                    sfz_content += f"default_path=$USERPATH/MappingPool/{m.get_default_path()}/\n#include \"$USERPATH/MappingPool/{m.get_include_path()}\"\n\n"
 
         sfz_content += "\n"
 

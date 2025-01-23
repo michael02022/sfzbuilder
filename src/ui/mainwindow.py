@@ -3592,7 +3592,7 @@ class MainWindow(QMainWindow):
           if m.rt_decaybool:
             sfz_content += f"rt_decay={m.rt_decay}\n"
           if m.keyswitchbool:
-            sfz_content += f"sw_last={m.keyswitch}\n"
+            sfz_content += f"sw_last={(m.keyswitch + m.note_offset) - m.note_offset}\n" # this formula let the keyswitch value stay in such midi note when using note offset
             sfz_content += f"sw_label={m.sw_label}\n"
           if m.keycenterbool:
             if m.key_opcode:

@@ -166,6 +166,10 @@ class MainWindow(QMainWindow):
 
     self.ui.btnAutoname.clicked.connect(self.onAutoname)
 
+    # Jump Buttons
+    self.ui.pbnMapJumpUp.clicked.connect(self.onMapJumpUp)
+    self.ui.pbnMapJumpDown.clicked.connect(self.onMapJumpDown)
+
     # Velocity Mapper
     self.ui.pbnVelAdd.clicked.connect(self.onVelMapAdd)
     self.ui.pbnVelDel.clicked.connect(self.onVelMapDel)
@@ -781,6 +785,54 @@ class MainWindow(QMainWindow):
     else:
       self.map_objects[idx].change_value("tuned_checkbox", False)
       self.ui.chkTunedVersion.setEnabled(False)
+
+  def onMapJumpDown(self):
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      pk_idx = self.ui.cbxPack.currentIndex()
+      mp_idx = self.ui.cbxMap.currentIndex()
+
+      current_ls = self.map_ls[mp_idx].split(os.sep)[:-1]
+
+      for i in range(len(self.map_ls) - mp_idx):
+        if self.map_ls[mp_idx + i].split(os.sep)[:-1] != current_ls:
+          self.ui.cbxMap.setCurrentIndex(mp_idx + i)
+          self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx + i])
+
+          self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+          self.ui.listMap.setCurrentRow(idx)
+          # the most horrible line of code I have ever wrote
+          if Path(f"""{self.settings.value("mainfolderpath")}/MappingPool/{str(pathlib.Path(f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}").parent).replace(os.sep, '/')}/{pathlib.Path(self.map_objects[idx].map).stem} --TN.sfz""").is_file():
+            self.map_objects[idx].change_value("tuned_checkbox", True)
+            self.ui.chkTunedVersion.setEnabled(True)
+          else:
+            self.map_objects[idx].change_value("tuned_checkbox", False)
+            self.ui.chkTunedVersion.setEnabled(False)
+          break
+  
+  def onMapJumpUp(self):
+    if self.ui.listMap.count() != 0:
+      idx = self.ui.listMap.currentRow()
+      pk_idx = self.ui.cbxPack.currentIndex()
+      mp_idx = self.ui.cbxMap.currentIndex()
+
+      current_ls = self.map_ls[mp_idx].split(os.sep)[:-1]
+
+      for i in range(mp_idx):
+        if self.map_ls[mp_idx - i].split(os.sep)[:-1] != current_ls:
+          self.ui.cbxMap.setCurrentIndex(mp_idx - i)
+          self.map_objects[idx].set_map(list(self.current_pack_dict)[pk_idx], self.map_ls[mp_idx - i])
+
+          self.ui.listMap.clear(); self.ui.listMap.addItems(get_map_names(self.map_objects))
+          self.ui.listMap.setCurrentRow(idx)
+          # the most horrible line of code I have ever wrote
+          if Path(f"""{self.settings.value("mainfolderpath")}/MappingPool/{str(pathlib.Path(f"{self.map_objects[idx].pack}/{self.map_objects[idx].map}").parent).replace(os.sep, '/')}/{pathlib.Path(self.map_objects[idx].map).stem} --TN.sfz""").is_file():
+            self.map_objects[idx].change_value("tuned_checkbox", True)
+            self.ui.chkTunedVersion.setEnabled(True)
+          else:
+            self.map_objects[idx].change_value("tuned_checkbox", False)
+            self.ui.chkTunedVersion.setEnabled(False)
+          break
 
   def onAutoname(self):
     idx = self.ui.listMap.currentRow()
